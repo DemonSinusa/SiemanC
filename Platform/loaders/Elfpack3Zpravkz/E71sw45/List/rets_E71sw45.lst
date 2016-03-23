@@ -1,0 +1,97 @@
+###############################################################################
+#                                                                             #
+#     IAR Systems ARM Assembler V4.42A/W32 25/Nov/2013  17:49:14              #
+#     Copyright 1999-2007 IAR Systems. All rights reserved.                   #
+#                                                                             #
+#           Source file   =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\rets_E71sw45.asm#
+#           List file     =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\List\rets_E71sw45.lst#
+#           Object file   =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\rets_E71sw45.r79#
+#           Command line  =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\rets_E71sw45.asm #
+#                            -OE:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\ #
+#                            -s+ -M<> -w+ -DNEWSGOLD -DELKA                   #
+#                            -LE:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\List\ #
+#                            -cE -t8 --cpu ARM926EJ-S --fpu None              #
+#                            -IE:\iar\Embedded Workbench 4.0 Evaluation\ARM\INC\ #
+#                                                                             #
+###############################################################################
+
+    1    00000000              
+    2    00000000                      
+    3    00000000                      RSEG    SWILIB_FUNC2EE_2F5:CODE
+    4    00000000                      EXTERN  sub_elfclose
+    5    00000000                      EXTERN  dlopen
+    6    00000000                      EXTERN  dlsym
+    7    00000000                      EXTERN  dlclose
+    8    00000000                      EXTERN  setenv
+    9    00000000                      EXTERN  unsetenv
+   10    00000000                      EXTERN  getenv
+   11    00000000                      EXTERN  clearenv
+   12    00000000                      
+   13    00000000 ........             DCD     sub_elfclose
+   14    00000004 ........             DCD     dlopen
+   15    00000008 ........             DCD     dlsym
+   16    0000000C ........             DCD     dlclose
+   17    00000010 ........             DCD     setenv
+   18    00000014 ........             DCD     unsetenv
+   19    00000018 ........             DCD     getenv
+   20    0000001C ........             DCD     clearenv
+   21    00000020              
+   22    00000020              
+   23    00000000                      RSEG    DATA_N
+   24    00000000                      RSEG    SWILIB_FUNC1B8_1BB:CODE
+   25    00000000                      EXTERN  EXT2_AREA
+   26    00000000                      EXTERN  pngtop
+   27    00000000                      EXTERN  pLIB_TOP
+   28    00000000 ........             DCD     EXT2_AREA
+   29    00000004 ........             DCD     pngtop
+   30    00000008 ........             DCD     pLIB_TOP
+   31    0000000C ........             DCD     SFE(DATA_N)
+   32    00000010                      
+   33    00000010              
+   34    00000010              
+   39    00000010              
+   40    00000000                      RSEG    CODE:CODE
+   41    00000000              
+   42    00000000                     
+   43    00000000              #ifdef NEWSGOLD
+   44    00000000              #ifdef  ELKA
+   45    00000000              
+   46    00000000                      PUBLIC  OldOnClose
+   47    00000000              OldOnClose:
+   48    00000000 B9D366A0             DCD     0xA066D3B8+1
+   49    00000004                      
+   50    00000000                      PUBLIC  OldOnCreate
+   51    00000004              OldOnCreate:
+   52    00000004 79D166A0             DCD     0xA066D178+1
+   53    00000008                      
+   54    00000000                      PUBLIC  OldShowMsg
+   55    00000008              OldShowMsg:
+   56    00000008 79EA94A0             DCD     0xA094EA78+1
+   57    0000000C              
+   58    00000000                      PUBLIC  PITgetN
+   59    0000000C              PITgetN:
+   60    0000000C 8422A3A0             DCD     0xA0A32284
+   61    00000010                      
+   62    00000000                      PUBLIC  PITret
+   63    00000010              PITret:
+   64    00000010 A5CE94A0             DCD     0xA094CEA4+1
+   65    00000014                      
+   66    00000014                      defadr  StoreErrInfoAndAbort,0xA04CCDD4
+   67    00000014                      defadr  StoreErrString,0xA04CCCA0
+   68    00000014              
+   69    00000014              #else
+   95    00000014              #endif
+   96    00000014              #else
+  133    00000014              #endif
+  134    00000014              
+  135    00000014                      END
+##############################
+#          CRC:3217          #
+#        Errors:   0         #
+#        Warnings: 0         #
+#         Bytes: 68          #
+##############################
+
+
+
+

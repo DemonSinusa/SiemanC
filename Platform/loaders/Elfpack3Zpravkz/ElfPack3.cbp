@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ElfPack3" />
+		<Option pch_mode="2" />
+		<Option compiler="armelfgcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\ElfPack3" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_test_linux" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\ElfPack3" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="ESI.asm" />
+		<Unit filename="EXT2.asm" />
+		<Unit filename="FSWI.asm" />
+		<Unit filename="IMB.asm" />
+		<Unit filename="additional.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="conf_loader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="conf_loader.h" />
+		<Unit filename="config_data.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="elfloader_helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="loader3\Mutex.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="loader3\Mutex.h" />
+		<Unit filename="loader3\elf.h" />
+		<Unit filename="loader3\env.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="loader3\env.h" />
+		<Unit filename="loader3\loadelf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="loader3\loader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="loader3\loader.h" />
+		<Unit filename="loader3\loadlib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="loader3\strchrnul.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="png.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="rets_E71sw45.asm" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

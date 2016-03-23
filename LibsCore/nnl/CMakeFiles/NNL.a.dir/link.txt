@@ -1,0 +1,2 @@
+/usr/bin/ar qc libNNL.a.a  CMakeFiles/NNL.a.dir/Quproquowing.cpp.o
+/usr/bin/ranlib libNNL.a.a

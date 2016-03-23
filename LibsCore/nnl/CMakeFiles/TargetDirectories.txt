@@ -1,0 +1,1 @@
+/home/aveman/NetBeansProjects/ElectronicBrain/nnl/CMakeFiles/NNL.dir

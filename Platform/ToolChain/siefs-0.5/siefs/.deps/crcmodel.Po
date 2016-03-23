@@ -1,0 +1,5 @@
+crcmodel.o: crcmodel.c /usr/include/stdc-predef.h crcmodel.h
+
+/usr/include/stdc-predef.h:
+
+crcmodel.h:

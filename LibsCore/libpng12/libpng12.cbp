@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="png" />
+		<Option pch_mode="2" />
+		<Option compiler="armelfgcc" />
+		<Build>
+			<Target title="lib">
+				<Option output="../../Platform/libs/%TARGET_NAME%%PROJECT_NAME%-12.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
+				<Option type="3" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-DNEWSGOLD" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-mthumb" />
+			<Add option="-Os" />
+			<Add option="-W" />
+		</Compiler>
+		<Linker>
+			<Add option="-s" />
+			<Add library="crt_helper" />
+			<Add library="gcc-4.6.1" />
+			<Add library="c-1.0" />
+			<Add library="z-1.2.5" />
+			<Add library="m-1.0" />
+		</Linker>
+		<Unit filename="png.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="png.h" />
+		<Unit filename="pngconf.h" />
+		<Unit filename="pngerror.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pnggccrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngmem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngpread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngrio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngrtran.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngrutil.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngtrans.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngvcrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngwio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngwrite.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngwtran.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pngwutil.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

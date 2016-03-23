@@ -1,0 +1,238 @@
+#!/bin/sh
+
+iar="/media/disk-1/ELF/IAR/EmbeddedWorkbenchEvaluation/common/bin/iarbuild.exe"
+err="Break with errors"
+no_compile=0
+no_generate_vkp=0
+args=$@
+
+for i in ${args}; do
+  if [ $i == "--no_compile" ]; then
+    no_compile=1
+  elif [ $i == "--no_gen_vkp" ]; then
+    no_generate_vkp=1
+  elif [ $i == "--help" ]; then
+    echo " Automated script for buld siemens loader v0.1 "
+    echo "                  (c) Z.Vova(STANOK) 2011-2012 "
+    echo "	Usage:"
+    echo "		--no_compile - do not compile elfloader"
+    echo "		--no_gen_vkp - do not generate patchs"
+    echo ""
+    exit 0
+  else
+    echo "Unknow parameter $i"
+  fi
+done
+
+
+echo "$(date +'%d.%m.%Y %H:%M:%S')" > time.txt
+
+if [ $no_compile == 0 ]; then
+echo "CCLD  C72sw22..."
+wine $iar ElfLoader.ewp -make C72sw22 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1
+fi
+
+echo "CCLD  C75sw22..."
+wine $iar ElfLoader.ewp -make C75sw22 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  C75sw24..."
+wine $iar ElfLoader.ewp -make C75sw24 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  C81sw51..."
+wine $iar ElfLoader.ewp -make C81sw51 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  CX70sw56..."
+wine $iar ElfLoader.ewp -make CX70sw56 -log warnings 
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  CX75sw25..."
+wine $iar ElfLoader.ewp -make CX75sw25 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  E71sw45..."
+wine $iar ElfLoader.ewp -make E71sw45 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  EL71sw45..."
+wine $iar ElfLoader.ewp -make EL71sw45 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  S65sw58..."
+wine $iar ElfLoader.ewp -make S65sw58 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  S68sw47..."
+wine $iar ElfLoader.ewp -make S68sw47 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  S68sw52..."
+wine $iar ElfLoader.ewp -make S68sw52 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  S75sw47..."
+wine $iar ElfLoader.ewp -make S75sw47 -log warnings 
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  S75sw52..."
+wine $iar ElfLoader.ewp -make S75sw52 -log warnings 
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  SK65sw50..."
+wine $iar ElfLoader.ewp -make SK65sw50 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  SL65sw53..."
+wine $iar ElfLoader.ewp -make SL65sw53 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  SL75sw47..."
+wine $iar ElfLoader.ewp -make SL75sw47 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  SL75sw52..."
+wine $iar ElfLoader.ewp -make SL75sw52 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  CL61sw00..."
+wine $iar ElfLoader.ewp -make CL61sw00 -log warnings 
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  CL61sw00_db128..."
+wine $iar ElfLoader.ewp -make CL61sw00_db128 -log warnings 
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+echo "CCLD  CF75sw23..."
+wine $iar ElfLoader.ewp -make CF75sw23 -log warnings
+if [[ ${?} != 0 ]] 
+then echo $err && exit 1 
+fi
+
+fi
+
+if [ $no_generate_vkp == 0 ]; then
+echo "HEX  C72sw22..."
+cd C72sw22/Exe
+./postbuild &
+
+echo "HEX  C75sw22..."
+cd  ../../C75sw22/Exe
+./postbuild
+
+echo "HEX  C75sw24..."
+cd  ../../C75sw24/Exe
+./postbuild &
+
+echo "HEX  C81sw51..."
+cd  ../../C81sw51/Exe
+./postbuild
+
+echo "HEX  CF75sw23..."
+cd  ../../CF75sw23/Exe
+./postbuild &
+
+echo "HEX  CX70sw56..."
+cd ../../CX70sw56/Exe
+./postbuild
+
+echo "HEX  CX75sw25..."
+cd  ../../CX75sw25/Exe
+./postbuild &
+
+echo "HEX  E71sw45..."
+cd  ../../E71sw45/Exe
+./postbuild
+
+echo "HEX  EL71sw45..."
+cd  ../../EL71sw45/Exe
+./postbuild &
+
+echo "HEX  S65sw58..."
+cd  ../../S65sw58/Exe
+./postbuild
+
+echo "HEX  S68sw47..."
+cd  ../../S68sw47/Exe
+./postbuild &
+
+echo "HEX  S68sw52..."
+cd  ../../S68sw52/Exe
+./postbuild
+
+echo "HEX  S75sw47..."
+cd  ../../S75sw47/Exe
+./postbuild &
+
+echo "HEX  S75sw52..."
+cd  ../../S75sw52/Exe
+./postbuild
+
+echo "HEX  SK65sw50..."
+cd  ../../SK65sw50/Exe
+./postbuild &
+
+echo "HEX  SL65sw53..."
+cd  ../../SL65sw53/Exe
+./postbuild
+
+echo "HEX  SL75sw47..."
+cd  ../../SL75sw47/Exe
+./postbuild &
+
+echo "HEX  SL75sw52..."
+cd  ../../SL75sw52/Exe
+./postbuild
+
+echo "HEX  CL61sw00..."
+cd  ../../CL61sw00/Exe
+./postbuild &
+
+echo "HEX  CL61sw00_db128..."
+cd  ../../CL61sw00_db128/Exe
+./postbuild
+fi
+#=============================================================================
+cd ../../
+#rm time.txt
+exit 0
+

@@ -1,0 +1,2393 @@
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V4.60I/386                                         #
+#                                                                              #
+#           Link time     =  25/Nov/2013  17:49:19                             #
+#           Target CPU    =  ARM                                               #
+#           List file     =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Li #
+#                            st\ELFLoader.map                                  #
+#           Output file 1 =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ex #
+#                            e\ELFLoader.elf                                   #
+#                            Format: elf, variant: -yas                        #
+#           Output file 2 =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ex #
+#                            e\ELFLoader.hex                                   #
+#                            Format: intel-extended                            #
+#           Command line  =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\ESI.r79                                         #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\EXT2.r79                                        #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\FSWI.r79                                        #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\IMB.r79                                         #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\Mutex.r79                                       #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\conf_loader.r79                                 #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\config_data.r79                                 #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\elfloader_helper.r79                            #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\env.r79                                         #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\loadelf.r79                                     #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\loader.r79                                      #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\loadlib.r79                                     #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\png.r79                                         #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\rets_E71sw45.r79                                #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ob #
+#                            j\strchrnul.r79                                   #
+#                            -o                                                #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Ex #
+#                            e\ELFLoader.hex                                   #
+#                            -Fintel-extended -l                               #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Li #
+#                            st\ELFLoader.map                                  #
+#                            -xmsnio -f                                        #
+#                            E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45.xc #
+#                            l                                                 #
+#                            (-carm                                            #
+#                            -Z(CODE)START,CODE,SWITAB,INITTAB,DATA_ID,DATA_C, #
+#                            CONFIG_DATA_ID=A1324000-A1346050                  #
+#                            -Z(DATA)CONFIG_DATA_I,DATA_Z,DATA_I,DATA_N=A8D9F1 #
+#                            78-A8D9FAD7                                       #
+#                            -Z(CODE)PATCH_ONCREATE=A084B698-A084B69B          #
+#                            -Z(CODE)PATCH_ONCLOSE=A084B6AC-A084B6AF           #
+#                            -Z(CODE)PATCH_ESI1=A08D5FF4-A08D5FF7              #
+#                            -Z(CODE)PATCH_ESI2=A08D6004-A08D6007              #
+#                            -Z(CODE)PATCH_SHOWMSG_BLF=A07F9600-A07F9603       #
+#                            -Z(CODE)PATCH_NO_BROWSE_TXT=A06C697A-A06C697D     #
+#                            -Z(CODE)SWILIB_FUNC171=A00745C4-A00745C7          #
+#                            -Z(CODE)SWILIB_FUNC172=A00745C8-A00745CB          #
+#                            -Z(CODE)SWILIB_FUNC19C=A0074670-A0074673          #
+#                            -Z(CODE)SWILIB_FUNC1B8_1BB=A00746E0-A00746EF      #
+#                            -Z(CODE)SWILIB_FUNC1E9=A00747A4-A00747A7          #
+#                            -Z(CODE)SWILIB_FUNC2EE_2F5=A0074BB8-A0074BD8      #
+#                            -Z(DATA)REGEXPL_CNT=A8D9F174-A8D9F177             #
+#                            -Z(CODE)PATCH_EXT2_R7=A0502A78-A0502A7B           #
+#                            -Z(CODE)PATCH_EXT2_R6=A0502C5C-A0502C5F           #
+#                            -Z(CODE)PATCH_EXT2_R7_1=A05026AC-A05026AF         #
+#                            -Z(CODE)PATCH_EXT2_R2=A0502830-A0502833           #
+#                            -Z(CODE)PATCH_EXT2_IMPL=A0502AFC-A0502B1F         #
+#                            -Z(CODE)PATCH_ENABLE_ALTOPEN=A071CDD4-A071CDD7    #
+#                            -Z(CODE)PATCH_GET_PIT=A094CE9A-A094CE9D           #
+#                            -Z(CODE)PATCH_GET_PITJ=A094CEA0-A094CEA3          #
+#                            -Z(CODE)FSWI_PATCH1=A12D1414-A12D1417             #
+#                            -Z(CODE)FSWI_PATCH2=A12D1328-A12D132B             #
+#                            -Z(CODE)LIBR=A0074000-A0077FFF)                   #
+#                            -Oelf,as=E:\iar\SVN\Elfloader3\elfloader3\srcMy\E #
+#                            71sw45\Exe\ELFLoader.elf                          #
+#                                                                              #
+#                        Copyright 1987-2007 IAR Systems. All rights reserved. #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+                  There are no program entries.
+
+
+
+
+                ****************************************
+                *                                      *
+                *            RUNTIME MODEL             *
+                *                                      *
+                ****************************************
+
+  StackAlign4  = USED
+  __cpu_mode   = __pcs__interwork
+  __data_model = absolute
+  __endian     = little
+  __rt_version = 6
+
+
+
+                ****************************************
+                *                                      *
+                *              MODULE MAP              *
+                *                                      *
+                ****************************************
+
+
+  DEFINED ABSOLUTE ENTRIES
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\ESI.r79
+  PROGRAM MODULE, NAME : ESI
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: A1324000 - A1324003 (0x4 bytes), align: 2
+  Segment part 0. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           BXR1                    A1324000        MyIDLECSMonClose (elfloader_helper)
+                                                   MyIDLECSMonCreate (elfloader_helper)
+    -------------------------------------------------------------------------
+PATCH_NO_BROWSE_TXT
+  Relative segment, address: A06C697A - A06C697B (0x2 bytes), align: 1
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+PATCH_ESI1
+  Relative segment, address: A08D5FF4 - A08D5FF7 (0x4 bytes), align: 2
+  Segment part 2. ROOT.
+    -------------------------------------------------------------------------
+PATCH_ESI2
+  Relative segment, address: A08D6004 - A08D6007 (0x4 bytes), align: 2
+  Segment part 3. ROOT.       Intra module refs:   Segment part 2
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324004 - A132400F (0xc bytes), align: 2
+  Segment part 4. ROOT.       Intra module refs:   Segment part 3
+    -------------------------------------------------------------------------
+PATCH_GET_PIT
+  Relative segment, address: A094CE9A - A094CE9D (0x4 bytes), align: 1
+  Segment part 5. ROOT.
+    -------------------------------------------------------------------------
+PATCH_GET_PITJ
+  Relative segment, address: A094CEA0 - A094CEA3 (0x4 bytes), align: 2
+  Segment part 6. ROOT.       Intra module refs:   Segment part 5
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324010 - A132404B (0x3c bytes), align: 2
+  Segment part 7. ROOT.       Intra module refs:   Segment part 6
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\EXT2.r79
+  PROGRAM MODULE, NAME : EXT2
+
+  SEGMENTS IN THE MODULE
+  ======================
+PATCH_ENABLE_ALTOPEN
+  Relative segment, address: A071CDD4 - A071CDD7 (0x4 bytes), align: 2
+  Segment part 0. ROOT.
+    -------------------------------------------------------------------------
+PATCH_EXT2_R7
+  Relative segment, address: A0502A78 - A0502A7B (0x4 bytes), align: 2
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+PATCH_EXT2_R6
+  Relative segment, address: A0502C5C - A0502C5F (0x4 bytes), align: 2
+  Segment part 2. ROOT.
+    -------------------------------------------------------------------------
+PATCH_EXT2_R7_1
+  Relative segment, address: A05026AC - A05026AF (0x4 bytes), align: 2
+  Segment part 3. ROOT.
+    -------------------------------------------------------------------------
+PATCH_EXT2_R2
+  Relative segment, address: A0502830 - A0502833 (0x4 bytes), align: 2
+  Segment part 4. ROOT.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132404C - A1324073 (0x28 bytes), align: 2
+  Segment part 5.             Intra module refs:   Segment part 1
+                                                   Segment part 2
+                                                   Segment part 3
+                                                   Segment part 4
+    -------------------------------------------------------------------------
+PATCH_EXT2_IMPL
+  Relative segment, address: A0502AFC - A0502B1F (0x24 bytes), align: 2
+  Segment part 6. ROOT.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324074 - A1324083 (0x10 bytes), align: 2
+  Segment part 7.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __e_div                 A1324074        findExport (loadlib)
+                                                   print10 (png)
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\FSWI.r79
+  PROGRAM MODULE, NAME : FSWI
+
+  SEGMENTS IN THE MODULE
+  ======================
+FSWI_PATCH1
+  Relative segment, address: A12D1414 - A12D1417 (0x4 bytes), align: 2
+  Segment part 0. ROOT.
+    -------------------------------------------------------------------------
+FSWI_PATCH2
+  Relative segment, address: A12D1328 - A12D132B (0x4 bytes), align: 2
+  Segment part 1. ROOT.       Intra module refs:   Segment part 0
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324084 - A132410F (0x8c bytes), align: 2
+  Segment part 2. ROOT.       Intra module refs:   Segment part 1
+    -------------------------------------------------------------------------
+LIBR
+  Relative segment, address: A0074000, align: 2
+  Segment part 3. ROOT.       Intra module refs:   Segment part 2
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Library                 A0074000        LoadLibrary (elfloader_helper)
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\IMB.r79
+  PROGRAM MODULE, NAME : IMB
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Relative segment, address: A1324110 - A132418B (0x7c bytes), align: 2
+  Segment part 0. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ExecuteIMB              A1324110        elf_load (elfloader_helper)
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\Mutex.r79
+  PROGRAM MODULE, NAME : Mutex
+
+  SEGMENTS IN THE MODULE
+  ======================
+CSTACK
+  Segment part 1. NOT NEEDED.
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\conf_loader.r79
+  PROGRAM MODULE, NAME : conf_loader
+
+  SEGMENTS IN THE MODULE
+  ======================
+DATA_N
+  Relative segment, address: A8D9F5F8 - A8D9F5FB (0x4 bytes), align: 2
+  Segment part 3.             Intra module refs:   LoadConfigData
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           successed_config_filename
+                                   A8D9F5F8 
+    -------------------------------------------------------------------------
+CODE
+  Segment part 4. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132418C - A13242AB (0x120 bytes), align: 2
+  Segment part 5.             Intra module refs:   InitConfig
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           LoadConfigData          A132418C 
+               stack 1 = 00000000 ( 00000030 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13242AC - A13242B3 (0x8 bytes), align: 2
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InitConfig::??rA        A13242AC 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13242B4 - A13242CF (0x1c bytes), align: 2
+  Segment part 7.             Intra module refs:   InitConfig::??rA
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InitConfig              A13242B5        MyIDLECSMonCreate (elfloader_helper)
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Segment part 8. NOT NEEDED.
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Segment part 9. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326B44 - A1326B7B (0x38 bytes), align: 2
+  Segment part 2.             Intra module refs:   InitConfig
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\config_data.r79
+  PROGRAM MODULE, NAME : config_data
+
+  SEGMENTS IN THE MODULE
+  ======================
+CONFIG_DATA_I
+  Relative segment, address: A8D9F178 - A8D9F1A3 (0x2c bytes), align: 2
+  Segment part 2. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr1                 A8D9F178 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F1A4 - A8D9F1A7 (0x4 bytes), align: 2
+  Segment part 4. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ALPHA_THRESHOLD         A8D9F1A4        create_imghdr (png)
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F1A8 - A8D9F1D3 (0x2c bytes), align: 2
+  Segment part 6. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr2                 A8D9F1A8 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F1D4 - A8D9F1D7 (0x4 bytes), align: 2
+  Segment part 8. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           CACHE_PNG               A8D9F1D4        PatchGetPIT (png)
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F1D8 - A8D9F203 (0x2c bytes), align: 2
+  Segment part 10. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr3                 A8D9F1D8 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F204 - A8D9F207 (0x4 bytes), align: 2
+  Segment part 12. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DEFAULT_COLOR           A8D9F204        create_imghdr (png)
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F208 - A8D9F267 (0x60 bytes), align: 2
+  Segment part 14. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfgcbox3_1              A8D9F208 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F268 - A8D9F293 (0x2c bytes), align: 2
+  Segment part 16. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr4                 A8D9F268 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F294 - A8D9F297 (0x4 bytes), align: 2
+  Segment part 18. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           load_in_suproc          A8D9F294        MyIDLECSMonCreate (elfloader_helper)
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F298 - A8D9F2D7 (0x40 bytes), align: 2
+  Segment part 20. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfgcbox4_1              A8D9F298 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F2D8 - A8D9F303 (0x2c bytes), align: 2
+  Segment part 22. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr5                 A8D9F2D8 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F304 - A8D9F383 (0x80 bytes), align: 2
+  Segment part 24. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           IMAGE_FOLDER            A8D9F304        MyIDLECSMonCreate (elfloader_helper)
+                                                   PatchGetPIT (png)
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F384 - A8D9F3AF (0x2c bytes), align: 2
+  Segment part 26. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr6                 A8D9F384 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F3B0 - A8D9F42F (0x80 bytes), align: 2
+  Segment part 28. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DAEMONS_FOLDER          A8D9F3B0        LoadDaemons (elfloader_helper)
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F430 - A8D9F45B (0x2c bytes), align: 2
+  Segment part 30. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           cfghdr7                 A8D9F430 
+    -------------------------------------------------------------------------
+CONFIG_DATA_I
+  Relative segment, address: A8D9F45C - A8D9F4DB (0x80 bytes), align: 2
+  Segment part 32. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           SWIBLIB_WAY             A8D9F45C        LoadLibrary (elfloader_helper)
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326E88 - A1326EB3 (0x2c bytes), align: 2
+  Segment part 3. ROOT.       Intra module refs:   cfghdr1
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326EB4 - A1326EB7 (0x4 bytes), align: 2
+  Segment part 5. ROOT.       Intra module refs:   ALPHA_THRESHOLD
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326EB8 - A1326EE3 (0x2c bytes), align: 2
+  Segment part 7. ROOT.       Intra module refs:   cfghdr2
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326EE4 - A1326EE7 (0x4 bytes), align: 2
+  Segment part 9. ROOT.       Intra module refs:   CACHE_PNG
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326EE8 - A1326F13 (0x2c bytes), align: 2
+  Segment part 11. ROOT.      Intra module refs:   cfghdr3
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326F14 - A1326F17 (0x4 bytes), align: 2
+  Segment part 13. ROOT.      Intra module refs:   DEFAULT_COLOR
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326F18 - A1326F77 (0x60 bytes), align: 2
+  Segment part 15. ROOT.      Intra module refs:   cfgcbox3_1
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326F78 - A1326FA3 (0x2c bytes), align: 2
+  Segment part 17. ROOT.      Intra module refs:   cfghdr4
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326FA4 - A1326FA7 (0x4 bytes), align: 2
+  Segment part 19. ROOT.      Intra module refs:   load_in_suproc
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326FA8 - A1326FE7 (0x40 bytes), align: 2
+  Segment part 21. ROOT.      Intra module refs:   cfgcbox4_1
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1326FE8 - A1327013 (0x2c bytes), align: 2
+  Segment part 23. ROOT.      Intra module refs:   cfghdr5
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1327014 - A1327093 (0x80 bytes), align: 2
+  Segment part 25. ROOT.      Intra module refs:   IMAGE_FOLDER
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1327094 - A13270BF (0x2c bytes), align: 2
+  Segment part 27. ROOT.      Intra module refs:   cfghdr6
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A13270C0 - A132713F (0x80 bytes), align: 2
+  Segment part 29. ROOT.      Intra module refs:   DAEMONS_FOLDER
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A1327140 - A132716B (0x2c bytes), align: 2
+  Segment part 31. ROOT.      Intra module refs:   cfghdr7
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Relative segment, address: A132716C - A13271EB (0x80 bytes), align: 2
+  Segment part 33. ROOT.      Intra module refs:   SWIBLIB_WAY
+    -------------------------------------------------------------------------
+CONFIG_DATA_ID
+  Segment part 34. NOT NEEDED.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?*?CONFIG_DATA_ID       
+    -------------------------------------------------------------------------
+INITTAB
+  Relative segment, address: A1326B2C - A1326B37 (0xc bytes), align: 2
+  Segment part 35. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?init?tab?CONFIG_DATA_I
+                                   A1326B2C 
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\elfloader_helper.r79
+  PROGRAM MODULE, NAME : elfloader_helper
+
+  SEGMENTS IN THE MODULE
+  ======================
+DATA_Z
+  Segment part 14. NOT NEEDED.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           lock_thread             
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13242D0 - A13242D3 (0x4 bytes), align: 2
+  Segment part 28.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           zeromem_a::??rT         A13242D1 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13242D4 - A13242DF (0xc bytes), align: 2
+  Segment part 29.            Intra module refs:   zeromem_a::??rT
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           zeromem_a               A13242D4        LoadSections (loader)
+                                                   dlopen (loadlib)
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 30. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13242E0 - A13242EB (0xc bytes), align: 2
+  Segment part 31.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           l_msg                   A13242E0        DoRelocation (loader)
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 32. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13242EC - A132438F (0xa4 bytes), align: 2
+  Segment part 33.            Intra module refs:   LoadDaemons
+                                                   elfload
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elf_load                A13242EC 
+               stack 1 = 00000000 ( 00000020 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 34. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324390 - A1324393 (0x4 bytes), align: 2
+  Segment part 35.            Intra module refs:   elfloader_onload
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elfload                 A1324390 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 36. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324394 - A13243A7 (0x14 bytes), align: 2
+  Segment part 37.            Intra module refs:   MyIDLECSMonCreate
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InitLoaderSystem        A1324394 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 38. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Segment part 39. NOT NEEDED.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           main                    
+               not allocated function
+    -------------------------------------------------------------------------
+CODE
+  Segment part 40. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13243A8 - A13243CD (0x26 bytes), align: 2
+  Segment part 41.            Intra module refs:   Segment part 8
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elfloader_onload        A13243A9 
+               stack 1 = 00000000 ( 00000088 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 42. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13243D0 - A132443B (0x6c bytes), align: 2
+  Segment part 43.            Intra module refs:   CreateHELPER_PROC
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           proc_HELPER             A13243D0 
+               stack 1 = 00000000 ( 0000001C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 44. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132443C - A132446B (0x30 bytes), align: 2
+  Segment part 45.            Intra module refs:   MyIDLECSMonCreate
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           CreateHELPER_PROC       A132443C 
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 46. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132446C - A132447F (0x14 bytes), align: 2
+  Segment part 47.            Intra module refs:   Segment part 26
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           REDRAW_impl             A132446C 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 48. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324480 - A13244A3 (0x24 bytes), align: 2
+  Segment part 49.            Intra module refs:   Segment part 25
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           SUBPROC_impl            A1324480 
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 50. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13244A4 - A13244AF (0xc bytes), align: 2
+  Segment part 51.            Intra module refs:   Segment part 27
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           SEQKILLER_impl          A13244A5 
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 52. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13244B0 - A13244DF (0x30 bytes), align: 2
+  Segment part 53.            Intra module refs:   Segment part 23
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MyIDLECSMonClose        A13244B0 
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 54. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13244E0 - A1324583 (0xa4 bytes), align: 2
+  Segment part 55.            Intra module refs:   MyIDLECSMonCreate
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           LoadDaemons             A13244E0 
+               stack 1 = 00000000 ( 00000450 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 56. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_N
+  Relative segment, address: A8D9F5FC - A8D9F5FF (0x4 bytes), align: 2
+  Segment part 16.            Intra module refs:   LoadLibrary
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           pLIB_TOP                A8D9F5FC        Segment part 2 (FSWI)
+                                                   Segment part 2 (rets_E71sw45)
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324584 - A132459F (0x1c bytes), align: 2
+  Segment part 57.            Intra module refs:   LoadLibrary
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           get_file_size           A1324585 
+               stack 1 = 00000000 ( 00000034 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 58. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13245A0 - A13246EF (0x150 bytes), align: 2
+  Segment part 59.            Intra module refs:   MyIDLECSMonCreate
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           LoadLibrary             A13245A0 
+               stack 1 = 00000000 ( 0000008C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 60. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_N
+  Relative segment, address: A8D9F600 - A8D9F63F (0x40 bytes), align: 2
+  Segment part 17.            Intra module refs:   MyIDLECSMonCreate
+                                                   Segment part 18
+                                                   Segment part 19
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           bigicons_str            A8D9F620 
+           smallicons_str          A8D9F600 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13246F0 - A132479B (0xac bytes), align: 2
+  Segment part 61.            Intra module refs:   Segment part 22
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MyIDLECSMonCreate       A13246F0 
+               stack 1 = 00000000 ( 00000014 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 62. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326B7C - A1326B9F (0x24 bytes), align: 2
+  Segment part 2.             Intra module refs:   FUNC_ABORT
+    -------------------------------------------------------------------------
+DATA_C
+  Segment part 3. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326BA0 - A1326BA7 (0x8 bytes), align: 2
+  Segment part 4.             Intra module refs:   ESI
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326BA8 - A1326BAF (0x8 bytes), align: 2
+  Segment part 5.             Intra module refs:   Segment part 8
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326BB0 - A1326BB7 (0x8 bytes), align: 2
+  Segment part 6.             Intra module refs:   Segment part 8
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326BB8 - A1326BBB (0x4 bytes), align: 2
+  Segment part 7.             Intra module refs:   Segment part 8
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326BBC - A1326C03 (0x48 bytes), align: 2
+  Segment part 8.             Intra module refs:   MyIDLECSMonCreate
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326C04 - A1326C47 (0x44 bytes), align: 2
+  Segment part 9.             Intra module refs:   LoadLibrary
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326C48 - A1326C4F (0x8 bytes), align: 2
+  Segment part 10.            Intra module refs:   LoadDaemons
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326C50 - A1326C73 (0x24 bytes), align: 2
+  Segment part 11.            Intra module refs:   elf_load
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326C74 - A1326C9F (0x2c bytes), align: 2
+  Segment part 12.            Intra module refs:   InitLoaderSystem
+    -------------------------------------------------------------------------
+DATA_C
+  Segment part 13. NOT NEEDED.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elf_run_prio            
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326CA0 - A1326CA7 (0x8 bytes), align: 2
+  Segment part 15.            Intra module refs:   CreateHELPER_PROC
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326CA8 - A1326CAF (0x8 bytes), align: 2
+  Segment part 18.            Intra module refs:   Segment part 8
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326CB0 - A1326CB7 (0x8 bytes), align: 2
+  Segment part 19.            Intra module refs:   Segment part 8
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132479C - A132480B (0x70 bytes), align: 2
+  Segment part 63.            Intra module refs:   ascii2ws
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           char8to16               A132479D 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 64. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132480C - A1324827 (0x1c bytes), align: 2
+  Segment part 65.            Intra module refs:   ESI
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ascii2ws                A132480D 
+               stack 1 = 00000000 ( 0000000C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 66. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324828 - A132486F (0x48 bytes), align: 2
+  Segment part 67.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ESI                     A1324828        Segment part 4 (ESI)
+               stack 1 = 00000000 ( 0000000C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 68. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324870 - A13248AB (0x3c bytes), align: 2
+  Segment part 69.            Intra module refs:   MyShowMSG
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DoUnknownFileType       A1324870 
+               stack 1 = 00000000 ( 0000000C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 70. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_N
+  Relative segment, address: A8D9F640 - A8D9F643 (0x4 bytes), align: 2
+  Segment part 20.            Intra module refs:   EXT2_REALLOC
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           EXT2_AREA               A8D9F640        Segment part 2 (rets_E71sw45)
+                                                   Segment part 5 (EXT2)
+    -------------------------------------------------------------------------
+REGEXPL_CNT
+  Relative segment, address: A8D9F174 - A8D9F177 (0x4 bytes), align: 2
+  Segment part 21.            Intra module refs:   EXT2_REALLOC
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           EXT2_CNT                A8D9F174 
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13248AC - A132491F (0x74 bytes), align: 2
+  Segment part 71.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           EXT2_REALLOC            A13248AC        Segment part 6 (EXT2)
+               stack 1 = 00000000 ( 0000001C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 72. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324920 - A132493F (0x20 bytes), align: 2
+  Segment part 73.            Intra module refs:   Segment part 24
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           MyShowMSG               A1324921 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 74. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324940 - A132498F (0x50 bytes), align: 2
+  Segment part 75.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FUNC_ABORT              A1324940        Segment part 2 (FSWI)
+               stack 1 = 00000000 ( 00000028 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 76. NOT NEEDED.Intra module refs:   elf_load
+    -------------------------------------------------------------------------
+CODE
+  Segment part 77. NOT NEEDED.Intra module refs:   elf_load
+    -------------------------------------------------------------------------
+CODE
+  Segment part 78. NOT NEEDED.Intra module refs:   elf_load
+    -------------------------------------------------------------------------
+CODE
+  Segment part 79. NOT NEEDED.Intra module refs:   elf_load
+    -------------------------------------------------------------------------
+CODE
+  Segment part 80. NOT NEEDED.Intra module refs:   InitLoaderSystem
+    -------------------------------------------------------------------------
+CODE
+  Segment part 81. NOT NEEDED.Intra module refs:   MyIDLECSMonClose
+    -------------------------------------------------------------------------
+CODE
+  Segment part 82. NOT NEEDED.Intra module refs:   MyIDLECSMonClose
+                                                   MyIDLECSMonCreate
+    -------------------------------------------------------------------------
+CODE
+  Segment part 83. NOT NEEDED.Intra module refs:   MyIDLECSMonCreate
+    -------------------------------------------------------------------------
+CODE
+  Segment part 84. NOT NEEDED.Intra module refs:   MyIDLECSMonCreate
+    -------------------------------------------------------------------------
+CODE
+  Segment part 85. NOT NEEDED.Intra module refs:   FUNC_ABORT
+    -------------------------------------------------------------------------
+CODE
+  Segment part 86. NOT NEEDED.Intra module refs:   FUNC_ABORT
+    -------------------------------------------------------------------------
+PATCH_ONCREATE
+  Relative segment, address: A084B698 - A084B69B (0x4 bytes), align: 2
+  Segment part 22. ROOT.
+    -------------------------------------------------------------------------
+PATCH_ONCLOSE
+  Relative segment, address: A084B6AC - A084B6AF (0x4 bytes), align: 2
+  Segment part 23. ROOT.
+    -------------------------------------------------------------------------
+PATCH_SHOWMSG_BLF
+  Relative segment, address: A07F9600 - A07F9603 (0x4 bytes), align: 2
+  Segment part 24. ROOT.
+    -------------------------------------------------------------------------
+SWILIB_FUNC171
+  Relative segment, address: A00745C4 - A00745C7 (0x4 bytes), align: 2
+  Segment part 25. ROOT.
+    -------------------------------------------------------------------------
+SWILIB_FUNC172
+  Relative segment, address: A00745C8 - A00745CB (0x4 bytes), align: 2
+  Segment part 26. ROOT.
+    -------------------------------------------------------------------------
+SWILIB_FUNC19C
+  Relative segment, address: A0074670 - A0074673 (0x4 bytes), align: 2
+  Segment part 27. ROOT.
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+    -------------------------------------------------------------------------
+INITTAB
+  Relative segment, address: A1326B38 - A1326B43 (0xc bytes), align: 2
+  Segment part 87. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?init?tab?DATA_Z        A1326B38 
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\env.r79
+  PROGRAM MODULE, NAME : env
+
+  SEGMENTS IN THE MODULE
+  ======================
+DATA_Z
+  Relative segment, address: A8D9F4DC - A8D9F4E3 (0x8 bytes), align: 2
+  Segment part 3.             Intra module refs:   Segment part 16
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           l__environ              A8D9F4DC 
+    -------------------------------------------------------------------------
+CODE
+  Segment part 4. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324990 - A13249A3 (0x14 bytes), align: 2
+  Segment part 5.             Intra module refs:   __add_to_environ
+                                                   unsetenv
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           strchrnul               A1324990 
+    -------------------------------------------------------------------------
+CODE
+  Segment part 6. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13249A4 - A1324ACB (0x128 bytes), align: 2
+  Segment part 7.             Intra module refs:   setenv
+           LOCAL                   ADDRESS         
+           =====                   =======         
+           __add_to_environ        A13249A4 
+               stack 1 = 00000000 ( 00000028 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 8. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324ACC - A1324ADB (0x10 bytes), align: 2
+  Segment part 9.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           setenv                  A1324ACC        InitLoaderSystem (elfloader_helper)
+                                                   Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 10. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324ADC - A1324B7B (0xa0 bytes), align: 2
+  Segment part 11.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           unsetenv                A1324ADC        Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000010 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 12. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324B7C - A1324BEF (0x74 bytes), align: 2
+  Segment part 13.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           getenv                  A1324B7C        Segment part 0 (rets_E71sw45)
+                                                   findShared (loadlib)
+               stack 1 = 00000000 ( 00000010 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 14. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324BF0 - A1324C5F (0x70 bytes), align: 2
+  Segment part 15.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           clearenv                A1324BF0        MyIDLECSMonClose (elfloader_helper)
+                                                   Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000010 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324C60 - A1324C63 (0x4 bytes), align: 2
+  Segment part 16.            Intra module refs:   __add_to_environ
+                                                   clearenv
+                                                   getenv
+                                                   unsetenv
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+    -------------------------------------------------------------------------
+INITTAB
+  Segment part 17. TENTATIVE. Used definition from elfloader_helper
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?init?tab?DATA_Z        
+    -------------------------------------------------------------------------
+DATA_C
+  Segment part 2. NOT NEEDED.
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\loadelf.r79
+  PROGRAM MODULE, NAME : loadelf
+
+  SEGMENTS IN THE MODULE
+  ======================
+CODE
+  Segment part 2. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324C64 - A1324D5F (0xfc bytes), align: 2
+  Segment part 3.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elfopen                 A1324C64        elf_load (elfloader_helper)
+               stack 1 = 00000000 ( 00000048 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 4. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324D60 - A1324D83 (0x24 bytes), align: 2
+  Segment part 5.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elf_entry               A1324D60        elf_load (elfloader_helper)
+    -------------------------------------------------------------------------
+CODE
+  Segment part 6. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324D84 - A1324DFF (0x7c bytes), align: 2
+  Segment part 7.             Intra module refs:   elfopen
+                                                   sub_elfclose
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elfclose                A1324D84        CloseLib (loadlib)
+                                                   DoRelocation (loader)
+                                                   OpenLib (loadlib)
+                                                   elf_load (elfloader_helper)
+               stack 1 = 00000000 ( 0000000C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 8. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324E00 - A1324E1B (0x1c bytes), align: 2
+  Segment part 9.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           sub_elfclose            A1324E00        Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 10. NOT NEEDED.Intra module refs:   elfopen
+    -------------------------------------------------------------------------
+CODE
+  Segment part 11. NOT NEEDED.Intra module refs:   elfopen
+    -------------------------------------------------------------------------
+CODE
+  Segment part 12. NOT NEEDED.Intra module refs:   elfclose
+    -------------------------------------------------------------------------
+CODE
+  Segment part 13. NOT NEEDED.Intra module refs:   elfclose
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\loader.r79
+  PROGRAM MODULE, NAME : loader
+
+  SEGMENTS IN THE MODULE
+  ======================
+DATA_C
+  Relative segment, address: A1326CB8 - A1326E57 (0x1a0 bytes), align: 2
+  Segment part 2.             Intra module refs:   DoRelocation
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326E58 - A1326E5F (0x8 bytes), align: 2
+  Segment part 3.             Intra module refs:   CheckElf
+    -------------------------------------------------------------------------
+DATA_Z
+  Relative segment, address: A8D9F4E4 - A8D9F4E7 (0x4 bytes), align: 2
+  Segment part 4.             Intra module refs:   Segment part 15
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ferr                    A8D9F4E4        OpenLib (loadlib)
+                                                   elfopen (loadelf)
+    -------------------------------------------------------------------------
+CODE
+  Segment part 5. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324E1C - A1324E57 (0x3c bytes), align: 2
+  Segment part 6.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           CheckElf                A1324E1C        OpenLib (loadlib)
+                                                   elfopen (loadelf)
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 7. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Segment part 8. NOT NEEDED.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           GetBinSize              
+               not allocated function
+    -------------------------------------------------------------------------
+CODE
+  Segment part 9. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324E58 - A1324EDF (0x88 bytes), align: 2
+  Segment part 10.            Intra module refs:   DoRelocation
+                                                   LoadSections
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           LoadData                A1324E58 
+               stack 1 = 00000000 ( 00000018 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 11. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1324EE0 - A13257EB (0x90c bytes), align: 2
+  Segment part 12.            Intra module refs:   LoadSections
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           DoRelocation            A1324EE0 
+               stack 1 = 00000000 ( 000001AC )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 13. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13257EC - A1325A5F (0x274 bytes), align: 2
+  Segment part 14.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           LoadSections            A13257EC        OpenLib (loadlib)
+                                                   elfopen (loadelf)
+               stack 1 = 00000000 ( 00000048 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325A60 - A1325A63 (0x4 bytes), align: 2
+  Segment part 15.            Intra module refs:   LoadData
+                                                   LoadSections
+    -------------------------------------------------------------------------
+CODE
+  Segment part 16. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325A64 - A1325AB7 (0x54 bytes), align: 2
+  Segment part 17.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           run_FINI_Array          A1325A64        elfclose (loadelf)
+               stack 1 = 00000000 ( 00000010 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 18. NOT NEEDED.Intra module refs:   DoRelocation
+    -------------------------------------------------------------------------
+CODE
+  Segment part 19. NOT NEEDED.Intra module refs:   DoRelocation
+    -------------------------------------------------------------------------
+CODE
+  Segment part 20. NOT NEEDED.Intra module refs:   DoRelocation
+    -------------------------------------------------------------------------
+CODE
+  Segment part 21. NOT NEEDED.Intra module refs:   DoRelocation
+    -------------------------------------------------------------------------
+CODE
+  Segment part 22. NOT NEEDED.Intra module refs:   DoRelocation
+    -------------------------------------------------------------------------
+CODE
+  Segment part 23. NOT NEEDED.Intra module refs:   LoadSections
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+    -------------------------------------------------------------------------
+INITTAB
+  Segment part 24. TENTATIVE. Used definition from elfloader_helper
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?init?tab?DATA_Z        
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\loadlib.r79
+  PROGRAM MODULE, NAME : loadlib
+
+  SEGMENTS IN THE MODULE
+  ======================
+DATA_Z
+  Relative segment, address: A8D9F4E8 - A8D9F5EF (0x108 bytes), align: 2
+  Segment part 3.             Intra module refs:   Segment part 21
+                                                   findShared
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           lib_top                 A8D9F4E8 
+           tmp                     A8D9F4EC 
+    -------------------------------------------------------------------------
+DATA_Z
+  Relative segment, address: A8D9F5F0 - A8D9F5F7 (0x8 bytes), align: 2
+  Segment part 4.             Intra module refs:   Segment part 28
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           handles                 A8D9F5F0 
+           handles_cnt             A8D9F5F4 
+    -------------------------------------------------------------------------
+CODE
+  Segment part 5. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325AB8 - A1325AEB (0x34 bytes), align: 2
+  Segment part 6.             Intra module refs:   findShared
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           __is_file_exist         A1325AB8 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 7. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325AEC - A1325B23 (0x38 bytes), align: 2
+  Segment part 8.             Intra module refs:   findExport
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           elfhash                 A1325AEC 
+    -------------------------------------------------------------------------
+CODE
+  Segment part 9. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325B24 - A1325BF3 (0xd0 bytes), align: 2
+  Segment part 10.            Intra module refs:   FindFunction
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           findExport              A1325B24        DoRelocation (loader)
+               stack 1 = 00000000 ( 00000020 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 11. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325BF4 - A1325C03 (0x10 bytes), align: 2
+  Segment part 12.            Intra module refs:   dlsym
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           FindFunction            A1325BF4        DoRelocation (loader)
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 13. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325C04 - A1325CBB (0xb8 bytes), align: 2
+  Segment part 14.            Intra module refs:   findShared
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           envparse                A1325C04 
+               stack 1 = 00000000 ( 00000018 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 15. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325CBC - A1325D23 (0x68 bytes), align: 2
+  Segment part 16.            Intra module refs:   OpenLib
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           findShared              A1325CBC 
+               stack 1 = 00000000 ( 00000014 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 17. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325D24 - A1325FC3 (0x2a0 bytes), align: 2
+  Segment part 18.            Intra module refs:   dlopen
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           OpenLib                 A1325D24        DoRelocation (loader)
+               stack 1 = 00000000 ( 0000005C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 19. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1325FC4 - A132606B (0xa8 bytes), align: 2
+  Segment part 20.            Intra module refs:   OpenLib
+                                                   dlclose
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           CloseLib                A1325FC4        elfclose (loadelf)
+               stack 1 = 00000000 ( 0000000C )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132606C - A132606F (0x4 bytes), align: 2
+  Segment part 21.            Intra module refs:   CloseLib
+                                                   OpenLib
+    -------------------------------------------------------------------------
+CODE
+  Segment part 22. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326070 - A13260F3 (0x84 bytes), align: 2
+  Segment part 23.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           dlopen                  A1326071        Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000018 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 24. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13260F4 - A1326123 (0x30 bytes), align: 2
+  Segment part 25.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           dlclose                 A13260F5        Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 26. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326124 - A1326155 (0x32 bytes), align: 2
+  Segment part 27.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           dlsym                   A1326125        Segment part 0 (rets_E71sw45)
+               stack 1 = 00000000 ( 00000008 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326158 - A132615B (0x4 bytes), align: 2
+  Segment part 28.            Intra module refs:   dlclose
+                                                   dlopen
+                                                   dlsym
+    -------------------------------------------------------------------------
+CODE
+  Segment part 29. NOT NEEDED.Intra module refs:   findExport
+    -------------------------------------------------------------------------
+CODE
+  Segment part 30. NOT NEEDED.Intra module refs:   findShared
+    -------------------------------------------------------------------------
+CODE
+  Segment part 31. NOT NEEDED.Intra module refs:   OpenLib
+    -------------------------------------------------------------------------
+CODE
+  Segment part 32. NOT NEEDED.Intra module refs:   OpenLib
+    -------------------------------------------------------------------------
+CODE
+  Segment part 33. NOT NEEDED.Intra module refs:   CloseLib
+                                                   OpenLib
+    -------------------------------------------------------------------------
+CODE
+  Segment part 34. NOT NEEDED.Intra module refs:   dlopen
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+    -------------------------------------------------------------------------
+INITTAB
+  Segment part 35. TENTATIVE. Used definition from elfloader_helper
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           ?init?tab?DATA_Z        
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326E60 - A1326E6F (0x10 bytes), align: 2
+  Segment part 2.             Intra module refs:   findShared
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\png.r79
+  PROGRAM MODULE, NAME : png
+
+  SEGMENTS IN THE MODULE
+  ======================
+DATA_C
+  Relative segment, address: A1326E70 - A1326E77 (0x8 bytes), align: 2
+  Segment part 2.             Intra module refs:   create_imghdr
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326E84 - A1326E84 (0x1 bytes), align: 0
+  Segment part 3.             Intra module refs:   empty_img
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           Pointer                 A1326E84 
+    -------------------------------------------------------------------------
+DATA_C
+  Relative segment, address: A1326E78 - A1326E83 (0xc bytes), align: 2
+  Segment part 4.             Intra module refs:   PatchGetPIT
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           empty_img               A1326E78 
+    -------------------------------------------------------------------------
+CODE
+  Segment part 7. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132615C - A1326163 (0x8 bytes), align: 2
+  Segment part 8.             Intra module refs:   create_imghdr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           xmalloc                 A132615D 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 9. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326164 - A132616B (0x8 bytes), align: 2
+  Segment part 10.            Intra module refs:   create_imghdr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           xmfree                  A1326165 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 11. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A132616C - A1326193 (0x28 bytes), align: 2
+  Segment part 12.            Intra module refs:   create_imghdr
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           read_data_fn            A132616C 
+               stack 1 = 00000000 ( 00000010 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 13. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326194 - A132673F (0x5ac bytes), align: 2
+  Segment part 14.            Intra module refs:   PatchGetPIT
+                                                   Segment part 6
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           create_imghdr           A1326194 
+               stack 1 = 00000000 ( 00000060 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 15. NOT NEEDED.
+    -------------------------------------------------------------------------
+DATA_N
+  Relative segment, address: A8D9F644 - A8D9F64F (0xc bytes), align: 2
+  Segment part 5.             Intra module refs:   InitPngBitMap
+                                                   Segment part 23
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           pngtop                  A8D9F644        Segment part 2 (rets_E71sw45)
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326740 - A1326763 (0x24 bytes), align: 2
+  Segment part 16.            Intra module refs:   PatchGetPIT
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           strcpy_tolow            A1326741 
+               stack 1 = 00000000 ( 00000004 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 17. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326764 - A13267F3 (0x90 bytes), align: 2
+  Segment part 18.            Intra module refs:   PatchGetPIT
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           print10                 A1326764 
+               stack 1 = 00000000 ( 00000010 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 19. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A13267F4 - A1326867 (0x74 bytes), align: 2
+  Segment part 20.            Intra module refs:   PatchGetPIT
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           find_png_in_cache       A13267F4 
+               stack 1 = 00000000 ( 00000014 )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 21. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326868 - A1326AD7 (0x270 bytes), align: 2
+  Segment part 22.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           PatchGetPIT             A1326868        Segment part 7 (ESI)
+               stack 1 = 00000000 ( 00000120 )
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326AD8 - A1326ADB (0x4 bytes), align: 2
+  Segment part 23.            Intra module refs:   PatchGetPIT
+                                                   find_png_in_cache
+    -------------------------------------------------------------------------
+CODE
+  Segment part 24. NOT NEEDED.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326ADC - A1326B17 (0x3c bytes), align: 2
+  Segment part 25.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           InitPngBitMap           A1326ADC        MyIDLECSMonCreate (elfloader_helper)
+               stack 1 = 00000000 ( 0000000C )
+    -------------------------------------------------------------------------
+CODE
+  Segment part 26. NOT NEEDED.Intra module refs:   print10
+    -------------------------------------------------------------------------
+SWILIB_FUNC1E9
+  Relative segment, address: A00747A4 - A00747A7 (0x4 bytes), align: 2
+  Segment part 6. ROOT.
+    -------------------------------------------------------------------------
+CSTACK
+  Segment part 1. NOT NEEDED.
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\rets_E71sw45.r79
+  PROGRAM MODULE, NAME : rets_E71sw45
+
+Absolute parts
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           StoreErrInfoAndAbort    A04CCDD4        FUNC_ABORT (elfloader_helper)
+           StoreErrString          A04CCCA0        FUNC_ABORT (elfloader_helper)
+  SEGMENTS IN THE MODULE
+  ======================
+SWILIB_FUNC2EE_2F5
+  Relative segment, address: A0074BB8 - A0074BD7 (0x20 bytes), align: 2
+  Segment part 0. ROOT.
+    -------------------------------------------------------------------------
+DATA_N
+  Relative segment, address: A8D9F650, align: 2
+  Segment part 1. ROOT.
+    -------------------------------------------------------------------------
+SWILIB_FUNC1B8_1BB
+  Relative segment, address: A00746E0 - A00746EF (0x10 bytes), align: 2
+  Segment part 2. ROOT.
+    -------------------------------------------------------------------------
+CODE
+  Relative segment, address: A1326B18 - A1326B2B (0x14 bytes), align: 2
+  Segment part 3. ROOT.
+           ENTRY                   ADDRESS         REF BY
+           =====                   =======         ======
+           OldOnClose              A1326B18        MyIDLECSMonClose (elfloader_helper)
+           OldOnCreate             A1326B1C        MyIDLECSMonCreate (elfloader_helper)
+           OldShowMsg              A1326B20        MyShowMSG (elfloader_helper)
+           PITgetN                 A1326B24        Segment part 7 (ESI)
+           PITret                  A1326B28        Segment part 7 (ESI)
+
+    *************************************************************************
+
+  FILE NAME : E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\strchrnul.r79
+  PROGRAM MODULE, NAME : strchrnul
+
+  SEGMENTS IN THE MODULE
+  ======================
+CSTACK
+  Segment part 1. NOT NEEDED.
+
+
+
+
+                ****************************************
+                *                                      *
+                *            MODULE SUMMARY            *
+                *                                      *
+                ****************************************
+
+Module              CODE   DATA
+------              ----   ----
+                   (Rel)  (Rel)
+ESI                   94
+EXT2                 112
+FSWI                 148
+IMB                  124
+conf_loader          372      4
+  + shared             8
+config_data          880    868
+elfloader_helper   2 064     76
+  + shared            16
+env                  724      8
+loadelf              440
+loader             3 652      4
+loadlib            1 716    272
+png                2 517     12
+rets_E71sw45          68
+N/A (alignment)
+------            ------  -----
+Total:            12 935  1 244
+
+
+                ****************************************
+                *                                      *
+                *              CALL GRAPH              *
+                *                                      *
+                ****************************************
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  elfloader_onload
+      | Stack used (prev) :  00000000
+      | + function block  :  00000088
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000088
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  proc_HELPER
+      | Stack used (prev) :  00000000
+      | + function block  :  0000001C
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  0000001C
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  REDRAW_impl
+      | Stack used (prev) :  00000000
+      | + function block  :  00000004
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000004
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  SUBPROC_impl
+      | Stack used (prev) :  00000000
+      | + function block  :  00000008
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000008
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  SEQKILLER_impl
+      | Stack used (prev) :  00000000
+      | + function block  :  00000008
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000008
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  MyIDLECSMonClose
+      | Stack used (prev) :  00000000
+      | + function block  :  00000008
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000008
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  LoadDaemons
+      | Stack used (prev) :  00000000
+      | + function block  :  00000450
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000450
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  MyIDLECSMonCreate
+      | Stack used (prev) :  00000000
+      | + function block  :  00000014
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000014
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  MyShowMSG
+      | Stack used (prev) :  00000000
+      | + function block  :  00000004
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000004
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  elfclose
+      | Stack used (prev) :  00000000
+      | + function block  :  0000000C
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  0000000C
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  xmalloc
+      | Stack used (prev) :  00000000
+      | + function block  :  00000004
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000004
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  xmfree
+      | Stack used (prev) :  00000000
+      | + function block  :  00000004
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000004
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  read_data_fn
+      | Stack used (prev) :  00000000
+      | + function block  :  00000010
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000010
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  create_imghdr
+      | Stack used (prev) :  00000000
+      | + function block  :  00000060
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000060
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000450
+  01  LoadConfigData
+      | Stack used (prev) :  00000450
+      | + function block  :  00000030
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000480
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000480
+  01  InitConfig
+      | Stack used (prev) :  00000480
+      | + function block  :  00000008
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000488
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000488
+  01  zeromem_a
+      | Stack used (prev) :  00000488
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000048C
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000048C
+  01  l_msg
+      | Stack used (prev) :  0000048C
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000490
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000490
+  01  elf_load
+      | Stack used (prev) :  00000490
+      | + function block  :  00000020
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000004B0
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000004B0
+  01  elfload
+      | Stack used (prev) :  000004B0
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000004B4
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000004B4
+  01  InitLoaderSystem
+      | Stack used (prev) :  000004B4
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000004B8
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000004B8
+  01  CreateHELPER_PROC
+      | Stack used (prev) :  000004B8
+      | + function block  :  00000008
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000004C0
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000004C0
+  01  get_file_size
+      | Stack used (prev) :  000004C0
+      | + function block  :  00000034
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000004F4
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000004F4
+  01  LoadLibrary
+      | Stack used (prev) :  000004F4
+      | + function block  :  0000008C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000580
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000580
+  01  char8to16
+      | Stack used (prev) :  00000580
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000584
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000584
+  01  ascii2ws
+      | Stack used (prev) :  00000584
+      | + function block  :  0000000C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000590
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000590
+  01  ESI
+      | Stack used (prev) :  00000590
+      | + function block  :  0000000C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000059C
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000059C
+  01  DoUnknownFileType
+      | Stack used (prev) :  0000059C
+      | + function block  :  0000000C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000005A8
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000005A8
+  01  EXT2_REALLOC
+      | Stack used (prev) :  000005A8
+      | + function block  :  0000001C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000005C4
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000005C4
+  01  FUNC_ABORT
+      | Stack used (prev) :  000005C4
+      | + function block  :  00000028
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000005EC
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000005EC
+  01  strchrnul
+      | Stack used (prev) :  000005EC
+      | + function block  :  00000000
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000005EC
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000005EC
+  01  __add_to_environ
+      | Stack used (prev) :  000005EC
+      | + function block  :  00000028
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000614
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000614
+  01  setenv
+      | Stack used (prev) :  00000614
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000618
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000618
+  01  unsetenv
+      | Stack used (prev) :  00000618
+      | + function block  :  00000010
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000628
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000628
+  01  getenv
+      | Stack used (prev) :  00000628
+      | + function block  :  00000010
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000638
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000638
+  01  clearenv
+      | Stack used (prev) :  00000638
+      | + function block  :  00000010
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000648
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000648
+  01  elfopen
+      | Stack used (prev) :  00000648
+      | + function block  :  00000048
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000690
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000690
+  01  elf_entry
+      | Stack used (prev) :  00000690
+      | + function block  :  00000000
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000690
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000690
+  01  sub_elfclose
+      | Stack used (prev) :  00000690
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000694
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000694
+  01  CheckElf
+      | Stack used (prev) :  00000694
+      | + function block  :  00000008
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000069C
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000069C
+  01  LoadData
+      | Stack used (prev) :  0000069C
+      | + function block  :  00000018
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000006B4
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000006B4
+  01  DoRelocation
+      | Stack used (prev) :  000006B4
+      | + function block  :  000001AC
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000860
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000860
+  01  LoadSections
+      | Stack used (prev) :  00000860
+      | + function block  :  00000048
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008A8
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008A8
+  01  run_FINI_Array
+      | Stack used (prev) :  000008A8
+      | + function block  :  00000010
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008B8
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008B8
+  01  __is_file_exist
+      | Stack used (prev) :  000008B8
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008BC
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008BC
+  01  elfhash
+      | Stack used (prev) :  000008BC
+      | + function block  :  00000000
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008BC
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008BC
+  01  findExport
+      | Stack used (prev) :  000008BC
+      | + function block  :  00000020
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008DC
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008DC
+  01  FindFunction
+      | Stack used (prev) :  000008DC
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008E0
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008E0
+  01  envparse
+      | Stack used (prev) :  000008E0
+      | + function block  :  00000018
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000008F8
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000008F8
+  01  findShared
+      | Stack used (prev) :  000008F8
+      | + function block  :  00000014
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000090C
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000090C
+  01  OpenLib
+      | Stack used (prev) :  0000090C
+      | + function block  :  0000005C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000968
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000968
+  01  CloseLib
+      | Stack used (prev) :  00000968
+      | + function block  :  0000000C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000974
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000974
+  01  dlopen
+      | Stack used (prev) :  00000974
+      | + function block  :  00000018
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000098C
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000098C
+  01  dlclose
+      | Stack used (prev) :  0000098C
+      | + function block  :  00000008
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000994
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000994
+  01  dlsym
+      | Stack used (prev) :  00000994
+      | + function block  :  00000008
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000099C
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000099C
+  01  strcpy_tolow
+      | Stack used (prev) :  0000099C
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000009A0
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000009A0
+  01  print10
+      | Stack used (prev) :  000009A0
+      | + function block  :  00000010
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000009B0
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000009B0
+  01  find_png_in_cache
+      | Stack used (prev) :  000009B0
+      | + function block  :  00000014
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000009C4
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000009C4
+  01  PatchGetPIT
+      | Stack used (prev) :  000009C4
+      | + function block  :  00000120
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000AE4
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000AE4
+  01  InitPngBitMap
+      | Stack used (prev) :  00000AE4
+      | + function block  :  0000000C
+  <-Sub-tree of type: Function tree
+    | Stack used          :  00000AF0
+
+
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
+=======              =====    =============   ===========     ====  ====  =====
+LIBR                                    A0074000                     rel    2
+SWILIB_FUNC171                     A00745C4 - A00745C7           4   rel    2
+SWILIB_FUNC172                     A00745C8 - A00745CB           4   rel    2
+SWILIB_FUNC19C                     A0074670 - A0074673           4   rel    2
+SWILIB_FUNC1B8_1BB                 A00746E0 - A00746EF          10   rel    2
+SWILIB_FUNC1E9                     A00747A4 - A00747A7           4   rel    2
+SWILIB_FUNC2EE_2F5                 A0074BB8 - A0074BD7          20   rel    2
+PATCH_EXT2_R7_1                    A05026AC - A05026AF           4   rel    2
+PATCH_EXT2_R2                      A0502830 - A0502833           4   rel    2
+PATCH_EXT2_R7                      A0502A78 - A0502A7B           4   rel    2
+PATCH_EXT2_IMPL                    A0502AFC - A0502B1F          24   rel    2
+PATCH_EXT2_R6                      A0502C5C - A0502C5F           4   rel    2
+PATCH_NO_BROWSE_TXT
+                                   A06C697A - A06C697B           2   rel    1
+PATCH_ENABLE_ALTOPEN
+                                   A071CDD4 - A071CDD7           4   rel    2
+PATCH_SHOWMSG_BLF                  A07F9600 - A07F9603           4   rel    2
+PATCH_ONCREATE                     A084B698 - A084B69B           4   rel    2
+PATCH_ONCLOSE                      A084B6AC - A084B6AF           4   rel    2
+PATCH_ESI1                         A08D5FF4 - A08D5FF7           4   rel    2
+PATCH_ESI2                         A08D6004 - A08D6007           4   rel    2
+PATCH_GET_PIT                      A094CE9A - A094CE9D           4   rel    1
+PATCH_GET_PITJ                     A094CEA0 - A094CEA3           4   rel    2
+FSWI_PATCH2                        A12D1328 - A12D132B           4   rel    2
+FSWI_PATCH1                        A12D1414 - A12D1417           4   rel    2
+START                                   A1324000                     dse    0
+CODE                               A1324000 - A1326B2B        2B2C   rel    2
+SWITAB                                  A1326B2C                     dse    0
+INITTAB                            A1326B2C - A1326B43          18   rel    2
+DATA_ID                                 A1326B44                     dse    0
+DATA_C                             A1326B44 - A1326E84         341   rel    2
+CONFIG_DATA_ID                     A1326E88 - A13271EB         364   rel    2
+REGEXPL_CNT                        A8D9F174 - A8D9F177           4   rel    2
+CONFIG_DATA_I                      A8D9F178 - A8D9F4DB         364   rel    2
+DATA_Z                             A8D9F4DC - A8D9F5F7         11C   rel    2
+DATA_I                                  A8D9F5F8                     dse    0
+DATA_N                             A8D9F5F8 - A8D9F64F          58   rel    2
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+ 12 935 bytes of CODE memory
+  1 244 bytes of DATA memory
+
+Errors: none
+Warnings: none
+

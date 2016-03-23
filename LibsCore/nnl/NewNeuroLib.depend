@@ -1,0 +1,165 @@
+# depslib dependency file v1.0
+1455828356 source:/home/aveman/SiemanC-git/LibsCore/nnl/DataFileTypes.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<wchar.h>
+	"DataFileTypes.h"
+	<unistd.h>
+
+1447506009 /home/aveman/SiemanC-git/LibsCore/nnl/DataFileTypes.h
+
+1434107395 source:/home/aveman/SiemanC-git/LibsCore/nnl/FreedomCase.cpp
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"LogSystem.h"
+	"DataFileTypes.h"
+	"FreedomCase.h"
+
+1443065501 /home/aveman/SiemanC-git/LibsCore/nnl/LogSystem.h
+	"libexport.h"
+
+1447318289 /home/aveman/SiemanC-git/LibsCore/nnl/libexport.h
+
+1450157045 /home/aveman/SiemanC-git/LibsCore/nnl/FreedomCase.h
+	"libexport.h"
+
+1435573982 source:/home/aveman/SiemanC-git/LibsCore/nnl/LangPack.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<wchar.h>
+	<wctype.h>
+	"DataFileTypes.h"
+	"LGP_DefLGP.h"
+	"LangPack.h"
+
+1449970396 /home/aveman/SiemanC-git/LibsCore/nnl/LGP_DefLGP.h
+
+1450157878 /home/aveman/SiemanC-git/LibsCore/nnl/LangPack.h
+	"libexport.h"
+
+1449970571 source:/home/aveman/SiemanC-git/LibsCore/nnl/Layer.cpp
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"LogSystem.h"
+	"FreedomCase.h"
+	"DataFileTypes.h"
+	"Link.h"
+	"Neuron.h"
+	"Layer.h"
+	"States.h"
+
+1437409682 /home/aveman/SiemanC-git/LibsCore/nnl/Link.h
+	"libexport.h"
+
+1450157589 /home/aveman/SiemanC-git/LibsCore/nnl/Neuron.h
+	"libexport.h"
+
+1449970532 /home/aveman/SiemanC-git/LibsCore/nnl/Layer.h
+	"libexport.h"
+
+1435484867 /home/aveman/SiemanC-git/LibsCore/nnl/States.h
+	"libexport.h"
+
+1433949990 source:/home/aveman/SiemanC-git/LibsCore/nnl/Link.cpp
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"LogSystem.h"
+	"FreedomCase.h"
+	"DataFileTypes.h"
+	"Link.h"
+	"Neuron.h"
+	"States.h"
+
+1437166257 source:/home/aveman/SiemanC-git/LibsCore/nnl/LogSystem.cpp
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<ctime>
+	<wchar.h>
+	"DataFileTypes.h"
+	"LogSystem.h"
+
+1435485139 source:/home/aveman/SiemanC-git/LibsCore/nnl/Net.cpp
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"LogSystem.h"
+	"FreedomCase.h"
+	"DataFileTypes.h"
+	"Link.h"
+	"Neuron.h"
+	"Layer.h"
+	"States.h"
+	"Net.h"
+
+1447317811 /home/aveman/SiemanC-git/LibsCore/nnl/Net.h
+	"libexport.h"
+
+1435397726 source:/home/aveman/SiemanC-git/LibsCore/nnl/Neuron.cpp
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"LogSystem.h"
+	"FreedomCase.h"
+	"DataFileTypes.h"
+	"Link.h"
+	"Neuron.h"
+	"Layer.h"
+	"States.h"
+
+1450368954 source:/home/aveman/SiemanC-git/LibsCore/nnl/Quproquowing.cpp
+	<windows.h>
+	<io.h>
+	<unistd.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<wchar.h>
+	<fcntl.h>
+	<errno.h>
+	"LogSystem.h"
+	"FreedomCase.h"
+	"DataFileTypes.h"
+	"States.h"
+	"Link.h"
+	"Neuron.h"
+	"Layer.h"
+	"LangPack.h"
+	"Utils.h"
+	"Quproquowing.h"
+
+1437431553 /home/aveman/SiemanC-git/LibsCore/nnl/Utils.h
+	"libexport.h"
+
+1449744792 /home/aveman/SiemanC-git/LibsCore/nnl/Quproquowing.h
+	"libexport.h"
+
+1427386630 source:/home/aveman/SiemanC-git/LibsCore/nnl/States.cpp
+	<stdio.h>
+	<stdlib.h>
+	"DataFileTypes.h"
+	"States.h"
+
+1447504996 source:/home/aveman/SiemanC-git/LibsCore/nnl/Utils.cpp
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<math.h>
+	"LogSystem.h"
+	"FreedomCase.h"
+	"DataFileTypes.h"
+	"States.h"
+	"Link.h"
+	"Neuron.h"
+	"Layer.h"
+	"Utils.h"
+

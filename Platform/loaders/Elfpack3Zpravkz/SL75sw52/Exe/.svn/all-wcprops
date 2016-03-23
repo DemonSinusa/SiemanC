@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/59/trunk/elfloader3/src2/SL75sw52/Exe
+END
+ELFLoader.hex
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/59/trunk/elfloader3/src2/SL75sw52/Exe/ELFLoader.hex
+END
+postbuild
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/59/trunk/elfloader3/src2/SL75sw52/Exe/postbuild
+END

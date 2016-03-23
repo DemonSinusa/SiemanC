@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Siemens" />
+		<Option pch_mode="2" />
+		<Option compiler="armelfgcc" />
+		<Build>
+			<Target title="lib">
+				<Option output="../../Platform/libs/%TARGET_NAME%s.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
+				<Option type="3" />
+				<Option compiler="armelfgcc" />
+			</Target>
+			<Target title="NSGlib">
+				<Option output="../../Platform/libs/%TARGET_NAME%s.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
+				<Option type="3" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-DNEWSGOLD" />
+				</Compiler>
+			</Target>
+			<Target title="ELKAlib">
+				<Option output="../../Platform/libs/%TARGET_NAME%s.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
+				<Option type="3" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-DNEWSGOLD" />
+					<Add option="-DELKA" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-marm" />
+			<Add option="-Os" />
+			<Add option="-std=c++98" />
+			<Add option="-W" />
+			<Add option="-std=c99" />
+			<Add directory="../../Platform/include" />
+		</Compiler>
+		<Linker>
+			<Add option="-s" />
+			<Add library="crt_helper" />
+			<Add library="gcc-4.6.1" />
+			<Add library="c-1.0" />
+			<Add directory="../../Platform/libs" />
+		</Linker>
+		<Unit filename="apd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="apd.h" />
+		<Unit filename="cfg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="cfg.h" />
+		<Unit filename="files.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="files.h" />
+		<Unit filename="find_files.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="find_files.h" />
+		<Unit filename="graphics.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="graphics.h" />
+		<Unit filename="ipc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ipc.h" />
+		<Unit filename="lang.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lang.h" />
+		<Unit filename="log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="log.h" />
+		<Unit filename="mplayer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mplayer.h" />
+		<Unit filename="obs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="obs.h" />
+		<Unit filename="other.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="other.h" />
+		<Unit filename="strings.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="strings.h" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

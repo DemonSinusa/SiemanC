@@ -1,0 +1,92 @@
+# depslib dependency file v1.0
+1455274803 source:/home/iceritual/SiemanC-git/LibsUser/libshell/conf_loader.c
+	<swilib.h>
+	<cfg_items.h>
+	"config_data.h"
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/config_data.h
+
+1455274809 source:/home/iceritual/SiemanC-git/LibsUser/libshell/config_col.c
+	<swilib.h>
+	<cfg_items.h>
+
+1455274818 source:/home/iceritual/SiemanC-git/LibsUser/libshell/config_coord.c
+	<swilib.h>
+	<conf_loader.h>
+	<cfg_items.h>
+
+1455274823 source:/home/iceritual/SiemanC-git/LibsUser/libshell/config_data.c
+	<swilib.h>
+	<conf_loader.h>
+	<cfg_items.h>
+
+1455274828 source:/home/iceritual/SiemanC-git/LibsUser/libshell/config_font.c
+	<swilib.h>
+	<cfg_items.h>
+
+1455275404 source:/home/iceritual/SiemanC-git/LibsUser/libshell/graphics.c
+	<swilib.h>
+	"../libsiemens/graphics.h"
+	"../libsiemens/cfg.h"
+	"../libsiemens/files.h"
+	"../libsiemens/obs.h"
+	"graphics.h"
+	"other.h"
+	"config_coord.h"
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/graphics.h
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/cfg.h
+
+1455262936 /home/iceritual/SiemanC-git/LibsUser/libsiemens/files.h
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/obs.h
+
+1455275400 /home/iceritual/SiemanC-git/LibsUser/libshell/graphics.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/other.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/config_coord.h
+
+1455275415 source:/home/iceritual/SiemanC-git/LibsUser/libshell/menu.c
+	<swilib.h>
+	"../libsiemens/graphics.h"
+	"graphics.h"
+	"menu.h"
+	"config_col.h"
+	"config_font.h"
+	"skin_utils.h"
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/menu.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/config_col.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/config_font.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/skin_utils.h
+
+1455275421 source:/home/iceritual/SiemanC-git/LibsUser/libshell/other.c
+	"swilib.h"
+	"../libsiemens/graphics.h"
+	"../libsiemens/ipc.h"
+	"../libsiemens/other.h"
+	"graphics.h"
+	"plugins.h"
+	"other.h"
+	"config_data.h"
+	"conf_loader.h"
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/ipc.h
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/other.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/plugins.h
+
+1382549200 /home/iceritual/SiemanC-git/LibsUser/libshell/conf_loader.h
+
+1455275427 source:/home/iceritual/SiemanC-git/LibsUser/libshell/plugins.c
+	<swilib.h>
+	"../libsiemens/files.h"
+	"plugins.h"
+	"other.h"
+

@@ -1,0 +1,1083 @@
+##############################################################################
+#                                                                            #
+# IAR ARM ANSI C/C++ Compiler V4.42A/W32 EVALUATION    25/Nov/2013  17:49:18 #
+# Copyright 1999-2005 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Cpu mode        =  interwork                                            #
+#    Endian          =  little                                               #
+#    Stack alignment =  4                                                    #
+#    Source file     =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\loader3\loadl #
+#                       ib.c                                                 #
+#    Command line    =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\loader3\loadl #
+#                       ib.c -D NDEBUG -D NEWSGOLD -D ELKA -lC               #
+#                       E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\List\ #
+#                        -o E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\O #
+#                       bj\ -s9 --no_unroll --cpu_mode thumb --endian        #
+#                       little --cpu ARM926EJ-S --stack_align 4 --interwork  #
+#                       -e --fpu None -I "E:\iar\Embedded Workbench 4.0      #
+#                       Evaluation\ARM\INC\" --inline_threshold=2            #
+#    List file       =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\List\ #
+#                       loadlib.lst                                          #
+#    Object file     =  E:\iar\SVN\Elfloader3\elfloader3\srcMy\E71sw45\Obj\l #
+#                       oadlib.r79                                           #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+E:\iar\SVN\Elfloader3\elfloader3\srcMy\loader3\loadlib.c
+      1          
+      2          /*
+      3           * Этот файл является частью программы ElfLoader
+      4           * Copyright (C) 2011 by Z.Vova, Ganster
+      5           * Licence: GPLv3
+      6           */
+      7          
+      8          #include "loader.h"
+
+  #define ELF32_ST_BIND(x)        ELF_ST_BIND(x)
+          ^
+"E:\iar\SVN\Elfloader3\elfloader3\srcMy\loader3\elf.h",554  Warning[Pe047]: 
+          incompatible redefinition of macro "ELF32_ST_BIND" (declared at line
+          356)
+
+  #define ELF32_ST_TYPE(x)        ELF_ST_TYPE(x)
+          ^
+"E:\iar\SVN\Elfloader3\elfloader3\srcMy\loader3\elf.h",555  Warning[Pe047]: 
+          incompatible redefinition of macro "ELF32_ST_TYPE" (declared at line
+          357)
+      9          #include "env.h"
+     10          
+     11          
+     12          #ifndef _test_linux
+     13          extern int __e_div(int delitelb, int delimoe);
+     14          #endif
+
+   \                                 In segment DATA_Z, align 4, align-sorted
+     15          char tmp[258];
+     16          
+     17          
+     18          Global_Queue* lib_top = 0;
+   \                     lib_top:
+   \   00000000                      DS8 4
+   \                     tmp:
+   \   00000004                      DS8 260
+
+   \                                 In segment DATA_Z, align 4, align-sorted
+     19          Elf32_Lib** handles = 0;
+   \                     handles:
+   \   00000000                      DS8 4
+     20          int handles_cnt = 0;
+   \                     handles_cnt:
+   \   00000004                      DS8 4
+     21          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     22          __arch char __is_file_exist(const char *fl)
+     23          {
+   \                     __is_file_exist:
+   \   00000000   00402DE9           PUSH     {LR}
+     24              int f;
+     25              if( (f=fopen(fl, A_ReadOnly | A_BIN, P_READ,0)) != -1)
+   \   00000004   0030A0E3           MOV      R3,#+0
+   \   00000008   8020A0E3           MOV      R2,#+128
+   \   0000000C   801CA0E3           MOV      R1,#+32768
+   \   00000010   0A0000EF           SWI      +10
+   \   00000014   010070E3           CMN      R0,#+1
+   \   00000018   0300000A           BEQ      ??__is_file_exist_0
+     26              {
+     27                  fclose(f,0);
+   \   0000001C   0010A0E3           MOV      R1,#+0
+   \   00000020   0D0000EF           SWI      +13
+     28                  return 1;
+   \   00000024   0100A0E3           MOV      R0,#+1
+   \   00000028   0080BDE8           POP      {PC}
+     29              }
+     30              return 0;
+   \                     ??__is_file_exist_0:
+   \   0000002C   0000A0E3           MOV      R0,#+0
+   \   00000030   0080BDE8           POP      {PC}             ;; return
+     31          }
+     32          
+     33          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     34          __arch unsigned long elfhash(const char* name)
+     35          {
+     36              unsigned long int hash = 0;
+   \                     elfhash:
+   \   00000000   0020D0E5           LDRB     R2,[R0, #+0]
+   \   00000004   0010A0E3           MOV      R1,#+0
+   \   00000008   000052E3           CMP      R2,#+0
+   \   0000000C   0700000A           BEQ      ??elfhash_0
+     37              while (*name != '\0')
+     38              {
+     39                  unsigned long int hi;
+     40                  hash = (hash << 4) + *name++;
+   \                     ??elfhash_1:
+   \   00000010   ........           LDRB     R2,[R0], #+1
+   \   00000014   011282E0           ADD      R1,R2,R1, LSL #+4
+     41                  hi = hash & 0xf0000000;
+   \   00000018   F02411E2           ANDS     R2,R1,#0xF0000000
+     42                  if (hi != 0)
+     43                  {
+     44                      hash ^= hi >> 24;
+     45                      hash ^= hi;
+   \   0000001C   222C2210           EORNE    R2,R2,R2, LSR #+24
+   \   00000020   01102210           EORNE    R1,R2,R1
+     46                  }
+     47              }
+   \   00000024   0020D0E5           LDRB     R2,[R0, #+0]
+   \   00000028   000052E3           CMP      R2,#+0
+   \   0000002C   F7FFFF1A           BNE      ??elfhash_1
+     48              return hash;
+   \                     ??elfhash_0:
+   \   00000030   0100A0E1           MOV      R0,R1
+   \   00000034   1EFF2FE1           BX       LR               ;; return
+     49          }
+     50          
+     51          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     52          __arch Elf32_Word findExport (Elf32_Exec* ex, const char* name)
+     53          {
+   \                     findExport:
+   \   00000000   F0472DE9           PUSH     {R4-R10,LR}
+   \   00000004   0040A0E1           MOV      R4,R0
+     54              if(!ex || !ex->hashtab) return 0;
+   \   00000008   000054E3           CMP      R4,#+0
+   \   0000000C   C8009415           LDRNE    R0,[R4, #+200]
+   \   00000010   0150A0E1           MOV      R5,R1
+   \   00000014   00005013           CMPNE    R0,#+0
+   \   00000018   0000A003           MOVEQ    R0,#+0
+   \   0000001C   F087BD08           POPEQ    {R4-R10,PC}
+     55          
+     56              long hash = elfhash(name);
+   \   00000020   0500A0E1           MOV      R0,R5
+   \   00000024   ........           BL       elfhash
+     57          
+     58              Elf32_Word nbucket = ex->hashtab[0];
+   \   00000028   C81094E5           LDR      R1,[R4, #+200]
+     59              //Elf32_Word nchain = ex->hashtab[1];
+     60              Elf32_Word* bucket = &ex->hashtab[2];
+     61              Elf32_Word* chain = &ex->hashtab[2 + nbucket];
+     62              Elf32_Word func = 0;
+   \   0000002C   0070A0E3           MOV      R7,#+0
+   \   00000030   002091E5           LDR      R2,[R1, #+0]
+   \   00000034   088081E2           ADD      R8,R1,#+8
+   \   00000038   021181E0           ADD      R1,R1,R2, LSL #+2
+   \   0000003C   086081E2           ADD      R6,R1,#+8
+     63              int symidx;
+     64          
+     65              for (symidx = bucket[__e_div(nbucket, hash)]; symidx != STN_UNDEF; symidx = chain[symidx])
+   \   00000040   0010A0E1           MOV      R1,R0
+   \   00000044   0200A0E1           MOV      R0,R2
+   \   00000048   ........           _BLF     __e_div,??__e_div??rA
+   \   0000004C   008198E7           LDR      R8,[R8, +R0, LSL #+2]
+   \   00000050   000000EA           B        ??findExport_0
+   \                     ??findExport_1:
+   \   00000054   088196E7           LDR      R8,[R6, +R8, LSL #+2]
+   \                     ??findExport_0:
+   \   00000058   000058E3           CMP      R8,#+0
+   \   0000005C   1900000A           BEQ      ??findExport_2
+     66              {
+     67                  Elf32_Sym sym = ex->symtab[symidx];
+   \   00000060   C00094E5           LDR      R0,[R4, #+192]
+   \   00000064   080280E0           ADD      R0,R0,R8, LSL #+4
+   \   00000068   04A090E5           LDR      R10,[R0, #+4]
+   \   0000006C   002090E5           LDR      R2,[R0, #+0]
+   \   00000070   0C90D0E5           LDRB     R9,[R0, #+12]
+     68          
+     69                  if (sym.st_value == 0 || sym.st_shndx == SHN_UNDEF)
+   \   00000074   00005AE3           CMP      R10,#+0
+   \   00000078   FE00D011           LDRSHNE  R0,[R0, #+14]
+   \   0000007C   00005013           CMPNE    R0,#+0
+   \   00000080   F3FFFF0A           BEQ      ??findExport_1
+     70                      continue;
+     71          
+     72                  switch (ELF_ST_TYPE(sym.st_info))
+   \   00000084   0F0009E2           AND      R0,R9,#0xF
+   \   00000088   020050E3           CMP      R0,#+2
+   \   0000008C   F0FFFF8A           BHI      ??findExport_1
+     73                  {
+     74                  case STT_NOTYPE:
+     75                  case STT_FUNC:
+     76                  case STT_OBJECT:
+     77                      break;
+     78                  default:
+     79                      /* Not a code/data definition. */
+     80                      continue;
+     81                  }
+     82          
+     83                  if (strcmp (ex->strtab + sym.st_name, name))
+   \   00000090   CC0094E5           LDR      R0,[R4, #+204]
+   \   00000094   0510A0E1           MOV      R1,R5
+   \   00000098   000082E0           ADD      R0,R2,R0
+   \   0000009C   190000EF           SWI      +25
+   \   000000A0   000050E3           CMP      R0,#+0
+   \   000000A4   EAFFFF1A           BNE      ??findExport_1
+     84                      /* Not the symbol we are looking for. */
+     85                      continue;
+     86          
+     87                  switch (ELF_ST_BIND(sym.st_info))
+   \   000000A8   000094E5           LDR      R0,[R4, #+0]
+   \   000000AC   2912A0E1           LSR      R1,R9,#+4
+   \   000000B0   00008AE0           ADD      R0,R10,R0
+   \   000000B4   011051E2           SUBS     R1,R1,#+1
+   \   000000B8   F087BD08           POPEQ    {R4-R10,PC}
+   \   000000BC   011051E2           SUBS     R1,R1,#+1
+   \   000000C0   0070A001           MOVEQ    R7,R0
+   \   000000C4   E2FFFFEA           B        ??findExport_1
+     88                  {
+     89                      case STB_GLOBAL:
+     90                          /* Global definition.  Just what we need. */
+     91                          return (Elf32_Word)ex->body + sym.st_value;
+     92                      case STB_WEAK:
+     93                          /* Weak definition.  Use this value if we don't find another. */
+     94                          func = (Elf32_Word)ex->body + sym.st_value;
+     95                          break;
+     96                  default:
+     97                      /* Local symbols are ignored.  */
+     98                      break;
+     99                  }
+    100              }
+    101          
+    102              return func;
+   \                     ??findExport_2:
+   \   000000C8   0700A0E1           MOV      R0,R7
+   \   000000CC   F087BDE8           POP      {R4-R10,PC}      ;; return
+    103          }
+    104          
+    105          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    106          __arch Elf32_Word FindFunction(Elf32_Lib* lib, const char *name)
+    107          {
+    108              if(!lib) return 0;
+   \                     FindFunction:
+   \   00000000   000050E3           CMP      R0,#+0
+   \   00000004   1EFF2F01           BXEQ     LR
+    109              return findExport(lib->ex, name);
+   \   00000008   400090E5           LDR      R0,[R0, #+64]
+   \   0000000C   ........           B        findExport       ;; tailcall
+    110          }
+    111          
+    112          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    113          __arch char * envparse(const char *str, char *buf, int num)
+    114          {
+   \                     envparse:
+   \   00000000   F0412DE9           PUSH     {R4-R8,LR}
+   \   00000004   0040A0E1           MOV      R4,R0
+   \   00000008   0150A0E1           MOV      R5,R1
+   \   0000000C   0260A0E1           MOV      R6,R2
+    115            if( !str || !buf || num < 0) return 0;
+   \   00000010   000054E3           CMP      R4,#+0
+   \   00000014   00005513           CMPNE    R5,#+0
+   \   00000018   0100000A           BEQ      ??envparse_0
+   \   0000001C   000056E3           CMP      R6,#+0
+   \   00000020   0100005A           BPL      ??envparse_1
+   \                     ??envparse_0:
+   \   00000024   0000A0E3           MOV      R0,#+0
+   \   00000028   F081BDE8           POP      {R4-R8,PC}
+    116            const char *start = str;
+    117            const char *s = strchr(str, ';');
+   \                     ??envparse_1:
+   \   0000002C   3B10A0E3           MOV      R1,#+59
+   \   00000030   180000EF           SWI      +24
+   \   00000034   0470A0E1           MOV      R7,R4
+   \   00000038   0080A0E3           MOV      R8,#+0
+   \   0000003C   040000EA           B        ??envparse_2
+    118            
+    119            while(num-- && start)
+    120            {
+    121              start = s? s+1:0;
+   \                     ??envparse_3:
+   \   00000040   017090E2           ADDS     R7,R0,#+1
+    122              if(start)
+   \   00000044   0A00000A           BEQ      ??envparse_4
+    123                s = strchr(start, ';');
+   \   00000048   3B10A0E3           MOV      R1,#+59
+   \   0000004C   0700A0E1           MOV      R0,R7
+   \   00000050   180000EF           SWI      +24
+   \                     ??envparse_2:
+   \   00000054   0610A0E1           MOV      R1,R6
+   \   00000058   016041E2           SUB      R6,R1,#+1
+   \   0000005C   000051E3           CMP      R1,#+0
+   \   00000060   00005713           CMPNE    R7,#+0
+   \   00000064   0400000A           BEQ      ??envparse_5
+   \   00000068   000050E3           CMP      R0,#+0
+   \   0000006C   F3FFFF1A           BNE      ??envparse_3
+   \   00000070   0070A0E3           MOV      R7,#+0
+    124              else s = 0;
+   \                     ??envparse_4:
+   \   00000074   0000A0E3           MOV      R0,#+0
+   \   00000078   F5FFFFEA           B        ??envparse_2
+    125            }
+    126            
+    127            if(!s){
+   \                     ??envparse_5:
+   \   0000007C   000050E3           CMP      R0,#+0
+   \   00000080   0400001A           BNE      ??envparse_6
+    128              switch( start ? 1:0 )
+   \   00000084   000057E3           CMP      R7,#+0
+   \   00000088   E5FFFF0A           BEQ      ??envparse_0
+    129              {
+    130                case 0:
+    131          	return 0;
+    132                case 1:
+    133          	s = str + strlen(str);
+   \   0000008C   0400A0E1           MOV      R0,R4
+   \   00000090   1B0000EF           SWI      +27
+   \   00000094   040080E0           ADD      R0,R0,R4
+    134              }
+    135            }
+    136          
+    137            memcpy(buf, start, s-start);
+   \                     ??envparse_6:
+   \   00000098   074040E0           SUB      R4,R0,R7
+   \   0000009C   0420A0E1           MOV      R2,R4
+   \   000000A0   0710A0E1           MOV      R1,R7
+   \   000000A4   0500A0E1           MOV      R0,R5
+   \   000000A8   1E0100EF           SWI      +286
+    138            buf[s-start] = 0;
+   \   000000AC   0580C4E7           STRB     R8,[R4, +R5]
+    139            return buf;
+   \   000000B0   0500A0E1           MOV      R0,R5
+   \   000000B4   F081BDE8           POP      {R4-R8,PC}       ;; return
+    140          }
+    141          
+    142          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    143          __arch const char * findShared(const char *name)
+    144          {
+   \                     findShared:
+   \   00000000   F0402DE9           PUSH     {R4-R7,LR}
+    145              const char *env = getenv("LD_LIBRARY_PATH");
+    146             
+    147              for(int i=0;; ++i)
+   \   00000004   54709FE5           LDR      R7,??findShared_0  ;; lib_top
+   \   00000008   0040A0E1           MOV      R4,R0
+   \   0000000C   50009FE5           LDR      R0,??findShared_0+0x4  ;; `?<Constant "LD_LIBRARY_PATH">`
+   \   00000010   0060A0E3           MOV      R6,#+0
+   \   00000014   ........           _BLF     getenv,??getenv??rA
+   \   00000018   0050A0E1           MOV      R5,R0
+   \   0000001C   000000EA           B        ??findShared_1
+   \                     ??findShared_2:
+   \   00000020   016086E2           ADD      R6,R6,#+1
+    148              {
+    149                  if( !envparse(env, tmp, i) ) return 0;
+   \                     ??findShared_1:
+   \   00000024   0620A0E1           MOV      R2,R6
+   \   00000028   041087E2           ADD      R1,R7,#+4
+   \   0000002C   0500A0E1           MOV      R0,R5
+   \   00000030   ........           BL       envparse
+   \   00000034   000050E3           CMP      R0,#+0
+   \   00000038   F080BD08           POPEQ    {R4-R7,PC}
+    150                  strcat(tmp, name);
+   \   0000003C   0410A0E1           MOV      R1,R4
+   \   00000040   040087E2           ADD      R0,R7,#+4
+   \   00000044   170000EF           SWI      +23
+    151                  if( __is_file_exist(tmp) )
+   \   00000048   040087E2           ADD      R0,R7,#+4
+   \   0000004C   ........           BL       __is_file_exist
+   \   00000050   000050E3           CMP      R0,#+0
+   \   00000054   F1FFFF0A           BEQ      ??findShared_2
+    152                  {
+    153                      return tmp;
+   \   00000058   040087E2           ADD      R0,R7,#+4
+   \   0000005C   F080BDE8           POP      {R4-R7,PC}       ;; return
+   \                     ??findShared_0:
+   \   00000060   ........           DC32     lib_top
+   \   00000064   ........           DC32     `?<Constant "LD_LIBRARY_PATH">`
+    154                  }
+    155              }
+    156              
+    157              /* этого никогда не будет */
+    158              //return 0;
+    159          }
+    160          
+    161          
+    162          // Открыть библиотеку
+
+   \                                 In segment CODE, align 4, keep-with-next
+    163          __arch Elf32_Lib* OpenLib(const char *name, Elf32_Exec *_ex)
+    164          {
+   \                     OpenLib:
+   \   00000000   F04F2DE9           PUSH     {R4-R11,LR}
+    165              printf("Starting loading shared library '%s'...\n", name);
+    166              int fp, _size = 0;
+    167              Elf32_Ehdr ehdr;
+    168              Elf32_Exec* ex;
+    169          
+    170              // Поищем среди уже загруженых
+    171              Global_Queue* ready_libs = lib_top;
+   \   00000004   ........           LDR      R7,??DataTable1  ;; lib_top
+   \   00000008   34D04DE2           SUB      SP,SP,#+52
+   \   0000000C   004097E5           LDR      R4,[R7, #+0]
+   \   00000010   0050A0E1           MOV      R5,R0
+   \   00000014   0160A0E1           MOV      R6,R1
+   \   00000018   000000EA           B        ??OpenLib_0
+    172              while(ready_libs)
+    173              {
+    174                  Elf32_Lib* lib = ready_libs->lib;
+    175          
+    176                  if(!strcmp (lib->soname, name))
+    177                  {
+    178                      printf(" '%s' is olready loaded\n", name);
+    179                      lib->users_cnt++;
+    180                      return lib;
+    181                  }
+    182                  ready_libs = ready_libs->prev;
+   \                     ??OpenLib_1:
+   \   0000001C   084094E5           LDR      R4,[R4, #+8]
+   \                     ??OpenLib_0:
+   \   00000020   000054E3           CMP      R4,#+0
+   \   00000024   0A00000A           BEQ      ??OpenLib_2
+   \   00000028   008094E5           LDR      R8,[R4, #+0]
+   \   0000002C   0510A0E1           MOV      R1,R5
+   \   00000030   0800A0E1           MOV      R0,R8
+   \   00000034   190000EF           SWI      +25
+   \   00000038   000050E3           CMP      R0,#+0
+   \   0000003C   F6FFFF1A           BNE      ??OpenLib_1
+   \   00000040   440098E5           LDR      R0,[R8, #+68]
+   \   00000044   010080E2           ADD      R0,R0,#+1
+   \   00000048   440088E5           STR      R0,[R8, #+68]
+   \   0000004C   0800A0E1           MOV      R0,R8
+   \   00000050   670000EA           B        ??OpenLib_3
+    183              }
+    184              
+    185              
+    186              const char  *ld_path;
+    187              
+    188              /* путь у нас реальный */
+    189              if(name[1] == ':')
+   \                     ??OpenLib_2:
+   \   00000054   0100D5E5           LDRB     R0,[R5, #+1]
+   \   00000058   3A0050E3           CMP      R0,#+58
+    190                ld_path = name;
+   \   0000005C   0590A001           MOVEQ    R9,R5
+   \   00000060   0200000A           BEQ      ??OpenLib_4
+    191              else
+    192                ld_path = findShared(name);
+   \   00000064   0500A0E1           MOV      R0,R5
+   \   00000068   ........           BL       findShared
+   \   0000006C   0090A0E1           MOV      R9,R0
+    193              
+    194              if(!ld_path) return 0;
+   \                     ??OpenLib_4:
+   \   00000070   24829FE5           LDR      R8,??OpenLib_5   ;; ferr
+   \   00000074   000059E3           CMP      R9,#+0
+   \   00000078   00A0A0E3           MOV      R10,#+0
+   \   0000007C   0600001A           BNE      ??OpenLib_6
+   \                     ??OpenLib_7:
+   \   00000080   5A0000EA           B        ??OpenLib_8
+    195              
+    196          try_again:
+    197              /* Открываем */
+    198              if((fp = fopen(ld_path, A_ReadOnly+A_BIN,P_READ, &ferr)) == -1) return 0;
+    199          
+    200              /* Читаем хедер */
+    201              if( (_size = fread(fp, &ehdr, sizeof(Elf32_Ehdr), &ferr)) <= 0) return 0;
+    202              
+    203              /* Проверяем шо это вообще такое */
+    204              if( _size < sizeof(Elf32_Ehdr) || CheckElf(&ehdr) ) // не эльф? о_О мб симлинк?!
+    205              {
+    206                int ns = lseek(fp, 0, S_END, &ferr, &ferr); // если длина файл больше 256 байт то нахрен такой путь...
+    207                if(ns < 256 && ns > 0)
+    208                {
+    209                  lseek(fp, 0, S_SET, &ferr, &ferr);
+    210                  if(fread(fp, tmp, ns, &ferr) != ns){
+    211                    fclose(fp, &ferr);
+    212                    return 0;
+    213                  }
+    214                  tmp[ns] = 0;
+   \                     ??OpenLib_9:
+   \   00000084   070089E0           ADD      R0,R9,R7
+   \   00000088   04A0C0E5           STRB     R10,[R0, #+4]
+    215                  ld_path = tmp;
+    216                  fclose(fp, &ferr);
+   \   0000008C   0810A0E1           MOV      R1,R8
+   \   00000090   0400A0E1           MOV      R0,R4
+   \   00000094   0D0000EF           SWI      +13
+   \   00000098   049087E2           ADD      R9,R7,#+4
+    217                  goto try_again;
+   \                     ??OpenLib_6:
+   \   0000009C   0830A0E1           MOV      R3,R8
+   \   000000A0   8020A0E3           MOV      R2,#+128
+   \   000000A4   801CA0E3           MOV      R1,#+32768
+   \   000000A8   0900A0E1           MOV      R0,R9
+   \   000000AC   0A0000EF           SWI      +10
+   \   000000B0   0040A0E1           MOV      R4,R0
+   \   000000B4   0A90E0E1           MVN      R9,R10
+   \   000000B8   090050E1           CMP      R0,R9
+   \   000000BC   4B00000A           BEQ      ??OpenLib_8
+   \   000000C0   0830A0E1           MOV      R3,R8
+   \   000000C4   3420A0E3           MOV      R2,#+52
+   \   000000C8   0D10A0E1           MOV      R1,SP
+   \   000000CC   0B0000EF           SWI      +11
+   \   000000D0   010050E3           CMP      R0,#+1
+   \   000000D4   450000BA           BLT      ??OpenLib_8
+   \   000000D8   340050E3           CMP      R0,#+52
+   \   000000DC   0300003A           BCC      ??OpenLib_10
+   \   000000E0   0D00A0E1           MOV      R0,SP
+   \   000000E4   ........           _BLF     CheckElf,??CheckElf??rA
+   \   000000E8   000050E3           CMP      R0,#+0
+   \   000000EC   1F00000A           BEQ      ??OpenLib_11
+   \                     ??OpenLib_10:
+   \   000000F0   0800A0E1           MOV      R0,R8
+   \   000000F4   01002DE9           PUSH     {R0}
+   \   000000F8   0830A0E1           MOV      R3,R8
+   \   000000FC   0220A0E3           MOV      R2,#+2
+   \   00000100   0010A0E3           MOV      R1,#+0
+   \   00000104   0400A0E1           MOV      R0,R4
+   \   00000108   0F0000EF           SWI      +15
+   \   0000010C   0090A0E1           MOV      R9,R0
+   \   00000110   400F59E3           CMP      R9,#+256
+   \   00000114   04D08DE2           ADD      SP,SP,#+4
+   \   00000118   100000AA           BGE      ??OpenLib_12
+   \   0000011C   010059E3           CMP      R9,#+1
+   \   00000120   0E0000BA           BLT      ??OpenLib_12
+   \   00000124   0800A0E1           MOV      R0,R8
+   \   00000128   01002DE9           PUSH     {R0}
+   \   0000012C   0830A0E1           MOV      R3,R8
+   \   00000130   0020A0E3           MOV      R2,#+0
+   \   00000134   0210A0E1           MOV      R1,R2
+   \   00000138   0400A0E1           MOV      R0,R4
+   \   0000013C   0F0000EF           SWI      +15
+   \   00000140   0830A0E1           MOV      R3,R8
+   \   00000144   0920A0E1           MOV      R2,R9
+   \   00000148   041087E2           ADD      R1,R7,#+4
+   \   0000014C   0400A0E1           MOV      R0,R4
+   \   00000150   0B0000EF           SWI      +11
+   \   00000154   090050E1           CMP      R0,R9
+   \   00000158   04D08DE2           ADD      SP,SP,#+4
+   \   0000015C   C8FFFF0A           BEQ      ??OpenLib_9
+   \                     ??OpenLib_12:
+   \   00000160   0810A0E1           MOV      R1,R8
+   \   00000164   0400A0E1           MOV      R0,R4
+   \   00000168   0D0000EF           SWI      +13
+   \   0000016C   1F0000EA           B        ??OpenLib_8
+    218                }
+    219                fclose(fp, &ferr);
+    220                return 0;
+    221              }
+    222              
+    223              /* Выделим память под структуру эльфа */
+    224              if( !(ex = malloc(sizeof(Elf32_Exec))) ) return 0;
+   \                     ??OpenLib_11:
+   \   00000170   E400A0E3           MOV      R0,#+228
+   \   00000174   140000EF           SWI      +20
+   \   00000178   00B0B0E1           MOVS     R11,R0
+   \   0000017C   1B00000A           BEQ      ??OpenLib_8
+    225              memcpy(&ex->ehdr, &ehdr, sizeof(Elf32_Ehdr));
+   \   00000180   3420A0E3           MOV      R2,#+52
+   \   00000184   0D10A0E1           MOV      R1,SP
+   \   00000188   08008BE2           ADD      R0,R11,#+8
+   \   0000018C   1E0100EF           SWI      +286
+    226              ex->v_addr = (unsigned int)-1;
+   \   00000190   3C908BE5           STR      R9,[R11, #+60]
+    227              ex->fp = fp;
+   \   00000194   D4408BE5           STR      R4,[R11, #+212]
+    228              ex->type = EXEC_LIB;
+   \   00000198   0200A0E3           MOV      R0,#+2
+   \   0000019C   4000CBE5           STRB     R0,[R11, #+64]
+    229              ex->libs = 0;
+   \   000001A0   D0A08BE5           STR      R10,[R11, #+208]
+    230              ex->complete = 0;
+   \   000001A4   D8A0CBE5           STRB     R10,[R11, #+216]
+    231              ex->meloaded = (void*)_ex;
+   \   000001A8   DC608BE5           STR      R6,[R11, #+220]
+    232              ex->switab = (int*)AddrLibrary();
+   \   000001AC   FF8000EF           SWI      +33023
+   \   000001B0   E0008BE5           STR      R0,[R11, #+224]
+    233          
+    234              /* Начинаем копать структуру либы */
+    235              if( LoadSections(ex) ){
+   \   000001B4   0B00A0E1           MOV      R0,R11
+   \   000001B8   ........           _BLF     LoadSections,??LoadSections??rA
+   \   000001BC   000050E3           CMP      R0,#+0
+   \   000001C0   0810A0E1           MOV      R1,R8
+   \   000001C4   0400A0E1           MOV      R0,R4
+   \   000001C8   0100000A           BEQ      ??OpenLib_13
+    236                  fclose(fp, &ferr);
+   \   000001CC   0D0000EF           SWI      +13
+    237                  elfclose(ex);
+   \   000001D0   040000EA           B        ??OpenLib_14
+    238                  return 0;
+    239              }
+    240          
+    241              /* Он уже не нужен */
+    242              fclose(fp, &ferr);
+   \                     ??OpenLib_13:
+   \   000001D4   0D0000EF           SWI      +13
+    243          
+    244              /* Глобальная база либ */
+    245              Elf32_Lib* lib;
+    246              if( !(lib = malloc(sizeof(Elf32_Lib))) ){
+   \   000001D8   4C00A0E3           MOV      R0,#+76
+   \   000001DC   140000EF           SWI      +20
+   \   000001E0   0040B0E1           MOVS     R4,R0
+   \   000001E4   0400001A           BNE      ??OpenLib_15
+    247                  elfclose(ex);
+   \                     ??OpenLib_14:
+   \   000001E8   0B00A0E1           MOV      R0,R11
+   \   000001EC   ........           _BLF     elfclose,??elfclose??rA
+    248                  return 0;
+   \                     ??OpenLib_8:
+   \   000001F0   0000A0E3           MOV      R0,#+0
+   \                     ??OpenLib_3:
+   \   000001F4   34D08DE2           ADD      SP,SP,#+52
+   \   000001F8   F08FBDE8           POP      {R4-R11,PC}
+    249              }
+    250          
+    251              lib->ex = ex;
+   \                     ??OpenLib_15:
+   \   000001FC   40B084E5           STR      R11,[R4, #+64]
+    252              lib->users_cnt = 1;
+   \   00000200   0160A0E3           MOV      R6,#+1
+   \   00000204   446084E5           STR      R6,[R4, #+68]
+    253          
+    254              char* soname = ex->dyn[DT_SONAME] ? ex->strtab + ex->dyn[DT_SONAME] : (char*)name;
+   \   00000208   7C009BE5           LDR      R0,[R11, #+124]
+   \   0000020C   000050E3           CMP      R0,#+0
+   \   00000210   CC109B15           LDRNE    R1,[R11, #+204]
+   \   00000214   01108010           ADDNE    R1,R0,R1
+   \   00000218   0510A001           MOVEQ    R1,R5
+    255              strcpy(lib->soname, soname);
+   \   0000021C   0400A0E1           MOV      R0,R4
+   \   00000220   1A0000EF           SWI      +26
+    256          
+    257              /*  Ведь капуста^W память всем нужна)) */
+    258              Global_Queue* global_ptr = malloc(sizeof(Global_Queue));
+   \   00000224   0C00A0E3           MOV      R0,#+12
+   \   00000228   140000EF           SWI      +20
+    259              if(!global_ptr)    // ?????...?? ??? :'(
+   \   0000022C   000050E3           CMP      R0,#+0
+   \   00000230   0200001A           BNE      ??OpenLib_16
+    260              {
+    261                  CloseLib(lib);
+   \   00000234   0400A0E1           MOV      R0,R4
+   \   00000238   ........           BL       CloseLib
+    262                  return 0;
+   \   0000023C   EBFFFFEA           B        ??OpenLib_8
+    263              }
+    264          
+    265              /* Ну тут заполняем */
+    266              global_ptr->lib = lib;
+   \                     ??OpenLib_16:
+   \   00000240   004080E5           STR      R4,[R0, #+0]
+    267              global_ptr->next = 0;
+   \   00000244   04A080E5           STR      R10,[R0, #+4]
+    268              lib->glob_queue = global_ptr;
+   \   00000248   480084E5           STR      R0,[R4, #+72]
+    269          
+    270              if(lib_top)
+   \   0000024C   001097E5           LDR      R1,[R7, #+0]
+   \   00000250   000051E3           CMP      R1,#+0
+    271              {
+    272                  lib_top->next = global_ptr;
+   \   00000254   04008115           STRNE    R0,[R1, #+4]
+    273                  global_ptr->prev = lib_top;
+   \   00000258   00A09715           LDRNE    R10,[R7, #+0]
+    274              }
+    275              else global_ptr->prev = 0;
+   \   0000025C   08A080E5           STR      R10,[R0, #+8]
+    276          
+    277              lib_top = global_ptr;
+   \   00000260   000087E5           STR      R0,[R7, #+0]
+    278          
+    279              /* запустим контсрукторы */
+    280              //run_INIT_Array(ex);
+    281              ex->complete = 1;
+   \   00000264   D860CBE5           STRB     R6,[R11, #+216]
+    282          
+    283              /* запустим функциюю инициализации либы, если таковая имеется */
+    284              if(ex->dyn[DT_INIT])
+   \   00000268   74109BE5           LDR      R1,[R11, #+116]
+   \   0000026C   000051E3           CMP      R1,#+0
+   \   00000270   0600000A           BEQ      ??OpenLib_17
+    285              {
+    286                  printf("init function found\n");
+    287          #ifndef _test_linux
+    288                  (( void (*)(const char*) )(ex->body + ex->dyn[DT_INIT] - ex->v_addr))(name);
+   \   00000274   3C209BE5           LDR      R2,[R11, #+60]
+   \   00000278   00309BE5           LDR      R3,[R11, #+0]
+   \   0000027C   0500A0E1           MOV      R0,R5
+   \   00000280   002062E2           RSB      R2,R2,#+0
+   \   00000284   031081E0           ADD      R1,R1,R3
+   \   00000288   011082E0           ADD      R1,R2,R1
+   \   0000028C   31FF2FE1           BLX      R1
+    289          #endif
+    290              }
+    291          
+    292              printf(" '%s' Loade complete\n", name);
+    293              return lib;
+   \                     ??OpenLib_17:
+   \   00000290   0400A0E1           MOV      R0,R4
+   \   00000294   34D08DE2           ADD      SP,SP,#+52
+   \   00000298   F08FBDE8           POP      {R4-R11,PC}      ;; return
+   \                     ??OpenLib_5:
+   \   0000029C   ........           DC32     ferr
+    294          }
+    295          
+    296          
+    297          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    298          __arch int CloseLib(Elf32_Lib* lib)
+    299          {
+   \                     CloseLib:
+   \   00000000   30402DE9           PUSH     {R4,R5,LR}
+   \   00000004   0040B0E1           MOVS     R4,R0
+    300              if(!lib) return E_EMPTY;
+   \   00000008   0700A003           MOVEQ    R0,#+7
+   \   0000000C   3080BD08           POPEQ    {R4,R5,PC}
+    301              lib->users_cnt--;
+   \   00000010   440094E5           LDR      R0,[R4, #+68]
+   \   00000014   010050E2           SUBS     R0,R0,#+1
+   \   00000018   440084E5           STR      R0,[R4, #+68]
+    302          
+    303              if(!lib->users_cnt)
+   \   0000001C   1F00001A           BNE      ??CloseLib_0
+    304              {
+    305                  Elf32_Exec* ex = lib->ex;
+    306          
+    307          
+    308                  if(lib->glob_queue)
+   \   00000020   480094E5           LDR      R0,[R4, #+72]
+   \   00000024   405094E5           LDR      R5,[R4, #+64]
+   \   00000028   000050E3           CMP      R0,#+0
+   \   0000002C   1700000A           BEQ      ??CloseLib_1
+    309                  {
+    310          	    // Функция финализации
+    311                      if(ex->dyn[DT_FINI]) ((LIB_FUNC*)(ex->body + ex->dyn[DT_FINI] - ex->v_addr))();
+   \   00000030   780095E5           LDR      R0,[R5, #+120]
+   \   00000034   000050E3           CMP      R0,#+0
+   \   00000038   0500000A           BEQ      ??CloseLib_2
+   \   0000003C   3C1095E5           LDR      R1,[R5, #+60]
+   \   00000040   002095E5           LDR      R2,[R5, #+0]
+   \   00000044   001061E2           RSB      R1,R1,#+0
+   \   00000048   020080E0           ADD      R0,R0,R2
+   \   0000004C   000081E0           ADD      R0,R1,R0
+   \   00000050   30FF2FE1           BLX      R0
+    312          
+    313                      Global_Queue* glob_queue = lib->glob_queue;
+   \                     ??CloseLib_2:
+   \   00000054   480094E5           LDR      R0,[R4, #+72]
+    314          
+    315                      Global_Queue* tmp = glob_queue->next;
+    316          
+    317                      if(glob_queue == lib_top) lib_top = 0;
+   \   00000058   ........           LDR      R2,??DataTable1  ;; lib_top
+   \   0000005C   041090E5           LDR      R1,[R0, #+4]
+   \   00000060   003092E5           LDR      R3,[R2, #+0]
+   \   00000064   030050E1           CMP      R0,R3
+   \   00000068   0030A003           MOVEQ    R3,#+0
+   \   0000006C   00308205           STREQ    R3,[R2, #+0]
+    318                      if(tmp) tmp->prev = glob_queue->prev;
+   \   00000070   000051E3           CMP      R1,#+0
+   \   00000074   08209015           LDRNE    R2,[R0, #+8]
+   \   00000078   08208115           STRNE    R2,[R1, #+8]
+    319                      if(tmp = glob_queue->prev) tmp->next = glob_queue->next;
+   \   0000007C   081090E5           LDR      R1,[R0, #+8]
+   \   00000080   000051E3           CMP      R1,#+0
+   \   00000084   04209015           LDRNE    R2,[R0, #+4]
+   \   00000088   04208115           STRNE    R2,[R1, #+4]
+    320                      mfree(glob_queue);
+   \   0000008C   150000EF           SWI      +21
+    321                  }
+    322          
+    323                  elfclose(ex);
+   \                     ??CloseLib_1:
+   \   00000090   0500A0E1           MOV      R0,R5
+   \   00000094   ........           _BLF     elfclose,??elfclose??rA
+    324                  mfree(lib);
+   \   00000098   0400A0E1           MOV      R0,R4
+   \   0000009C   150000EF           SWI      +21
+    325              }
+    326              return E_NO_ERROR;
+   \                     ??CloseLib_0:
+   \   000000A0   0000A0E3           MOV      R0,#+0
+   \   000000A4   3080BDE8           POP      {R4,R5,PC}       ;; return
+    327          }
+    328          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    329          int dlopen(const char *name)
+    330          {
+   \                     dlopen:
+   \   00000000   F1B5               PUSH     {R0,R4-R7,LR}
+    331            int handle = -1;
+    332            
+    333            if(!name) return -1;
+   \   00000002   0024               MOVS     R4,#+0
+   \   00000004   E443               MVNS     R4,R4
+   \   00000006   0028               CMP      R0,#+0
+   \   00000008   01D1               BNE      ??dlopen_0
+   \                     ??dlopen_1:
+   \   0000000A   2000               MOVS     R0,R4
+   \   0000000C   38E0               B        ??dlopen_2
+   \                     ??dlopen_0:
+   \   0000000E   ....               LDR      R5,??DataTable4  ;; handles
+   \   00000010   6868               LDR      R0,[R5, #+4]
+   \   00000012   0028               CMP      R0,#+0
+   \   00000014   0BD1               BNE      ??dlopen_3
+    334            
+    335            // Первый клиент! :)
+    336            if(!handles_cnt)
+    337            {
+    338              handles_cnt = 256;
+   \   00000016   8020               MOVS     R0,#+128
+   \   00000018   4000               LSLS     R0,R0,#+1
+   \   0000001A   6860               STR      R0,[R5, #+4]
+    339              handles = malloc(sizeof(Elf32_Lib*) * handles_cnt);
+   \   0000001C   8000               LSLS     R0,R0,#+2
+   \   0000001E   14DF               SVC      +20
+   \   00000020   2860               STR      R0,[R5, #+0]
+    340              
+    341              if(!handles) return -1;
+   \   00000022   0028               CMP      R0,#+0
+   \   00000024   F1D0               BEQ      ??dlopen_1
+    342              
+    343              zeromem_a(handles, sizeof(Elf32_Lib*) * handles_cnt);
+   \                     ??dlopen_4:
+   \   00000026   6968               LDR      R1,[R5, #+4]
+   \   00000028   8900               LSLS     R1,R1,#+2
+   \   0000002A   ........           _BLF     zeromem_a,??zeromem_a??rT
+    344            }
+    345            
+    346            // Ищем свободный слот
+    347            for(int i=0; i<handles_cnt; ++i)
+   \                     ??dlopen_3:
+   \   0000002E   6968               LDR      R1,[R5, #+4]
+   \   00000030   0026               MOVS     R6,#+0
+   \   00000032   00E0               B        ??dlopen_5
+   \                     ??dlopen_6:
+   \   00000034   761C               ADDS     R6,R6,#+1
+   \                     ??dlopen_5:
+   \   00000036   2868               LDR      R0,[R5, #+0]
+   \   00000038   8E42               CMP      R6,R1
+   \   0000003A   05DA               BGE      ??dlopen_7
+    348            {
+    349              if(handles[i] == 0)
+   \   0000003C   B200               LSLS     R2,R6,#+2
+   \   0000003E   8258               LDR      R2,[R0, R2]
+   \   00000040   002A               CMP      R2,#+0
+   \   00000042   F7D1               BNE      ??dlopen_6
+    350              {
+    351                handle = i;
+    352                break;
+    353              }
+    354            }
+    355            
+    356            // Не нашли O_o
+    357            if(handle == -1)
+   \   00000044   A642               CMP      R6,R4
+   \   00000046   11D1               BNE      ??dlopen_8
+    358            {
+    359              Elf32_Lib** new_handles = realloc(handles, sizeof(Elf32_Lib*) * (handles_cnt + 64));
+   \                     ??dlopen_7:
+   \   00000048   4031               ADDS     R1,R1,#+64
+   \   0000004A   8900               LSLS     R1,R1,#+2
+   \   0000004C   BADF               SVC      +186
+   \   0000004E   0700               MOVS     R7,R0
+    360              
+    361              // Места нет, и рама кончилась :'(
+    362              if(!new_handles) return -1;
+   \   00000050   01D1               BNE      ??dlopen_9
+   \   00000052   2000               MOVS     R0,R4
+   \   00000054   14E0               B        ??dlopen_2
+    363              
+    364              handle = handles_cnt;
+   \                     ??dlopen_9:
+   \   00000056   6E68               LDR      R6,[R5, #+4]
+    365              zeromem_a(&new_handles[handles_cnt], sizeof(Elf32_Lib*) * 64);
+   \   00000058   8021               MOVS     R1,#+128
+   \   0000005A   4900               LSLS     R1,R1,#+1
+   \   0000005C   B000               LSLS     R0,R6,#+2
+   \   0000005E   3818               ADDS     R0,R7,R0
+   \   00000060   ........           _BLF     zeromem_a,??zeromem_a??rT
+    366              handles_cnt += 64;
+   \   00000064   6868               LDR      R0,[R5, #+4]
+    367              handles = new_handles;
+   \   00000066   2F60               STR      R7,[R5, #+0]
+   \   00000068   4030               ADDS     R0,R0,#+64
+   \   0000006A   6860               STR      R0,[R5, #+4]
+    368            }
+    369            
+    370            Elf32_Lib* lib = OpenLib(name, 0);
+   \                     ??dlopen_8:
+   \   0000006C   0098               LDR      R0,[SP, #+0]
+   \   0000006E   0021               MOVS     R1,#+0
+   \   00000070   ........           BLX      OpenLib
+    371            if(!lib) return -1;
+   \   00000074   0028               CMP      R0,#+0
+   \   00000076   C8D0               BEQ      ??dlopen_1
+    372            
+    373            handles[handle] = lib;
+   \                     ??dlopen_10:
+   \   00000078   2A68               LDR      R2,[R5, #+0]
+   \   0000007A   B100               LSLS     R1,R6,#+2
+   \   0000007C   5050               STR      R0,[R2, R1]
+    374            return handle;
+   \   0000007E   3000               MOVS     R0,R6
+   \                     ??dlopen_2:
+   \   00000080   01B0               ADD      SP,SP,#+4
+   \   00000082   F0BD               POP      {R4-R7,PC}       ;; return
+    375          }
+    376          
+    377          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    378          int dlclose(int handle)
+    379          {
+   \                     dlclose:
+   \   00000000   10B5               PUSH     {R4,LR}
+    380            if(0 > handle > handles_cnt - 1) return 0;
+   \   00000002   0021               MOVS     R1,#+0
+   \   00000004   0028               CMP      R0,#+0
+   \   00000006   01D5               BPL      ??dlclose_0
+   \   00000008   0122               MOVS     R2,#+1
+   \   0000000A   00E0               B        ??dlclose_1
+   \                     ??dlclose_0:
+   \   0000000C   0022               MOVS     R2,#+0
+   \                     ??dlclose_1:
+   \   0000000E   ....               LDR      R3,??DataTable4  ;; handles
+   \   00000010   5C68               LDR      R4,[R3, #+4]
+   \   00000012   641E               SUBS     R4,R4,#+1
+   \   00000014   9442               CMP      R4,R2
+   \   00000016   01DA               BGE      ??dlclose_2
+   \   00000018   0020               MOVS     R0,#+0
+   \   0000001A   10BD               POP      {R4,PC}
+    381            
+    382            if(handles[handle])
+   \                     ??dlclose_2:
+   \   0000001C   1A68               LDR      R2,[R3, #+0]
+   \   0000001E   8000               LSLS     R0,R0,#+2
+   \   00000020   1218               ADDS     R2,R2,R0
+   \   00000022   1068               LDR      R0,[R2, #+0]
+   \   00000024   0028               CMP      R0,#+0
+   \   00000026   02D0               BEQ      ??dlclose_3
+    383            {
+    384              Elf32_Lib* lib = handles[handle];
+    385              handles[handle] = 0;
+   \   00000028   1160               STR      R1,[R2, #+0]
+    386              
+    387              // Точто здесь стоит возвращать это? handle все равно же потерли...
+    388              return CloseLib(lib);
+   \   0000002A   ........           BLX      CloseLib
+    389            }
+    390            
+    391            return 0;
+   \                     ??dlclose_3:
+   \   0000002E   10BD               POP      {R4,PC}          ;; return
+    392          }
+    393          
+    394          
+
+   \                                 In segment CODE, align 4, keep-with-next
+    395          Elf32_Word dlsym(int handle, const char *name)
+    396          {
+   \                     dlsym:
+   \   00000000   10B5               PUSH     {R4,LR}
+    397            if(0 > handle > handles_cnt - 1) return 0;
+   \   00000002   0028               CMP      R0,#+0
+   \   00000004   01D5               BPL      ??dlsym_0
+   \   00000006   0122               MOVS     R2,#+1
+   \   00000008   00E0               B        ??dlsym_1
+   \                     ??dlsym_0:
+   \   0000000A   0022               MOVS     R2,#+0
+   \                     ??dlsym_1:
+   \   0000000C   ....               LDR      R3,??DataTable4  ;; handles
+   \   0000000E   5C68               LDR      R4,[R3, #+4]
+   \   00000010   641E               SUBS     R4,R4,#+1
+   \   00000012   9442               CMP      R4,R2
+   \   00000014   01DA               BGE      ??dlsym_2
+   \   00000016   0020               MOVS     R0,#+0
+   \   00000018   10BD               POP      {R4,PC}
+    398            
+    399            if(handles[handle]) return FindFunction(handles[handle], name);
+   \                     ??dlsym_2:
+   \   0000001A   1A68               LDR      R2,[R3, #+0]
+   \   0000001C   8000               LSLS     R0,R0,#+2
+   \   0000001E   1018               ADDS     R0,R2,R0
+   \   00000020   0268               LDR      R2,[R0, #+0]
+   \   00000022   002A               CMP      R2,#+0
+   \   00000024   03D0               BEQ      ??dlsym_3
+   \   00000026   1000               MOVS     R0,R2
+   \   00000028   ........           BLX      FindFunction
+   \   0000002C   10BD               POP      {R4,PC}
+    400            
+    401            return 0;
+   \                     ??dlsym_3:
+   \   0000002E   0020               MOVS     R0,#+0
+   \   00000030   10BD               POP      {R4,PC}          ;; return
+    402          }
+
+   \                                 In segment CODE, align 4, keep-with-next
+   \                     ??DataTable1:
+   \   00000000   ........           DC32     lib_top
+
+   \                                 In segment CODE, align 4, keep-with-next
+   \                     ??DataTable4:
+   \   00000000   ........           DC32     handles
+
+   \                                 In segment DATA_C, align 4, align-sorted
+   \                     `?<Constant "LD_LIBRARY_PATH">`:
+   \   00000000   4C445F4C4942       DC8 "LD_LIBRARY_PATH"
+   \              524152595F50
+   \              41544800    
+
+   Maximum stack usage in bytes:
+
+     Function        CSTACK
+     --------        ------
+     CloseLib           12
+     FindFunction        4
+     OpenLib            92
+     __is_file_exist     4
+     dlclose             8
+     dlopen             24
+     dlsym               8
+     elfhash             0
+     envparse           24
+     findExport         32
+     findShared         20
+
+
+   Segment part sizes:
+
+     Function/Label                Bytes
+     --------------                -----
+     lib_top                        264
+     handles                          8
+     __is_file_exist                 52
+     elfhash                         56
+     findExport                     208
+     FindFunction                    16
+     envparse                       184
+     findShared                     104
+     OpenLib                        672
+     CloseLib                       168
+     dlopen                         132
+     dlclose                         48
+     dlsym                           50
+     ??DataTable1                     4
+     ??DataTable4                     4
+     ?<Constant "LD_LIBRARY_PATH">   16
+      Others                        136
+
+ 
+ 1 822 bytes in segment CODE
+    16 bytes in segment DATA_C
+   272 bytes in segment DATA_Z
+    12 bytes in segment INITTAB
+ 
+ 1 698 bytes of CODE  memory (+ 136 bytes shared)
+    16 bytes of CONST memory
+   272 bytes of DATA  memory
+
+Errors: none
+Warnings: 2

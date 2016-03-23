@@ -1,0 +1,80 @@
+###############################################################################
+#                                                                             #
+#     IAR Systems ARM Assembler V4.42A/W32 27/Nov/2013  01:50:37              #
+#     Copyright 1999-2007 IAR Systems. All rights reserved.                   #
+#                                                                             #
+#           Source file   =  E:\iar\SVN\Elfloader3\elfloader3\src2\rets_E71sw45.asm#
+#           List file     =  E:\iar\SVN\Elfloader3\elfloader3\src2\E71sw45\List\rets_E71sw45.lst#
+#           Object file   =  E:\iar\SVN\Elfloader3\elfloader3\src2\E71sw45\Obj\rets_E71sw45.r79#
+#           Command line  =  E:\iar\SVN\Elfloader3\elfloader3\src2\rets_E71sw45.asm #
+#                            -OE:\iar\SVN\Elfloader3\elfloader3\src2\E71sw45\Obj\ #
+#                            -s+ -M<> -w+ -DNEWSGOLD -DELKA                   #
+#                            -LE:\iar\SVN\Elfloader3\elfloader3\src2\E71sw45\List\ #
+#                            -cE -t8 --cpu ARM926EJ-S --fpu None              #
+#                            -IE:\iar\Embedded Workbench 4.0 Evaluation\ARM\INC\ #
+#                                                                             #
+###############################################################################
+
+    1    00000000              
+    2    00000000                      
+    3    00000000              #include "ep3.asm"
+    4    00000048              
+    5    00000048              
+    6    00000000                      RSEG    DATA_N
+    7    00000000                      RSEG    SWILIB_FUNC1B8_1BB:CODE
+    8    00000000                      EXTERN  EXT2_AREA
+    9    00000000                      EXTERN  pngtop
+   10    00000000                      EXTERN  pLIB_TOP
+   11    00000000 ........             DCD     EXT2_AREA
+   12    00000004 ........             DCD     pngtop
+   13    00000008 ........             DCD     pLIB_TOP
+   14    0000000C ........             DCD     SFE(DATA_N)
+   15    00000010                      
+   16    00000010              
+   17    00000010              
+   22    00000010              
+   23    00000000                      RSEG    CODE:CODE
+   24    00000000              
+   25    00000000                     
+   26    00000000              #ifdef NEWSGOLD
+   27    00000000              #ifdef  ELKA
+   28    00000000              
+   29    00000000                      PUBLIC  OldOnClose
+   30    00000000              OldOnClose:
+   31    00000000 B9D366A0             DCD     0xA066D3B8+1
+   32    00000004                      
+   33    00000000                      PUBLIC  OldOnCreate
+   34    00000004              OldOnCreate:
+   35    00000004 79D166A0             DCD     0xA066D178+1
+   36    00000008                      
+   37    00000000                      PUBLIC  OldShowMsg
+   38    00000008              OldShowMsg:
+   39    00000008 79EA94A0             DCD     0xA094EA78+1
+   40    0000000C              
+   41    00000000                      PUBLIC  PITgetN
+   42    0000000C              PITgetN:
+   43    0000000C 8422A3A0             DCD     0xA0A32284
+   44    00000010                      
+   45    00000000                      PUBLIC  PITret
+   46    00000010              PITret:
+   47    00000010 A5CE94A0             DCD     0xA094CEA4+1
+   48    00000014                      
+   49    00000014                      defadr  StoreErrInfoAndAbort,0xA04CCDD4
+   50    00000014                      defadr  StoreErrString,0xA04CCCA0
+   51    00000014              
+   52    00000014              #else
+   78    00000014              #endif
+   79    00000014              #else
+  116    00000014              #endif
+  117    00000014              
+  118    00000014                      END
+##############################
+#          CRC:712C          #
+#        Errors:   0         #
+#        Warnings: 0         #
+#         Bytes: 108         #
+##############################
+
+
+
+

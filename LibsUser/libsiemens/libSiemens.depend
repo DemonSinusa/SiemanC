@@ -1,0 +1,250 @@
+# depslib dependency file v1.0
+1455261738 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/cfg.c
+	<swilib.h>
+	<stdlib.h>
+
+1452106715 /home/iceritual/SiemanC-git/Platform/include/swilib.h
+	<sys/types.h>
+	<stdarg.h>
+	<sha.h>
+	<rsa.h>
+	<md5.h>
+	<obs.h>
+	<swihelper.h>
+	<png.h>
+	<spl/processbridge.h>
+	<spl/memctl.h>
+	<ep3/loader.h>
+	"swicall.h"
+	"directswicall.h"
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sys/types.h
+	<inttypes.h>
+	<stddef.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/inttypes.h
+	<sys/cdefs.h>
+	<endian.h>
+	<stdint.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sys/cdefs.h
+
+1452020695 /home/iceritual/SiemanC-git/Platform/include/endian.h
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/stdint.h
+	<features.h>
+	<bits/wordsize.h>
+
+1452020691 /home/iceritual/SiemanC-git/Platform/include/features.h
+	<sys/cdefs.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/bits/wordsize.h
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/stddef.h
+	<machine/ansi.h>
+	<sys/_types.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/stdarg.h
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sha.h
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/rsa.h
+	"bn.h"
+	"crypto.h"
+
+1452020694 /home/iceritual/SiemanC-git/Platform/include/bn.h
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/crypto.h
+	<stdio.h>
+	<openssl/ebcdic.h>
+	"vms_idhacks.h"
+
+1452020694 /home/iceritual/SiemanC-git/Platform/include/stdio.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<stdarg.h>
+	<endian.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/md5.h
+	<sys/types.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/obs.h
+
+1452020694 /home/iceritual/SiemanC-git/Platform/include/swihelper.h
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/png.h
+	"zlib.h"
+	"pngconf.h"
+	<crtdbg.h>
+
+1452020692 /home/iceritual/SiemanC-git/Platform/include/zlib.h
+	"zconf.h"
+
+1452020691 /home/iceritual/SiemanC-git/Platform/include/zconf.h
+	<windows.h>
+	<sys/types.h>
+	<unistd.h>
+	<unixio.h>
+
+1452020694 /home/iceritual/SiemanC-git/Platform/include/unistd.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<endian.h>
+	<sys/fsuid.h>
+	<sys/select.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sys/fsuid.h
+	<sys/types.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sys/select.h
+	<string.h>
+	<signal.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/string.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<strings.h>
+
+1452020694 /home/iceritual/SiemanC-git/Platform/include/strings.h
+	<stddef.h>
+	<sys/cdefs.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/signal.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<endian.h>
+	<sys/time.h>
+	<sys/ucontext.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sys/time.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<sys/select.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/sys/ucontext.h
+	<asm/sigcontext.h>
+	<signal.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/asm/sigcontext.h
+	<sys/cdefs.h>
+	<asm/arm-sigcontext.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/asm/arm-sigcontext.h
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/pngconf.h
+	"pngusr.h"
+	"config.h"
+	<windows.h>
+	<stdio.h>
+	<stdio.h>
+	<sys/types.h>
+	<setjmp.h>
+	<strings.h>
+	<string.h>
+	<stdlib.h>
+	<fp.h>
+	<math.h>
+	<m68881.h>
+	<mem.h>
+	<alloc.h>
+	<malloc.h>
+	<time.h>
+	<dos.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/setjmp.h
+	<sys/cdefs.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/stdlib.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<alloca.h>
+
+1452020691 /home/iceritual/SiemanC-git/Platform/include/alloca.h
+	<sys/cdefs.h>
+	<sys/types.h>
+
+1452020692 /home/iceritual/SiemanC-git/Platform/include/math.h
+	<sys/cdefs.h>
+	<sys/types.h>
+	<limits.h>
+
+1452020691 /home/iceritual/SiemanC-git/Platform/include/limits.h
+	<endian.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/malloc.h
+	<stdlib.h>
+
+1452020692 /home/iceritual/SiemanC-git/Platform/include/time.h
+	<sys/cdefs.h>
+	<sys/time.h>
+
+1452020691 /home/iceritual/SiemanC-git/Platform/include/spl/processbridge.h
+	<swilib.h>
+	<nu_swilib.h>
+	<ep3/loader.h>
+
+1452020697 /home/iceritual/SiemanC-git/Platform/include/nu_swilib.h
+	<swihelper.h>
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/ep3/loader.h
+	<swilib.h>
+	"elf.h"
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/ep3/elf.h
+
+1452020691 /home/iceritual/SiemanC-git/Platform/include/spl/memctl.h
+	<swilib.h>
+
+1452107953 /home/iceritual/SiemanC-git/Platform/include/swicall.h
+
+1452020693 /home/iceritual/SiemanC-git/Platform/include/directswicall.h
+
+1455261768 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/files.c
+	<swilib.h>
+	<stdlib.h>
+
+1455261711 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/find_files.c
+	<swilib.h>
+	<stdlib.h>
+	"find_files.h"
+	"obs.h"
+	"strings.h"
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/find_files.h
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/obs.h
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/strings.h
+
+1455261829 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/graphics.c
+	<swilib.h>
+	"obs.h"
+
+1455261851 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/ipc.c
+	<swilib.h>
+
+1455261857 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/lang.c
+	<swilib.h>
+
+1455261860 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/log.c
+	<swilib.h>
+
+1455261865 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/mplayer.c
+	<swilib.h>
+	"mplayer.h"
+
+1382549131 /home/iceritual/SiemanC-git/LibsUser/libsiemens/mplayer.h
+
+1455261872 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/obs.c
+	<swilib.h>
+	"strings.h"
+
+1455261877 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/other.c
+	<swilib.h>
+
+1455261881 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/string_utils.c
+	<swilib.h>
+
+1455261884 source:/home/iceritual/SiemanC-git/LibsUser/libsiemens/strings.c
+	<swilib.h>
+
