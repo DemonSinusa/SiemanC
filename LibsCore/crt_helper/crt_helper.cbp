@@ -18,7 +18,6 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Os" />
 			<Add option="-Wall" />
 			<Add option="-W" />
 			<Add option="-D__NO_LIBC" />
@@ -27,7 +26,6 @@
 			<Add option="--init=__onstart" />
 			<Add option="--fini=__onclose" />
 		</Linker>
-		<Unit filename="__cxa_atexit.cpp" />
 		<Unit filename="dump.S" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />

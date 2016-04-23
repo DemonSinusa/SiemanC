@@ -25,54 +25,87 @@ bool ThreadFlag = true;
 
 //void RaspFunc(NEURON *neuron,LINKL *in,LINKL *out);
 
-DLL_EXPORT void TrueActivateNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
-    LINKL *inlist = in, *outlist = out, *tlist = 0;
+DLL_EXPORT void OptimiZActivateNeuronFunc(NEURON *n, LINKL *in, LINKL *out){
+	LINKL *inlist = in, *outlist = out, *tlist = NULL,*curpozl=NULL;
     LINK *curlink = 0;
     NEURON *nto = 0;
     NLAYER *remlay = 0;
     ntype incurval = 0, devizor = 1;
-    //    int counter=n->incount+1;   //-----Считаем сам нейрон как входящую связь
 
-    while (inlist) {
-	//------Рассчет в 2 строчки
-	curlink = inlist->link;
-	incurval += curlink->weight / n->incount; //----Считает среднее по всем
-	//----???????????????????--Возможно нужно только по активным, получится больше возможностей.
-	//---и меньше простоя но нагрузка останется неизменной
-	//--Но сделаем обнуление веса связи или нет
-	//--GHOST-101-Ю
-	//RelinkedList ZarelinkNULL to hvost traceroot
-	curlink->weight = 0;
-	//curlink->activated=0;
-	//--------------------------
 
-	if (curlink->activated > 0) {
-	    //-След Оом-а здесъ.
-	    curlink->activated = 0; //?-Следом найдем максимально используемую связь..ну и минимум, так на всякий.
-	    //-?-Стоит ли ослабить нагруженность нейрона в зависимости
-	    //-от колличества исходящих связей и колличества Half-холостых входящих
-	    //-связей перелинкнув их в отдельный Glone-neurРас11!! и единым выходом
-	    //-на вход того от которого щепанули...
-	    // /me-Здесь советаю удариться по зеленой волне а то можно и не вырулить
-	    n->incount_excited--; //?-?
-	    inlist = inlist->next;
-	} else {
-	    //Переместить связь в начало списка
-	    tlist = inlist->next;
-	    if (inlist != n->in) { //Имеет смысл только если он не первый
-		if (inlist->prev)
-		    inlist->prev->next = inlist->next;
-		if (inlist->next)
-		    inlist->next->prev = inlist->prev;
-		inlist->next = n->in;
-		inlist->next->prev = inlist;
-		n->in = inlist;
-	    }
-	    inlist = tlist;
+    while(inlist){
+		curlink=inlist->link;
+		incurval+=curlink->weight/n->incount;
+
+	curpozl=inlist->next;
+
+	if(curlink->activated>0){
+		curlink->activated=0;
+		n->incount_excited--;
 	}
+
+		if(curlink->weight>=in->link->weight){
+			tlist=_GetEndListItem(in);
+			if(inlist->next)
+				inlist->next->prev=inlist->prev;
+			if(inlist->prev)
+				inlist->prev->next=inlist->next;
+			inlist->prev=tlist;
+			tlist->next=inlist;
+		}else{
+			if(inlist->next)
+				inlist->next->prev=inlist->prev;
+			if(inlist->prev)
+				inlist->prev->next=inlist->next;
+			inlist->next=n->in;
+			n->in=n->in->prev=inlist;
+		}
+
+
+		inlist=curpozl;
     }
 
-    /*
+
+    	if(n->val){
+		n->val/2+incurval/2;	//Запопаламлин
+	}else n->val=incurval;
+
+	if (n->outcount>0 && n->incount > 0)
+	devizor = (n->incount + 1) / n->outcount;	//Ва сколько будет изменяться вес каждой связи, ориг.поставщик n->val
+
+	if(!outlist){			//Некуда дальше идти
+		if (n->ReturnFunc) //И есть функция возврата
+	    n->ReturnFunc(n, n->in, n->out);
+	}else while(outlist){
+		curlink = outlist->link;
+	    nto = (NEURON *)((LINKL *)curlink->to)->Neuron;
+	    if (curlink->activated == 0)nto->incount_excited++;
+	    //-----Всем рассказать насколько Я крут
+		//----------------Меняем флаг активных связей у нейрона последователя
+	    curlink->weight = curlink->weight / 2 + (n->val * devizor) / 2;
+	    //Даже связь выстрелевшего Нейрона остается что-то весить.. Или нет?
+	    curlink->activated++;
+
+	    //Рекуринама хорошанама
+	    if ((nto->incount_excited / nto->incount * 100) >= nto->chance) {
+	    		//Если шанс набрался...
+		if (!nto->Layer) {
+				//И слоя неть...
+		    if (nto->ActivateFunc)
+			nto->ActivateFunc(nto, nto->in, nto->out);
+		} else {
+				//И есть слой
+		    remlay = (NLAYER *) nto->Layer;
+		    remlay->neurocount_activ++; //Возбуждение как и шанс нарастает...
+		    if (((remlay->neurocount_activ / remlay->neurocount * 100) >= remlay->chance)&&remlay->ActivateFunc)
+			remlay->ActivateFunc(remlay, remlay->first, remlay->end);
+		}
+	    }
+
+	    outlist=outlist->next;
+	}
+
+	/*
      * Хорошая идея- использовать эту библиотеку как карказ для сайта -соц сетей.
      * Кнопка-"рассказать" только создает указатель на олригинальный пост, без копирования текста,
      * И при изменении оригинала, все рассказанное,перерассказанное, оставленное без изменений
@@ -86,61 +119,59 @@ DLL_EXPORT void TrueActivateNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
      * А так же наполнить его всяким конътентом и прочим гуамном радилулзинга
      */
 
-    if (n->val) {
-	if (n->incount > 0)
-	    n->val = n->val / 2 + incurval / 2;
-    } else n->val = incurval;
-
-    if (n->outcount && (n->incount > 0))
-	devizor = (n->incount + 1) / n->outcount;
-    //---------Учитываем сам нейрон тоже.
-
-    //-------Все данные получены, осталось только вросто взять и раскидать,
-    //-------флаги расставить и попытаться в голове поюзать.
-
-    if (outlist) {
-	while (outlist) {
-	    curlink = outlist->link;
-	    tlist = (LINKL *) curlink->to;
-	    nto = (NEURON *) tlist->Neuron;
-	    if (curlink->activated == 0) {
-		curlink->weight = n->val*devizor; //-----Всем рассказать насколько Я крут
-		//----------------Меняем флаг активных связей у нейрона последователя
-		nto->incount_excited++;
-	    } else {
-		//--------Всем рассказать насколько Я крут, но видал и другие
-
-		curlink->weight = curlink->weight / 2 + (n->val * devizor) / 2;
-	    }
-	    curlink->activated++;
-	    outlist = outlist->next;
-
-	    //------По огромному счету здесь должна стоять функция активации
-	    //---связанного нейрона или слоя целиком, чтобы избежать лишних проверок и все работалол
-
-	    if ((nto->incount_excited / nto->incount * 100) >= nto->chance) {
-		if (!nto->Layer) {
-		    if (nto->ActivateFunc)
-			nto->ActivateFunc(nto, nto->in, nto->out);
-		} else {
-		    remlay = (NLAYER *) nto->Layer;
-		    remlay->neurocount_activ++; //Возбуждение нарастает...
-		    if ((remlay->neurocount_activ / remlay->neurocount * 100) >= remlay->chance)
-			remlay->ActivateFunc(remlay, remlay->first, remlay->end);
-		}
-	    }
-
-	}
-    } else { //Некуда дальше идти
-	if (n->ReturnFunc) //И есть функция возврата
-	    n->ReturnFunc(n, n->in, n->out);
-    }
 }
+
 //Принцип-собрать по всем исходящим
 //Найти оптимальное между своим и общим
-//Раздать по входящим флаг на возврат значения
+//Раздать по входящим c флагom на возврат значения
 //И запустить функцию возврата во входящем если шанс норм
 
+DLL_EXPORT void OptimiZReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out){
+	LINKL *inlist = in, *outlist = out;
+    LINK *curlink = NULL;
+    NEURON *nto = NULL, *nfrom = NULL;
+    ntype outcurval = 0,delta=0;
+
+    /*
+    Это еще одна вариация.....
+    1.Значение предидущего возврата заменять\СовмещатЬ с полученой частью.*
+    Это даст ~статичный выхлоп для равных вхлопов после полной прогонки по набору из значений.
+    ...Самооптимизация или тип того..Ответы и так были точны и интересны,
+    а теперь еще с каждым запросом они становяться точнее без ущерба к ресурсоемкости.
+    */
+
+    while(outlist){
+		    curlink = outlist->link;
+			nto = (NEURON *) ((LINKL *) curlink->to)->Neuron;
+			n->outcount_excited--;
+			//Получаем размер шага, умножаем на количество таких шагов.
+			outcurval+=(nto->retval/nto->in->link->weight)*(curlink->weight/nto->in->link->weight);
+		    outlist=outlist->next;
+    }
+
+    if(n->retval)			//Бывалый Нейрон
+    	n->retval = n->retval / 2 + outcurval / 2;		//*Стабилизатор
+	else if(n->outcount>0)	//Не замыкающий, связаный Нейрон
+		n->retval=outcurval;
+	else n->retval=n->val;	//Замыкающий Нейрон
+
+
+	while(inlist){
+		curlink = inlist->link;
+		nfrom = (NEURON *) ((LINKL *) curlink->from)->Neuron;
+		nfrom->incount_excited++;
+	//Если пора возвращать
+	//Что это за натурально порн... Износилован за недодОдодачу...
+	if (((nfrom->incount_excited / nfrom->incount * 100) >= nfrom->chance)&&nfrom->ReturnFunc)
+			//И есть функция возврата
+		nfrom->ReturnFunc(nfrom, nfrom->in, nfrom->out);
+
+		inlist=inlist->next;
+	}
+
+}
+
+/*
 DLL_EXPORT void TrueReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
     LINKL *inlist = in, *outlist = out;
     LINK *curlink = NULL;
@@ -162,7 +193,20 @@ DLL_EXPORT void TrueReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
 	n->retval = outcurval;
     else n->retval = n->val;
 
+    */
+    /*
+    Принцип распростронения.
+    1.Найти минимальный = Ь
+    2.Значение от возврата / Ь = Д и совмещение\замена на тот с чем.
+    3.Пройти остальные меряя в Этот/Ь*Д...
 
+    Это еще одна вариация.....
+    1.Значение предидущего возврата заменять\совмещать с полученой частью.
+    Это даст ~статичный выхлоп для равных вхлопов после полной прогонки по набору из значений.
+    ...Самооптимизация или тип того..Ответы и так были точны и интересны,
+    а теперь еще с каждым запросом они становяться точнее без ущерба к ресурсоемкости.
+    */
+/*
     while (inlist) {
 	curlink = inlist->link;
 	nfrom = (NEURON *) ((LINKL *) curlink->from)->Neuron;
@@ -176,7 +220,7 @@ DLL_EXPORT void TrueReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
 	inlist = inlist->next;
     }
 }
-
+*/
 //Функция должна работать как надо,
 //можно сказать, что это среднепсихологическая функция :)
 
@@ -217,7 +261,7 @@ DLL_EXPORT void DefActivateFunc(NEURON *neuron, LINKL *in, LINKL *out) {
 
 //Функцию разврата надо подправить, она должна изменять retval
 //По нему находиться так сказать успешность действий
-
+/*
 DLL_EXPORT void DefReturnFunc(NEURON *neuron, LINKL *in, LINKL *out) {
     int linkcount = neuron->incount, linkcountout = neuron->outcount;
     int ost = 0;
@@ -252,7 +296,7 @@ DLL_EXPORT void DefReturnFunc(NEURON *neuron, LINKL *in, LINKL *out) {
 	inmode = inmode->next;
     }
 }
-
+*/
 
 //Нейрон активируется только после того как накопит заявленное количество активных сигналов
 
@@ -325,8 +369,8 @@ DLL_EXPORT void _FreeCBT(CBT *cbt) {
 }
 
 DLL_EXPORT void _SetDefaultFunctions(NEURON *n) {
-    n->ActivateFunc = TrueActivateNeuronFunc; //DefActivateFunc;
-    n->ReturnFunc = TrueReturnNeuronFunc;
+    n->ActivateFunc = OptimiZActivateNeuronFunc; //DefActivateFunc;
+    n->ReturnFunc = OptimiZReturnNeuronFunc;
 }
 
 DLL_EXPORT NEURON *_CreateNeuron(ntype val) { //Создает нейрон в памяти и возвращает на него указатель
@@ -440,11 +484,10 @@ DLL_EXPORT LINK *_ConnectNeuron(NEURON *from, NEURON *to, ntype weight) { //Со
     if (!from || !to)return 0;
 
     if (!(curlink = _CreateLink(weight)))return 0;
-
+//_GetEndListItem
     if (!from->out) {
 	from->out = lfrom = _CreateLinkListItem(NULL);
     } else lfrom = _CreateLinkListItem(from->out);
-
     if (!to->in) {
 	to->in = lto = _CreateLinkListItem(NULL);
     } else lto = _CreateLinkListItem(to->in);

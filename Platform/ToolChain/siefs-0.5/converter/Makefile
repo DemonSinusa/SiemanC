@@ -13,7 +13,7 @@
 # PARTICULAR PURPOSE.
 
 
-SHELL = /bin/bash
+SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ..
@@ -29,8 +29,8 @@ sysconfdir = ${prefix}/etc
 sharedstatedir = ${prefix}/com
 localstatedir = ${prefix}/var
 libdir = ${exec_prefix}/lib
-infodir = ${prefix}/info
-mandir = ${prefix}/man
+infodir = ${prefix}/share/info
+mandir = ${prefix}/share/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
 pkgdatadir = $(datadir)/siefs
@@ -38,9 +38,9 @@ pkglibdir = $(libdir)/siefs
 pkgincludedir = $(includedir)/siefs
 top_builddir = ..
 
-ACLOCAL = aclocal-1.6
+ACLOCAL = aclocal-1.14
 AUTOCONF = autoconf
-AUTOMAKE = automake-1.6
+AUTOMAKE = automake-1.14
 AUTOHEADER = autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
@@ -63,11 +63,11 @@ POST_UNINSTALL = :
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = tar
+AMTAR = $${TAR-tar}
 AWK = gawk
 CC = gcc
 DEPDIR = .deps
-INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
+INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LD = ld
 PACKAGE = siefs
 RANLIB = ranlib
@@ -76,7 +76,7 @@ VERSION = 0.5
 am__include = include
 am__quote = 
 fuseinst = /usr
-install_sh = /home/iceritual/ElfsDo/Developtools/siefs-0.5/install-sh
+install_sh = ${SHELL} /home/aveman/Desktop/Проводничок/SiemanC-git/Platform/ToolChain/siefs-0.5/install-sh
 subdirs = siefs converter
 
 bin_PROGRAMS = vmo2wav
