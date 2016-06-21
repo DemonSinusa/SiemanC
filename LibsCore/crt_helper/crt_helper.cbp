@@ -26,9 +26,6 @@
 			<Add option="--init=__onstart" />
 			<Add option="--fini=__onclose" />
 		</Linker>
-		<Unit filename="__cxa_atexit.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="dump.S" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />

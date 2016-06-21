@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1464888400 source:/home/aveman/SiemanC-git/System/GExtD/extsdata.c
+	<stdio.h>
+	<stdlib.h>
+	<swilib.h>
+	<string.h>
+	"parser.h"
+	"extsdata.h"
+
+1464888400 /home/aveman/SiemanC-git/System/GExtD/parser.h
+
+1464888400 /home/aveman/SiemanC-git/System/GExtD/extsdata.h
+
+1464888400 source:/home/aveman/SiemanC-git/System/GExtD/IPCExtD.c
+	<stdio.h>
+	<stdlib.h>
+	<swilib.h>
+	"IPCExtD.h"
+
+1464888400 /home/aveman/SiemanC-git/System/GExtD/IPCExtD.h
+
+1466524999 source:/home/aveman/SiemanC-git/System/GExtD/main.c
+	<stdio.h>
+	<stdlib.h>
+	<swilib.h>
+	"main.h"
+	"IPCExtD.h"
+	"parser.h"
+	"extsdata.h"
+
+1464888400 /home/aveman/SiemanC-git/System/GExtD/main.h
+
+1464888400 source:/home/aveman/SiemanC-git/System/GExtD/parser.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"parser.h"
+

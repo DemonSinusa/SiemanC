@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="GMacro" />
+		<Option title="GExtD" />
 		<Option pch_mode="2" />
 		<Option compiler="armelfgcc" />
 		<Build>
@@ -16,6 +16,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="Sc-1.0" />
 				</Linker>
 			</Target>
 			<Target title="NSG">
@@ -29,6 +30,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="Nc-1.0" />
 				</Linker>
 			</Target>
 			<Target title="ELKA">
@@ -45,15 +47,15 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="Ec-1.0" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Os" />
 			<Add option="-O" />
-			<Add option="-std=c99" />
 			<Add option="-std=gnu99" />
-			<Add option="-D__NO_LIBC" />
+			<Add directory="../include" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
@@ -62,18 +64,24 @@
 			<Add library="crt" />
 			<Add library="crt_helper" />
 			<Add library="gcc-4.6.1" />
-			<Add library="spl" />
+			<Add directory="../libs" />
 		</Linker>
-		<Unit filename="conf_loader.c">
+		<Unit filename="IPCExtD.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="conf_loader.h" />
-		<Unit filename="config_data.c">
+		<Unit filename="IPCExtD.h" />
+		<Unit filename="extsdata.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="extsdata.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="main.h" />
+		<Unit filename="parser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="parser.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />
