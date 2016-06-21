@@ -270,6 +270,6 @@ int main(char *exename, char* filename) {
     UnlockSched();
     //Передать параметры запущенному
     //(int)env	-ID
-    return (EXIT_SUCCESS);
+    return 0;
 }
 

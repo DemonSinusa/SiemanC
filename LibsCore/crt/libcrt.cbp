@@ -21,8 +21,7 @@
 			<Add option="-marm" />
 			<Add option="-msoft-float" />
 			<Add option="-O2" />
-			<Add option="-W" />
-			<Add option="-std=gnu99" />
+			<Add option="-Wall" />
 			<Add option="-D__NO_LIBC" />
 		</Compiler>
 		<Linker>

@@ -20,7 +20,6 @@
 		<Compiler>
 			<Add option="-marm" />
 			<Add option="-Wall" />
-			<Add option="-W" />
 			<Add option="-D__NO_LIBC" />
 		</Compiler>
 		<Linker>

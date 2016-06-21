@@ -26,7 +26,7 @@ extern int __hcxa_atexit(void (*func)(void*), void *arg, void *__dsohandle,
                          __cxa_atexit_struct **__s_exit, __cxa_atexit_struct **__ex_start, int __cxa_is_killing);
 
 int __cxa_atexit(void (*func)(void*), void *arg, void *__dsohandle) {
-    __hcxa_atexit(func, arg, __dsohandle, &__s_exit, &__ex_start, __cxa_is_killing);
+    return __hcxa_atexit(func, arg, __dsohandle, &__s_exit, &__ex_start, __cxa_is_killing);
 }
 
 

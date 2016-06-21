@@ -1,6 +1,6 @@
 
 /**
-    * 2011
+    * 2012
     * (c) Z.Vova
 */
 
@@ -16,7 +16,7 @@ int truncate(const char *path, off_t size) {
         __set_errno(ENOENT);
         return -1;
     }
-    int r = _truncate(fd, size, __errno_location());
+    int r = _truncate(fd, size, (unsigned int *)__errno_location());
     _close(fd,0);
 
     return r;

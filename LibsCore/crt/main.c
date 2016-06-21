@@ -75,7 +75,7 @@ int _start(char *exe, char *fname, void *p1)
     return main(argc, __argv);
 #else
     /* выполним маин */
-    MsgBoxOkCancel(0,(int)"Psdfgsdsdfs",CBProc);
+    return MsgBoxOkCancel(0,(int)"Это и надо.",CBProc);
 //    return main(exe, fname, p1);
 #endif
 }
