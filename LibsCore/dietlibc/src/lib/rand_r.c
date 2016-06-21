@@ -17,13 +17,13 @@
 
 // FIXME: ISO C/SuS want a longer period
 
-int rand_r(unsigned int* seed)
-{   int32_t X;
+int rand_r(unsigned int* seed) {
+    int32_t X;
 
     X = *seed;
     X = A*(X%Q) - R * (int32_t) (X/Q);
     if (X < 0)
-	X += M;
+        X += M;
 
     *seed = X;
     return X;

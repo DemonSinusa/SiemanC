@@ -6,13 +6,32 @@
 		<Option pch_mode="2" />
 		<Option compiler="armelfgcc" />
 		<Build>
-			<Target title="lib">
+			<Target title="NSG_lib">
+				<Option output="../../Platform/libs/%TARGET_NAME%c-1.0.so" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
+				<Option type="3" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-DNEWSGOLD" />
+				</Compiler>
+			</Target>
+			<Target title="SG_lib">
+				<Option output="../../Platform/libs/%TARGET_NAME%c-1.0.so" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
+				<Option type="3" />
+				<Option compiler="armelfgcc" />
+				<Compiler>
+					<Add option="-DSGOLD" />
+				</Compiler>
+			</Target>
+			<Target title="ELKA_lib">
 				<Option output="../../Platform/libs/%TARGET_NAME%c-1.0.so" imp_lib="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).a" def_file="$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).def" prefix_auto="0" extension_auto="0" />
 				<Option object_output="../../WTObj/Objects/$(PROJECT_NAME)/$(TARGET_NAME)/" />
 				<Option type="3" />
 				<Option compiler="armelfgcc" />
 				<Compiler>
 					<Add option="-DNEWSGOLD" />
+					<Add option="-DELKA" />
 				</Compiler>
 			</Target>
 		</Build>
@@ -21,16 +40,19 @@
 			<Add option="-fomit-frame-pointer" />
 			<Add option="-Os" />
 			<Add option="-Wall" />
+			<Add option="-std=c++0x" />
 			<Add option="-std=gnu99" />
 			<Add option="-D__ARM_EABI__" />
 			<Add option="-D__arm__" />
 			<Add directory="src/include" />
 			<Add directory="src" />
-			<Add directory="../CoreProc" />
 		</Compiler>
 		<Linker>
 			<Add option="-s" />
+			<Add option="-init=_init" />
+			<Add option="-fini=_fini" />
 			<Add library="crt_helper" />
+			<Add library="gcc-4.6.1" />
 		</Linker>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
@@ -41,6 +63,220 @@
 		<Unit filename="src/dietstring.h" />
 		<Unit filename="src/dietwarning.h" />
 		<Unit filename="src/errlist.S" />
+		<Unit filename="src/include/alloca.h" />
+		<Unit filename="src/include/ar.h" />
+		<Unit filename="src/include/arpa/inet.h" />
+		<Unit filename="src/include/arpa/nameser.h" />
+		<Unit filename="src/include/arpa/tftp.h" />
+		<Unit filename="src/include/asm/alpha-sigcontext.h" />
+		<Unit filename="src/include/asm/arm-sigcontext.h" />
+		<Unit filename="src/include/asm/i386-sigcontext.h" />
+		<Unit filename="src/include/asm/ia64-sigcontext.h" />
+		<Unit filename="src/include/asm/mips-sigcontext.h" />
+		<Unit filename="src/include/asm/parisc-sigcontext.h" />
+		<Unit filename="src/include/asm/ppc-sigcontext.h" />
+		<Unit filename="src/include/asm/s390-sigcontext.h" />
+		<Unit filename="src/include/asm/sigcontext.h" />
+		<Unit filename="src/include/asm/sparc-sigcontext.h" />
+		<Unit filename="src/include/asm/statfs.h" />
+		<Unit filename="src/include/asm/types.h" />
+		<Unit filename="src/include/asm/x86_64-sigcontext.h" />
+		<Unit filename="src/include/assert.h" />
+		<Unit filename="src/include/attr/xattr.h" />
+		<Unit filename="src/include/bn.h" />
+		<Unit filename="src/include/byteswap.h" />
+		<Unit filename="src/include/cpio.h" />
+		<Unit filename="src/include/crypto.h" />
+		<Unit filename="src/include/ctype.h" />
+		<Unit filename="src/include/daemon.h" />
+		<Unit filename="src/include/dietref.h" />
+		<Unit filename="src/include/dietrefdef.h" />
+		<Unit filename="src/include/dirent.h" />
+		<Unit filename="src/include/dlfcn.h" />
+		<Unit filename="src/include/elf.h" />
+		<Unit filename="src/include/endian.h" />
+		<Unit filename="src/include/err.h" />
+		<Unit filename="src/include/errno.h" />
+		<Unit filename="src/include/fcntl.h" />
+		<Unit filename="src/include/features.h" />
+		<Unit filename="src/include/float.h" />
+		<Unit filename="src/include/fnmatch.h" />
+		<Unit filename="src/include/ftw.h" />
+		<Unit filename="src/include/getopt.h" />
+		<Unit filename="src/include/glob.h" />
+		<Unit filename="src/include/grp.h" />
+		<Unit filename="src/include/iconv.h" />
+		<Unit filename="src/include/inttypes.h" />
+		<Unit filename="src/include/langinfo.h" />
+		<Unit filename="src/include/libgen.h" />
+		<Unit filename="src/include/libintl.h" />
+		<Unit filename="src/include/limits.h" />
+		<Unit filename="src/include/link.h" />
+		<Unit filename="src/include/linux/aio.h" />
+		<Unit filename="src/include/linux/eventpoll.h" />
+		<Unit filename="src/include/linux/fadvise.h" />
+		<Unit filename="src/include/linux/fd.h" />
+		<Unit filename="src/include/linux/if.h" />
+		<Unit filename="src/include/linux/if_ether.h" />
+		<Unit filename="src/include/linux/if_tun.h" />
+		<Unit filename="src/include/linux/kd.h" />
+		<Unit filename="src/include/linux/loop.h" />
+		<Unit filename="src/include/linux/nfs.h" />
+		<Unit filename="src/include/linux/soundcard.h" />
+		<Unit filename="src/include/linux/types.h" />
+		<Unit filename="src/include/locale.h" />
+		<Unit filename="src/include/malloc.h" />
+		<Unit filename="src/include/math.h" />
+		<Unit filename="src/include/md5.h" />
+		<Unit filename="src/include/memory.h" />
+		<Unit filename="src/include/mntent.h" />
+		<Unit filename="src/include/mqueue.h" />
+		<Unit filename="src/include/net/ethernet.h" />
+		<Unit filename="src/include/net/if.h" />
+		<Unit filename="src/include/net/if_arp.h" />
+		<Unit filename="src/include/net/if_ether.h" />
+		<Unit filename="src/include/net/route.h" />
+		<Unit filename="src/include/netdb.h" />
+		<Unit filename="src/include/netinet/ether.h" />
+		<Unit filename="src/include/netinet/if_ether.h" />
+		<Unit filename="src/include/netinet/in.h" />
+		<Unit filename="src/include/netinet/in_systm.h" />
+		<Unit filename="src/include/netinet/ip.h" />
+		<Unit filename="src/include/netinet/ip_icmp.h" />
+		<Unit filename="src/include/netinet/tcp.h" />
+		<Unit filename="src/include/netinet/udp.h" />
+		<Unit filename="src/include/netpacket/packet.h" />
+		<Unit filename="src/include/nl_types.h" />
+		<Unit filename="src/include/obs.h" />
+		<Unit filename="src/include/paths.h" />
+		<Unit filename="src/include/png.h" />
+		<Unit filename="src/include/pngconf.h" />
+		<Unit filename="src/include/pnglist.h" />
+		<Unit filename="src/include/poll.h" />
+		<Unit filename="src/include/pthread.h" />
+		<Unit filename="src/include/pty.h" />
+		<Unit filename="src/include/pwd.h" />
+		<Unit filename="src/include/regex.h" />
+		<Unit filename="src/include/resolv.h" />
+		<Unit filename="src/include/rpc/auth.h" />
+		<Unit filename="src/include/rpc/auth_des.h" />
+		<Unit filename="src/include/rpc/auth_unix.h" />
+		<Unit filename="src/include/rpc/clnt.h" />
+		<Unit filename="src/include/rpc/des_crypt.h" />
+		<Unit filename="src/include/rpc/key_prot.h" />
+		<Unit filename="src/include/rpc/netdb.h" />
+		<Unit filename="src/include/rpc/pmap_clnt.h" />
+		<Unit filename="src/include/rpc/pmap_prot.h" />
+		<Unit filename="src/include/rpc/pmap_rmt.h" />
+		<Unit filename="src/include/rpc/rpc.h" />
+		<Unit filename="src/include/rpc/rpc_des.h" />
+		<Unit filename="src/include/rpc/rpc_msg.h" />
+		<Unit filename="src/include/rpc/svc.h" />
+		<Unit filename="src/include/rpc/svc_auth.h" />
+		<Unit filename="src/include/rpc/types.h" />
+		<Unit filename="src/include/rpc/xdr.h" />
+		<Unit filename="src/include/rsa.h" />
+		<Unit filename="src/include/sched.h" />
+		<Unit filename="src/include/scsi/scsi.h" />
+		<Unit filename="src/include/scsi/scsi_ioctl.h" />
+		<Unit filename="src/include/scsi/sg.h" />
+		<Unit filename="src/include/semaphore.h" />
+		<Unit filename="src/include/setjmp.h" />
+		<Unit filename="src/include/sha.h" />
+		<Unit filename="src/include/shadow.h" />
+		<Unit filename="src/include/signal.h" />
+		<Unit filename="src/include/stdarg-cruft.h" />
+		<Unit filename="src/include/stdarg.h" />
+		<Unit filename="src/include/stdbool.h" />
+		<Unit filename="src/include/stddef.h" />
+		<Unit filename="src/include/stdint.h" />
+		<Unit filename="src/include/stdio.h" />
+		<Unit filename="src/include/stdlib.h" />
+		<Unit filename="src/include/string.h" />
+		<Unit filename="src/include/strings.h" />
+		<Unit filename="src/include/swihelper.h" />
+		<Unit filename="src/include/swilib.h" />
+		<Unit filename="src/include/sys/alpha-ioctl.h" />
+		<Unit filename="src/include/sys/arm-ioctl.h" />
+		<Unit filename="src/include/sys/cdefs.h" />
+		<Unit filename="src/include/sys/epoll.h" />
+		<Unit filename="src/include/sys/file.h" />
+		<Unit filename="src/include/sys/fsuid.h" />
+		<Unit filename="src/include/sys/futex.h" />
+		<Unit filename="src/include/sys/gmon.h" />
+		<Unit filename="src/include/sys/gmon_out.h" />
+		<Unit filename="src/include/sys/hppa-ioctl.h" />
+		<Unit filename="src/include/sys/i386-ioctl.h" />
+		<Unit filename="src/include/sys/inotify.h" />
+		<Unit filename="src/include/sys/io.h" />
+		<Unit filename="src/include/sys/ioctl.h" />
+		<Unit filename="src/include/sys/ipc.h" />
+		<Unit filename="src/include/sys/kd.h" />
+		<Unit filename="src/include/sys/key.h" />
+		<Unit filename="src/include/sys/klog.h" />
+		<Unit filename="src/include/sys/mips-ioctl.h" />
+		<Unit filename="src/include/sys/mman.h" />
+		<Unit filename="src/include/sys/mount.h" />
+		<Unit filename="src/include/sys/msg.h" />
+		<Unit filename="src/include/sys/mtio.h" />
+		<Unit filename="src/include/sys/param.h" />
+		<Unit filename="src/include/sys/personality.h" />
+		<Unit filename="src/include/sys/poll.h" />
+		<Unit filename="src/include/sys/ppc-ioctl.h" />
+		<Unit filename="src/include/sys/prctl.h" />
+		<Unit filename="src/include/sys/ptrace.h" />
+		<Unit filename="src/include/sys/quota.h" />
+		<Unit filename="src/include/sys/reboot.h" />
+		<Unit filename="src/include/sys/resource.h" />
+		<Unit filename="src/include/sys/s390-ioctl.h" />
+		<Unit filename="src/include/sys/select.h" />
+		<Unit filename="src/include/sys/sem.h" />
+		<Unit filename="src/include/sys/sendfile.h" />
+		<Unit filename="src/include/sys/shm.h" />
+		<Unit filename="src/include/sys/signal.h" />
+		<Unit filename="src/include/sys/signalfd.h" />
+		<Unit filename="src/include/sys/socket.h" />
+		<Unit filename="src/include/sys/soundcard.h" />
+		<Unit filename="src/include/sys/sparc-ioctl.h" />
+		<Unit filename="src/include/sys/stat.h" />
+		<Unit filename="src/include/sys/statfs.h" />
+		<Unit filename="src/include/sys/statvfs.h" />
+		<Unit filename="src/include/sys/swap.h" />
+		<Unit filename="src/include/sys/syscall.h" />
+		<Unit filename="src/include/sys/sysctl.h" />
+		<Unit filename="src/include/sys/sysinfo.h" />
+		<Unit filename="src/include/sys/syslog.h" />
+		<Unit filename="src/include/sys/sysmacros.h" />
+		<Unit filename="src/include/sys/time.h" />
+		<Unit filename="src/include/sys/timeb.h" />
+		<Unit filename="src/include/sys/timerfd.h" />
+		<Unit filename="src/include/sys/times.h" />
+		<Unit filename="src/include/sys/timex.h" />
+		<Unit filename="src/include/sys/tls.h" />
+		<Unit filename="src/include/sys/types.h" />
+		<Unit filename="src/include/sys/ucontext.h" />
+		<Unit filename="src/include/sys/uio.h" />
+		<Unit filename="src/include/sys/un.h" />
+		<Unit filename="src/include/sys/utsname.h" />
+		<Unit filename="src/include/sys/vfs.h" />
+		<Unit filename="src/include/sys/vm86.h" />
+		<Unit filename="src/include/sys/wait.h" />
+		<Unit filename="src/include/sysexits.h" />
+		<Unit filename="src/include/syslog.h" />
+		<Unit filename="src/include/tar.h" />
+		<Unit filename="src/include/termio.h" />
+		<Unit filename="src/include/termios.h" />
+		<Unit filename="src/include/time.h" />
+		<Unit filename="src/include/unistd.h" />
+		<Unit filename="src/include/ustat.h" />
+		<Unit filename="src/include/utime.h" />
+		<Unit filename="src/include/utmp.h" />
+		<Unit filename="src/include/utmpx.h" />
+		<Unit filename="src/include/wchar.h" />
+		<Unit filename="src/include/wctype.h" />
+		<Unit filename="src/include/write12.h" />
+		<Unit filename="src/include/zconf.h" />
+		<Unit filename="src/include/zlib.h" />
 		<Unit filename="src/lib/__dtostr.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -71,9 +307,6 @@
 		<Unit filename="src/lib/atol.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/lib/chdir.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="src/lib/closedir.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -81,9 +314,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib/errno_location.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/lib/getcwd.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/lib/getopt.c">
@@ -297,6 +527,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/libc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/libc_init.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/libcompat/mempcpy.c">
@@ -534,6 +767,12 @@
 		<Unit filename="src/libugly/time64.h" />
 		<Unit filename="src/libugly/time64_config.h" />
 		<Unit filename="src/libugly/tzfile.h" />
+		<Unit filename="src/stubs/abort.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stubs/chdir.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/stubs/chmod.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -612,10 +851,16 @@
 		<Unit filename="src/syscall/__clear_cache.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/syscall/access.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/syscall/calloc.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/syscall/clock.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/syscall/close.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/syscall/environment.c">
@@ -627,6 +872,9 @@
 		<Unit filename="src/syscall/fstat.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/syscall/ftruncate.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/syscall/gettimeofday.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -636,7 +884,13 @@
 		<Unit filename="src/syscall/jmp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/syscall/lseek.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/syscall/malloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/syscall/mkdir.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/syscall/mmap.c">
@@ -645,7 +899,16 @@
 		<Unit filename="src/syscall/munmap.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/syscall/open.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/syscall/read.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/syscall/realloc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/syscall/rename.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/syscall/rmdir.c">
@@ -654,7 +917,13 @@
 		<Unit filename="src/syscall/time.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/syscall/truncate.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/syscall/unlink.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/syscall/write.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/wchar/mbrtowc.c">

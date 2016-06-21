@@ -59,16 +59,16 @@ typedef struct LGP_file_block {
 extern "C" {
 #endif
 
-    DLL_EXPORT int lgpLoadLangpackByFile(const wchar_t *file_path);
-    DLL_EXPORT int lgpLoadLangpack(wchar_t *settings_path);
-    DLL_EXPORT void lgpModifyLGPStringByID(int id, wchar_t *lgpstr);
-    DLL_EXPORT void lgpModifyLGPStringByTag(char *tagstr, wchar_t *lgpstr);
-    DLL_EXPORT int lgpSaveLangpackByFile(wchar_t *file_path);
-    DLL_EXPORT int lgpSaveLangpack(wchar_t *settings_path);
-    DLL_EXPORT void lgpFreeLangPack(void);
-    //---------------------------------------------------------------------------
+DLL_EXPORT int lgpLoadLangpackByFile(const wchar_t *file_path);
+DLL_EXPORT int lgpLoadLangpack(wchar_t *settings_path);
+DLL_EXPORT void lgpModifyLGPStringByID(int id, wchar_t *lgpstr);
+DLL_EXPORT void lgpModifyLGPStringByTag(char *tagstr, wchar_t *lgpstr);
+DLL_EXPORT int lgpSaveLangpackByFile(wchar_t *file_path);
+DLL_EXPORT int lgpSaveLangpack(wchar_t *settings_path);
+DLL_EXPORT void lgpFreeLangPack(void);
+//---------------------------------------------------------------------------
 
-    extern LGP_Item LGPTAGS[];
+extern LGP_Item LGPTAGS[];
 
 #ifdef __cplusplus
 }

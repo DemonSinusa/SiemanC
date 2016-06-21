@@ -5,28 +5,27 @@
 #include <write12.h>
 #include <stdio.h>
 
-void __assert_fail (const char *assertion, const char *file, unsigned int line, const char *function)
-{
-  unsigned int alen = strlen(assertion);
-  unsigned int flen = strlen(file);
-  unsigned int fulen = function ? strlen(function) : 0;
-  char *buf = (char*)malloc(alen+flen+fulen+50);
-  if (buf) {
-    char *tmp;
-    *buf=0;
-    if (file) strcat(strcat(buf,file),":");
-    tmp=buf+strlen(buf);
-    __ltostr(tmp,10,line,10,0);
-    strcat(buf,": ");
-    if (function) strcat(strcat(buf,function),": ");
-    strcat(buf,"Assertion `");
-    strcat(buf,assertion);
-    strcat(buf,"' failed.\n");
-    //__write2(buf);
-    fprintf(stderr, buf);
-    free(buf);
-  }
-  //abort();
+void __assert_fail (const char *assertion, const char *file, unsigned int line, const char *function) {
+    unsigned int alen = strlen(assertion);
+    unsigned int flen = strlen(file);
+    unsigned int fulen = function ? strlen(function) : 0;
+    char *buf = (char*)malloc(alen+flen+fulen+50);
+    if (buf) {
+        char *tmp;
+        *buf=0;
+        if (file) strcat(strcat(buf,file),":");
+        tmp=buf+strlen(buf);
+        __ltostr(tmp,10,line,10,0);
+        strcat(buf,": ");
+        if (function) strcat(strcat(buf,function),": ");
+        strcat(buf,"Assertion `");
+        strcat(buf,assertion);
+        strcat(buf,"' failed.\n");
+        //__write2(buf);
+        fprintf(stderr, buf);
+        free(buf);
+    }
+    //abort();
 }
 
 

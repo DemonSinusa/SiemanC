@@ -1,8 +1,7 @@
 #include <errno.h>
 
 
-void *symlink()
-{
+void *symlink() {
     errno = ENOSYS;
     return 0;
 }

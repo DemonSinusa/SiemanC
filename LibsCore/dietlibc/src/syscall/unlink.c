@@ -9,9 +9,7 @@
 #include <errno.h>
 
 
-
-int unlink(const char *file)
-{
+int unlink(const char *file) {
     return _unlink(file, (unsigned int *)__errno_location());
 }
 

@@ -19,6 +19,11 @@
 ** ID
 */
 
+#ifndef lint
+#ifndef NOID
+static char tzfilehid[] = "@(#)tzfile.h 8.1";
+#endif /* !defined NOID */
+#endif /* !defined lint */
 
 /*
 ** Information about time zone files.
@@ -113,7 +118,7 @@ struct tzhead {
 
 #ifndef TZ_MAX_CHARS
 #define TZ_MAX_CHARS    50  /* Maximum number of abbreviation characters */
-                /* (limited by what unsigned chars can hold) */
+/* (limited by what unsigned chars can hold) */
 #endif /* !defined TZ_MAX_CHARS */
 
 #ifndef TZ_MAX_LEAPS

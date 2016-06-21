@@ -49,6 +49,10 @@ typedef struct _transh_{
 }ARGS;
 */
 
+void CBProc(int id){
+
+}
+
 char *__argv[2] = {'\0','\0'};
 
 int _start(char *exe, char *fname, void *p1)
@@ -71,7 +75,8 @@ int _start(char *exe, char *fname, void *p1)
     return main(argc, __argv);
 #else
     /* выполним маин */
-    return main(exe, fname, p1);
+    MsgBoxOkCancel(0,(int)"Psdfgsdsdfs",CBProc);
+//    return main(exe, fname, p1);
 #endif
 }
 

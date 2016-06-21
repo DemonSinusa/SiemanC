@@ -4,8 +4,7 @@
 
 
 int
-readlink (const char *path, char *buf, size_t bufsize)
-{
+readlink (const char *path, char *buf, size_t bufsize) {
     __set_errno (ENOSYS);
     return -1;
 }

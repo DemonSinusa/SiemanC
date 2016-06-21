@@ -15,27 +15,26 @@ extern "C" {
 
 
 
-typedef struct
-{
-  const char *ext;
-  const char *small_png;
-  int zero_small;
-  const char *large_png;
-  int zero_large;
-  const char *elf;
-  const char *altelf;
-}ES;
+typedef struct {
+    const char *ext;
+    const char *small_png;
+    int zero_small;
+    const char *large_png;
+    int zero_large;
+    const char *elf;
+    const char *altelf;
+} ES;
 
-typedef struct _ext_list{
+typedef struct _ext_list {
     ES item;
     int unical_id;
     struct _ext_list *next,*prev;
-}ESL;
+} ESL;
 
-struct _es_info{
+struct _es_info {
     ESL *root,*cur,*end;
     int ES_count;
-}ES_INFO;
+} ES_INFO;
 
 int do_ext(WSHDR *filename, WSHDR *ext, void *param);
 int do_alternate(WSHDR *filename, WSHDR *ext, void *param);

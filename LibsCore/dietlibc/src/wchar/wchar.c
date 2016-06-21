@@ -2,8 +2,7 @@
 #include <wchar.h>
 #include <errno.h>
 
-size_t wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
-{
+size_t wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps) {
     const char*  s = (const char*)*src;
     const char*  s2 = memchr( s, 0, len );
 
@@ -17,8 +16,7 @@ size_t wcsrtombs(char *dst, const wchar_t **src, size_t len, mbstate_t *ps)
     return len;
 }
 
-size_t wcstombs(char *dst, const wchar_t *src, size_t len)
-{
+size_t wcstombs(char *dst, const wchar_t *src, size_t len) {
     return wcsrtombs(dst, &src, len, NULL);
 }
 

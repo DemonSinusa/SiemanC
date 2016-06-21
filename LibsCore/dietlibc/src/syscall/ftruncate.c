@@ -10,8 +10,6 @@
 #include <errno.h>
 
 
-
-int ftruncate(int fd, off_t size)
-{
+int ftruncate(int fd, off_t size) {
     return setfilesize(fd, size, (unsigned int*)__errno_location());
 }

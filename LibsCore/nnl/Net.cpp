@@ -51,71 +51,66 @@ DLL_EXPORT NLAYER *_UseManyToOneConnect(char vectorcompass, int MaxFOfMainLay, i
     undercount--;
 
     switch (vectorcompass) {
-	case COMPAS_ENDDOWN:
-	{
-	    while (undercount > MaxFOfEndLay) {
-		//Каркас делается вглубь... Почему не в лево, не вправо?
-		templay->down = _CreateLayerWNeuroCount(undercount, 0);
-		_SetLayerActivateChance(templay->down, 100 - (undercount / MaxFOfMainLay * 100));
-		if (func)_ConnectLayer(templay, templay->down, 0, func);
-		else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
-		templay = templay->down;
-		undercount--;
-	    }
-	    break;
-	}
-	case COMPAS_ENDRIGHT:
-	{
-	    while (undercount > MaxFOfEndLay) {
-		//Каркас делается вглубь... Почему не в лево, не вправо?
-		templay->next = _CreateLayerWNeuroCount(undercount, 0);
-		_SetLayerActivateChance(templay->next, 100 - (undercount / MaxFOfMainLay * 100));
-		if (func)_ConnectLayer(templay, templay->next, 0, func);
-		else _ConnectLayer(templay, templay->next, DefConnectLayMet, NULL);
-		templay = templay->next;
-		undercount--;
-	    }
-	    break;
-	}
-	case COMPAS_ENDUP:
-	{
-	    while (undercount > MaxFOfEndLay) {
-		//Каркас делается вглубь... Почему не в лево, не вправо?
-		templay->up = _CreateLayerWNeuroCount(undercount, 0);
-		_SetLayerActivateChance(templay->up, 100 - (undercount / MaxFOfMainLay * 100));
-		if (func)_ConnectLayer(templay, templay->up, 0, func);
-		else _ConnectLayer(templay, templay->up, DefConnectLayMet, NULL);
-		templay = templay->up;
-		undercount--;
-	    }
-	    break;
-	}
-	case COMPAS_ENDLEFT:
-	{
-	    while (undercount > MaxFOfEndLay) {
-		//Каркас делается вглубь... Почему не в лево, не вправо?
-		templay->prev = _CreateLayerWNeuroCount(undercount, 0);
-		_SetLayerActivateChance(templay->prev, 100 - (undercount / MaxFOfMainLay * 100));
-		if (func)_ConnectLayer(templay, templay->prev, 0, func);
-		else _ConnectLayer(templay, templay->prev, DefConnectLayMet, NULL);
-		templay = templay->prev;
-		undercount--;
-	    }
-	    break;
-	}
-	default:
-	{
-	    while (undercount > MaxFOfEndLay) {
-		//Каркас делается вглубь... Почему не в лево, не вправо?
-		templay->down = _CreateLayerWNeuroCount(undercount, 0);
-		_SetLayerActivateChance(templay->down, 100 - (undercount / MaxFOfMainLay * 100));
-		if (func)_ConnectLayer(templay, templay->down, 0, func);
-		else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
-		templay = templay->down;
-		undercount--;
-	    }
-	    break;
-	}
+    case COMPAS_ENDDOWN: {
+        while (undercount > MaxFOfEndLay) {
+            //Каркас делается вглубь... Почему не в лево, не вправо?
+            templay->down = _CreateLayerWNeuroCount(undercount, 0);
+            _SetLayerActivateChance(templay->down, 100 - (undercount / MaxFOfMainLay * 100));
+            if (func)_ConnectLayer(templay, templay->down, 0, func);
+            else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
+            templay = templay->down;
+            undercount--;
+        }
+        break;
+    }
+    case COMPAS_ENDRIGHT: {
+        while (undercount > MaxFOfEndLay) {
+            //Каркас делается вглубь... Почему не в лево, не вправо?
+            templay->next = _CreateLayerWNeuroCount(undercount, 0);
+            _SetLayerActivateChance(templay->next, 100 - (undercount / MaxFOfMainLay * 100));
+            if (func)_ConnectLayer(templay, templay->next, 0, func);
+            else _ConnectLayer(templay, templay->next, DefConnectLayMet, NULL);
+            templay = templay->next;
+            undercount--;
+        }
+        break;
+    }
+    case COMPAS_ENDUP: {
+        while (undercount > MaxFOfEndLay) {
+            //Каркас делается вглубь... Почему не в лево, не вправо?
+            templay->up = _CreateLayerWNeuroCount(undercount, 0);
+            _SetLayerActivateChance(templay->up, 100 - (undercount / MaxFOfMainLay * 100));
+            if (func)_ConnectLayer(templay, templay->up, 0, func);
+            else _ConnectLayer(templay, templay->up, DefConnectLayMet, NULL);
+            templay = templay->up;
+            undercount--;
+        }
+        break;
+    }
+    case COMPAS_ENDLEFT: {
+        while (undercount > MaxFOfEndLay) {
+            //Каркас делается вглубь... Почему не в лево, не вправо?
+            templay->prev = _CreateLayerWNeuroCount(undercount, 0);
+            _SetLayerActivateChance(templay->prev, 100 - (undercount / MaxFOfMainLay * 100));
+            if (func)_ConnectLayer(templay, templay->prev, 0, func);
+            else _ConnectLayer(templay, templay->prev, DefConnectLayMet, NULL);
+            templay = templay->prev;
+            undercount--;
+        }
+        break;
+    }
+    default: {
+        while (undercount > MaxFOfEndLay) {
+            //Каркас делается вглубь... Почему не в лево, не вправо?
+            templay->down = _CreateLayerWNeuroCount(undercount, 0);
+            _SetLayerActivateChance(templay->down, 100 - (undercount / MaxFOfMainLay * 100));
+            if (func)_ConnectLayer(templay, templay->down, 0, func);
+            else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
+            templay = templay->down;
+            undercount--;
+        }
+        break;
+    }
     }
     return mainlay;
 }
@@ -139,66 +134,61 @@ DLL_EXPORT NLAYER *_UseOneToManyConnect(char vectorcompass, int MaxFOfMainLay, i
     cunt++;
 
     switch (vectorcompass) {
-	case COMPAS_ENDDOWN:
-	{
-	    while (cunt < MaxFOfEndLay) {
-		templay->down = _CreateLayerWNeuroCount(cunt, 0);
-		_SetLayerActivateChance(templay->down, 100);
-		if (func)_ConnectLayer(templay, templay->down, 0, func);
-		else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
-		templay = templay->down;
-		cunt++;
-	    }
-	    break;
-	}
-	case COMPAS_ENDRIGHT:
-	{
-	    while (cunt < MaxFOfEndLay) {
-		templay->next = _CreateLayerWNeuroCount(cunt, 0);
-		_SetLayerActivateChance(templay->next, 100);
-		if (func)_ConnectLayer(templay, templay->next, 0, func);
-		else _ConnectLayer(templay, templay->next, DefConnectLayMet, NULL);
-		templay = templay->next;
-		cunt++;
-	    }
-	    break;
-	}
-	case COMPAS_ENDUP:
-	{
-	    while (cunt < MaxFOfEndLay) {
-		templay->up = _CreateLayerWNeuroCount(cunt, 0);
-		_SetLayerActivateChance(templay->up, 100);
-		if (func)_ConnectLayer(templay, templay->up, 0, func);
-		else _ConnectLayer(templay, templay->up, DefConnectLayMet, NULL);
-		templay = templay->up;
-		cunt++;
-	    }
-	    break;
-	}
-	case COMPAS_ENDLEFT:
-	{
-	    while (cunt < MaxFOfEndLay) {
-		templay->prev = _CreateLayerWNeuroCount(cunt, 0);
-		_SetLayerActivateChance(templay->prev, 100);
-		if (func)_ConnectLayer(templay, templay->prev, 0, func);
-		else _ConnectLayer(templay, templay->prev, DefConnectLayMet, NULL);
-		templay = templay->prev;
-		cunt++;
-	    }
-	    break;
-	}
-	default:
-	{
-	    while (cunt < MaxFOfEndLay) {
-		templay->down = _CreateLayerWNeuroCount(cunt, 0);
-		_SetLayerActivateChance(templay->down, 100);
-		if (func)_ConnectLayer(templay, templay->down, 0, func);
-		else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
-		templay = templay->down;
-		cunt++;
-	    }
-	    break;
-	}
+    case COMPAS_ENDDOWN: {
+        while (cunt < MaxFOfEndLay) {
+            templay->down = _CreateLayerWNeuroCount(cunt, 0);
+            _SetLayerActivateChance(templay->down, 100);
+            if (func)_ConnectLayer(templay, templay->down, 0, func);
+            else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
+            templay = templay->down;
+            cunt++;
+        }
+        break;
+    }
+    case COMPAS_ENDRIGHT: {
+        while (cunt < MaxFOfEndLay) {
+            templay->next = _CreateLayerWNeuroCount(cunt, 0);
+            _SetLayerActivateChance(templay->next, 100);
+            if (func)_ConnectLayer(templay, templay->next, 0, func);
+            else _ConnectLayer(templay, templay->next, DefConnectLayMet, NULL);
+            templay = templay->next;
+            cunt++;
+        }
+        break;
+    }
+    case COMPAS_ENDUP: {
+        while (cunt < MaxFOfEndLay) {
+            templay->up = _CreateLayerWNeuroCount(cunt, 0);
+            _SetLayerActivateChance(templay->up, 100);
+            if (func)_ConnectLayer(templay, templay->up, 0, func);
+            else _ConnectLayer(templay, templay->up, DefConnectLayMet, NULL);
+            templay = templay->up;
+            cunt++;
+        }
+        break;
+    }
+    case COMPAS_ENDLEFT: {
+        while (cunt < MaxFOfEndLay) {
+            templay->prev = _CreateLayerWNeuroCount(cunt, 0);
+            _SetLayerActivateChance(templay->prev, 100);
+            if (func)_ConnectLayer(templay, templay->prev, 0, func);
+            else _ConnectLayer(templay, templay->prev, DefConnectLayMet, NULL);
+            templay = templay->prev;
+            cunt++;
+        }
+        break;
+    }
+    default: {
+        while (cunt < MaxFOfEndLay) {
+            templay->down = _CreateLayerWNeuroCount(cunt, 0);
+            _SetLayerActivateChance(templay->down, 100);
+            if (func)_ConnectLayer(templay, templay->down, 0, func);
+            else _ConnectLayer(templay, templay->down, DefConnectLayMet, NULL);
+            templay = templay->down;
+            cunt++;
+        }
+        break;
+    }
     }
 
     return mainlay;
@@ -232,44 +222,39 @@ vectorcompass- направление в котором следует идти 
 DLL_EXPORT NLAYER *_GetDeeperLayer(NLAYER *mainlay, char vectorcompass) {
     NLAYER *templay = mainlay;
     if (mainlay) {
-	switch (vectorcompass) {
-	    case COMPAS_ENDDOWN:
-	    {
-		while (templay->down) {
-		    templay = templay->down;
-		}
-		break;
-	    }
-	    case COMPAS_ENDRIGHT:
-	    {
-		while (templay->next) {
-		    templay = templay->next;
-		}
-		break;
-	    }
-	    case COMPAS_ENDUP:
-	    {
-		while (templay->up) {
-		    templay = templay->up;
-		}
-		break;
-	    }
-	    case COMPAS_ENDLEFT:
-	    {
-		while (templay->prev) {
-		    templay = templay->prev;
-		}
-		break;
-	    }
-	    default:
-	    {
-		while (templay->down) {
-		    templay = templay->down;
-		}
-		break;
-	    }
-	}
-	return templay;
+        switch (vectorcompass) {
+        case COMPAS_ENDDOWN: {
+            while (templay->down) {
+                templay = templay->down;
+            }
+            break;
+        }
+        case COMPAS_ENDRIGHT: {
+            while (templay->next) {
+                templay = templay->next;
+            }
+            break;
+        }
+        case COMPAS_ENDUP: {
+            while (templay->up) {
+                templay = templay->up;
+            }
+            break;
+        }
+        case COMPAS_ENDLEFT: {
+            while (templay->prev) {
+                templay = templay->prev;
+            }
+            break;
+        }
+        default: {
+            while (templay->down) {
+                templay = templay->down;
+            }
+            break;
+        }
+        }
+        return templay;
     } else return NULL;
 }
 
@@ -280,40 +265,36 @@ NLAYER *_SimpleMethod(NLAYER *from, int count, int countend, char compas) {
     int retval = 0;
     NLAYER *curlay = from, *nextlay = 0;
     while (countend > countstop) {
-	if (countstop % 2 == 0) {
-	    countstop = countstop / 2;
-	    nextlay = _CreateLayerWNeuroCount(countstop, 0);
-	    retval = _ConnectLayer(curlay, nextlay, 6, NULL);
-	    if (retval)retval = retval; //Ошибко
-	} else {
-	    countstop = countstop - 1;
-	    nextlay = _CreateLayerWNeuroCount(countstop - 1, 0);
-	    retval = _ConnectLayer(curlay, nextlay, 5, NULL);
-	    if (retval)retval = retval; //Ошибко
-	}
-	switch (compas) {
-	    case COMPAS_ENDDOWN:
-	    {
-		curlay->down = nextlay;
-		break;
-	    }
-	    case COMPAS_ENDRIGHT:
-	    {
-		curlay->next = nextlay;
-		break;
-	    }
-	    case COMPAS_ENDUP:
-	    {
-		curlay->up = nextlay;
-		break;
-	    }
-	    case COMPAS_ENDLEFT:
-	    {
-		curlay->prev = nextlay;
-		break;
-	    }
-	}
-	curlay = nextlay;
+        if (countstop % 2 == 0) {
+            countstop = countstop / 2;
+            nextlay = _CreateLayerWNeuroCount(countstop, 0);
+            retval = _ConnectLayer(curlay, nextlay, 6, NULL);
+            if (retval)retval = retval; //Ошибко
+        } else {
+            countstop = countstop - 1;
+            nextlay = _CreateLayerWNeuroCount(countstop - 1, 0);
+            retval = _ConnectLayer(curlay, nextlay, 5, NULL);
+            if (retval)retval = retval; //Ошибко
+        }
+        switch (compas) {
+        case COMPAS_ENDDOWN: {
+            curlay->down = nextlay;
+            break;
+        }
+        case COMPAS_ENDRIGHT: {
+            curlay->next = nextlay;
+            break;
+        }
+        case COMPAS_ENDUP: {
+            curlay->up = nextlay;
+            break;
+        }
+        case COMPAS_ENDLEFT: {
+            curlay->prev = nextlay;
+            break;
+        }
+        }
+        curlay = nextlay;
     }
     return curlay;
 }
@@ -325,40 +306,36 @@ NLAYER *_EveMethod(NLAYER *from, int count, int countend, char compas) {
     int retval = 0;
     NLAYER *curlay = from, *nextlay = 0;
     while (countend > countstop) {
-	if (countstop % 2 == 0) {
-	    countstop = countstop / 2;
-	    nextlay = _CreateLayerWNeuroCount(countstop, 0);
-	    retval = _ConnectLayer(curlay, nextlay, 4, NULL);
-	    if (retval)retval = retval; //Ошибко
-	} else {
-	    countstop = countstop - 1;
-	    nextlay = _CreateLayerWNeuroCount(countstop - 1, 0);
-	    retval = _ConnectLayer(curlay, nextlay, 4, NULL);
-	    if (retval)retval = retval; //Ошибко
-	}
-	switch (compas) {
-	    case COMPAS_ENDDOWN:
-	    {
-		curlay->down = nextlay;
-		break;
-	    }
-	    case COMPAS_ENDRIGHT:
-	    {
-		curlay->next = nextlay;
-		break;
-	    }
-	    case COMPAS_ENDUP:
-	    {
-		curlay->up = nextlay;
-		break;
-	    }
-	    case COMPAS_ENDLEFT:
-	    {
-		curlay->prev = nextlay;
-		break;
-	    }
-	}
-	curlay = nextlay;
+        if (countstop % 2 == 0) {
+            countstop = countstop / 2;
+            nextlay = _CreateLayerWNeuroCount(countstop, 0);
+            retval = _ConnectLayer(curlay, nextlay, 4, NULL);
+            if (retval)retval = retval; //Ошибко
+        } else {
+            countstop = countstop - 1;
+            nextlay = _CreateLayerWNeuroCount(countstop - 1, 0);
+            retval = _ConnectLayer(curlay, nextlay, 4, NULL);
+            if (retval)retval = retval; //Ошибко
+        }
+        switch (compas) {
+        case COMPAS_ENDDOWN: {
+            curlay->down = nextlay;
+            break;
+        }
+        case COMPAS_ENDRIGHT: {
+            curlay->next = nextlay;
+            break;
+        }
+        case COMPAS_ENDUP: {
+            curlay->up = nextlay;
+            break;
+        }
+        case COMPAS_ENDLEFT: {
+            curlay->prev = nextlay;
+            break;
+        }
+        }
+        curlay = nextlay;
     }
     return curlay;
 }
@@ -373,20 +350,18 @@ NLAYER *_CreateNeuroCard(int incount, int outcount, int method, NLAYER *finish) 
     firstlay = _CreateLayerWNeuroCount(nin, 0);
 
     switch (method) {
-	case CARDMETHOD_SIMPLE:
-	{
-	    endlay = _SimpleMethod(firstlay, nin, nout, COMPAS_ENDRIGHT);
-	    break;
-	}
-	case CARDMETHOD_GODEVE:
-	{
-	    endlay = _EveMethod(firstlay, nin, nout, COMPAS_ENDDOWN);
-	    break;
-	}
+    case CARDMETHOD_SIMPLE: {
+        endlay = _SimpleMethod(firstlay, nin, nout, COMPAS_ENDRIGHT);
+        break;
+    }
+    case CARDMETHOD_GODEVE: {
+        endlay = _EveMethod(firstlay, nin, nout, COMPAS_ENDDOWN);
+        break;
+    }
     }
 
     if (finish) {
-	_MoveDataFromLayer(endlay, finish);
+        _MoveDataFromLayer(endlay, finish);
     }
     return firstlay;
 }
@@ -408,9 +383,9 @@ NLAYER *Net::CreateFrameworkNet(char vectorcompass, int MaxFOfMainLay, int MaxFO
     NLAYER *retv = 0;
     retv = _CreateFrameworkNet(vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:*void...", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:0x%X04", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:*void...", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:0x%X04", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func, retv);
     }
     return retv;
 }
@@ -420,9 +395,9 @@ NLAYER *Net::UseManyToOneConnect(char vectorcompass, int MaxFOfMainLay, int MaxF
     NLAYER *retv = 0;
     retv = _UseManyToOneConnect(vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:*void...", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:0x%X04", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:*void...", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:0x%X04", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func, retv);
     }
     return retv;
 }
@@ -432,9 +407,9 @@ NLAYER *Net::UseOneToManyConnect(char vectorcompass, int MaxFOfMainLay, int MaxF
     NLAYER *retv = 0;
     retv = _UseOneToManyConnect(vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:*void...", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:0x%X04", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:*void...", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"vectorcompass:%d,MaxFOfMainLay:%d,MaxFOfEndLay:%d,DefConnectLayMet:%d,UserFunct:0x%X04,return:0x%X04", vectorcompass, MaxFOfMainLay, MaxFOfEndLay, DefConnectLayMet, func, retv);
     }
     return retv;
 }
@@ -444,9 +419,9 @@ NLAYER *Net::GetDeeperLayer(NLAYER *mainlay, char vectorcompass) {
     NLAYER *retv = 0;
     retv = _GetDeeperLayer(mainlay, vectorcompass);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"mainlay:0x%X03,vectorcompass:%d,return:*void...", mainlay, vectorcompass);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"mainlay:0x%X03,vectorcompass:%d,return:0x%X04", mainlay, vectorcompass, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_ERROR, descr, L"mainlay:0x%X03,vectorcompass:%d,return:*void...", mainlay, vectorcompass);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, descr, L"mainlay:0x%X03,vectorcompass:%d,return:0x%X04", mainlay, vectorcompass, retv);
     }
     return retv;
 }

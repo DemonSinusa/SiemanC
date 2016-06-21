@@ -1,16 +1,9 @@
 
-/**
-    * 2011
-    * (c) Z.Vova
-*/
-
-
 #include <time.h>
 #include <sys/time.h>
 #include <swilib.h>
 
-char mon_days[] =
-{
+char mon_days[] = {
     31,
     28, /*(в високосном году Ч 29)*/
     31,
@@ -27,12 +20,10 @@ char mon_days[] =
 
 
 
-int GetDay(TDate *td)
-{
+int GetDay(TDate *td) {
     if(!td) return -1;
     int yday = 0;
-    for (int i=0; i<td->month-1; ++i)
-    {
+    for (int i=0; i<td->month-1; ++i) {
         yday += mon_days[i];
     }
 
@@ -40,15 +31,13 @@ int GetDay(TDate *td)
 }
 
 
-int gettimeofday (struct timeval *tv, struct timezone *tz)
-{
+int gettimeofday (struct timeval *tv, struct timezone *tz) {
     TTime tt;
     TDate td;
 
     GetDateTime(&td, &tt);
 
-    if (NULL != tv)
-    {
+    if (NULL != tv) {
         struct tm t;
         t.tm_sec  = tt.sec;
         t.tm_min  = tt.min;
@@ -65,8 +54,7 @@ int gettimeofday (struct timeval *tv, struct timezone *tz)
         tv->tv_sec = mktime(&t);
     }
 
-    if (NULL != tz)
-    {
+    if (NULL != tz) {
         tz->tz_dsttime = 0;
         tz->tz_minuteswest = -180;
     }
@@ -75,13 +63,11 @@ int gettimeofday (struct timeval *tv, struct timezone *tz)
 }
 
 
-int settimeofday (const struct timeval *tv, const struct timezone *tz)
-{
+int settimeofday (const struct timeval *tv, const struct timezone *tz) {
     TTime tt;
     TDate td;
 
-    if (NULL != tv)
-    {
+    if (NULL != tv) {
         struct tm t;
         tt.sec   = t.tm_sec;
         tt.min = t.tm_min;
@@ -93,8 +79,7 @@ int settimeofday (const struct timeval *tv, const struct timezone *tz)
         SetDateTime(&td, &tt);
     }
 
-    if (NULL != tz)
-    {
+    if (NULL != tz) {
         /* а шо тут делать? */
     }
 

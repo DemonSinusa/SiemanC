@@ -45,9 +45,9 @@ DLL_EXPORT LINK *_SetLinkToList(LINK *it, LINKL *from, LINKL *to) { //Функц
     from->link = it;
     to->link = it;
     if (tempfdl) {
-	from->IDOffset = tempfdl->data.FreedoomID;
-	to->IDOffset = tempfdl->data.FreedoomID;
-	_DeleteFDL(tempfdl);
+        from->IDOffset = tempfdl->data.FreedoomID;
+        to->IDOffset = tempfdl->data.FreedoomID;
+        _DeleteFDL(tempfdl);
     }
     from->state = to->state = STATE_READY;
     return it;
@@ -61,9 +61,9 @@ DLL_EXPORT LINKL *_CreateLinkListItem(LINKL *prev) { //Функция созда
 
     temp->IDOffset = -1;
     if (prev) {
-	temp->Neuron = prev->Neuron;
-	prev->next = temp;
-	temp->prev = prev;
+        temp->Neuron = prev->Neuron;
+        prev->next = temp;
+        temp->prev = prev;
     }
     AddLinclistsCount(1);
     return temp;
@@ -76,17 +76,17 @@ DLL_EXPORT LINKL *_FreeLinkListItem(LINKL *it) { //Функция удаляет
     LINKL *prevl = it->prev;
     LINKL *nextl = it->next;
     if (it->state == STATE_READY)
-	it->state = STATE_NOT_READY;
+        it->state = STATE_NOT_READY;
     else return templ;
 
     if (nextl) {
-	templ = nextl;
-	nextl->prev = prevl;
+        templ = nextl;
+        nextl->prev = prevl;
     }
 
     if (prevl) {
-	templ = prevl;
-	prevl->next = nextl;
+        templ = prevl;
+        prevl->next = nextl;
     }
     free(it);
     AddLinclistsCount(-1);
@@ -100,6 +100,61 @@ DLL_EXPORT LINKL *_GetEndListItem(LINKL *first) { //Возвращает пос�
     return temp;
 }
 
+DLL_EXPORT LINKL *_IncertListItem(LINKL *item,LINKL *prev,LINKL *next) {	//Внедряет элемент между prev и next
+    if(!item)return NULL;
+    if(item->state=STATE_READY){
+    item->state=STATE_NOT_READY;
+
+    if(prev) {
+        item->prev=prev;
+        prev->next=item;
+    } else item->prev=NULL;
+    if(next) {
+        item->next=next;
+        next->prev=item;
+    } else item->next=NULL;
+
+    item->state=STATE_READY;
+    }
+    return item;
+}
+
+
+//Функция возвращает место для врезки руководствуясь условием либо NULL
+/*
+Если не передан item ищет absolute в сторону direction
+Иначе ближайший absolute относительно item в заданом направлении
+*/
+DLL_EXPORT LINKL *_CompareWeightFinding(LINK *item,LINKL *entry,int absolute,int direction) {
+    LINKL *cur=entry,*aitem=item?item:entry;
+    while(cur) {
+#define "Изменен подход, продумать на досуге."
+        if(absolute&ABSOLUTE_MAX) {
+            if(item){
+            if(absolute&ABSOLUTE_WEIGHT) {
+                if(item->weight<=cur->link->weight)break;
+            } else if(item->activated<=cur->link->activated)break;
+            }else{
+                if(absolute&ABSOLUTE_WEIGHT){
+                    if(aitem->link->weight<cur->link->weight)aitem=cur;
+                }else if(aitem->link->activated<cur->link->activated)aitem=cur;
+            }
+        } else {
+            if(item){
+            if(absolute&ABSOLUTE_WEIGHT) {
+                if(item->weight>=cur->link->weight)break;
+            } else if(item->activated>=cur->link->activated)break;
+            }else{
+                if(absolute&ABSOLUTE_WEIGHT){
+                    if(aitem->link->weight>cur->link->weight)aitem=cur;
+                }else if(aitem->link->activated>cur->link->activated)aitem=cur;
+            }
+        }
+        cur=direction?cur->next:cur->prev;
+    }
+    return cur;
+}
+
 DLL_EXPORT int _DeleteLinkWList(LINK *it) { //Функция удаляет связь полностью, с проверками
     int retval = 0;
     NEURON *nfrom = 0, *nto = 0;
@@ -107,36 +162,36 @@ DLL_EXPORT int _DeleteLinkWList(LINK *it) { //Функция удаляет св
     if (!it)return 0;
     //Если есть it->from то должен быть и it->to и наоборот, иначе обязана быть ошибка.
     if (!it->from) {
-	_FreeLink(it);
-	return 0;
+        _FreeLink(it);
+        return 0;
     }
 
     if (lfrom->IDOffset != -1 || lto->IDOffset != -1) {
-	if (lfrom->IDOffset == lto->IDOffset) {
-	    _CreateFDL(lfrom->IDOffset, FIDL_LINKS);
-	} else {
-	    //Если выполняется эта часть условия, то это ошибка сохранения (!Умну Дублинекатинг!)
-	    _CreateFDL(lfrom->IDOffset, FIDL_LINKS);
-	    _CreateFDL(lto->IDOffset, FIDL_LINKS);
-	}
+        if (lfrom->IDOffset == lto->IDOffset) {
+            _CreateFDL(lfrom->IDOffset, FIDL_LINKS);
+        } else {
+            //Если выполняется эта часть условия, то это ошибка сохранения (!Умну Дублинекатинг!)
+            _CreateFDL(lfrom->IDOffset, FIDL_LINKS);
+            _CreateFDL(lto->IDOffset, FIDL_LINKS);
+        }
     }
     if (lfrom) {
-	nfrom = (NEURON *) lfrom->Neuron;
-	if (nfrom->out == lfrom)
-	    nfrom->out = _FreeLinkListItem(lfrom);
-	else _FreeLinkListItem(lfrom);
+        nfrom = (NEURON *) lfrom->Neuron;
+        if (nfrom->links.out == lfrom)
+            nfrom->links.out = _FreeLinkListItem(lfrom);
+        else _FreeLinkListItem(lfrom);
 
-	retval += 1;
+        retval += 1;
     }
 
     if (lto) {
-	nto = (NEURON *) lto->Neuron;
-	if (nto->in == lto)
-	    nto->in = _FreeLinkListItem(lto);
-	else _FreeLinkListItem(lto);
+        nto = (NEURON *) lto->Neuron;
+        if (nto->links.in == lto)
+            nto->links.in = _FreeLinkListItem(lto);
+        else _FreeLinkListItem(lto);
 
-	if (!nto->in)_DeleteNeuron(nto);
-	retval += 1;
+        if (!nto->links.in)_DeleteNeuron(nto);
+        retval += 1;
     }
 
     _FreeLink(it);
@@ -150,10 +205,10 @@ DLL_EXPORT int _DeleteLinksList(LINKL *first) { //Полностью удаля�
     if (!temp)return -1;
 
     while (temp) {
-	templ = temp->next;
-	if (_DeleteLinkWList(temp->link))
-	    retval++;
-	temp = templ;
+        templ = temp->next;
+        if (_DeleteLinkWList(temp->link))
+            retval++;
+        temp = templ;
     }
     return retval;
 }
@@ -171,7 +226,7 @@ int LinksBase::SetLinkWeight(LINK *it, ntype weight) {
     int rval = 0;
     rval = _SetLinkWeight(it, weight);
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"weight:%x", weight);
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"weight:%x", weight);
     }
     return rval;
 }
@@ -181,7 +236,7 @@ LINK *LinksBase::CreateLink(ntype weight) {
     LINK *rval = 0;
     rval = _CreateLink(weight);
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"weight:%x,return:0x%X02", weight, rval);
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"weight:%x,return:0x%X02", weight, rval);
     }
     return rval;
 }
@@ -189,7 +244,7 @@ LINK *LinksBase::CreateLink(ntype weight) {
 void LinksBase::FreeLink(LINK *it) {
     const wchar_t *descr = L"void LinksBase::FreeLink(LINK *it)\r\n";
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"LinkU:Freee\r\n");
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"LinkU:Freee\r\n");
     }
     _FreeLink(it);
 }
@@ -199,9 +254,9 @@ LINK *LinksBase::SetLinkToList(LINK *it, LINKL *from, LINKL *to) {
     LINK *rval = 0;
     rval = _SetLinkToList(it, from, to);
     if (log) {
-	if (!rval)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"from:%x,to:%x,it:%x,return:Niht", from, to, it);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"from:%x,to:%x,it:%x,return:%x", from, to, it, rval);
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"from:%x,to:%x,it:%x,return:Niht", from, to, it);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"from:%x,to:%x,it:%x,return:%x", from, to, it, rval);
     }
     return rval;
 }
@@ -211,9 +266,9 @@ LINKL *LinksBase::CreateLinkListItem(LINKL *prev) {
     LINKL *rval = 0;
     rval = _CreateLinkListItem(prev);
     if (log) {
-	if (!rval)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"prev:%x,return:Net'\"", prev);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"prev:%x,return:%x", prev, rval);
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"prev:%x,return:Net'\"", prev);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"prev:%x,return:%x", prev, rval);
     }
     return rval;
 }
@@ -223,9 +278,9 @@ LINKL *LinksBase::FreeLinkListItem(LINKL *it) {
     LINKL *rval = 0;
     rval = _FreeLinkListItem(it);
     if (log) {
-	if (!rval)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"it:%x,return:0", it);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"it:0,return:%x", rval);
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"it:%x,return:0", it);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"it:0,return:%x", rval);
     }
     return rval;
 }
@@ -235,9 +290,33 @@ LINKL *LinksBase::GetEndListItem(LINKL *first) {
     LINKL *rval = 0;
     rval = _GetEndListItem(first);
     if (log) {
-	if (!rval)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:%x,return:0", first);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:%x,return:%x", first, rval);
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:%x,return:0", first);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:%x,return:%x", first, rval);
+    }
+    return rval;
+}
+
+LINKL *LinksBase::IncertListItem(LINKL *item,LINKL *prev,LINKL *next) {
+    const wchar_t *descr = L"LINKL *LinksBase::IncertListItem(LINKL *item,LINKL *prev,LINKL *next)\r\n";
+    LINKL *rval = _IncertListItem(item,prev,next);
+    if (log) {
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"item:%x,prev:%x,next:%x,return:0", item,prev,next);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"item:%x,prev:%x,next:%x,return:%x", item,prev,next, rval);
+    }
+    return rval;
+}
+
+LINKL *LinksBase::CompareWeightFinding(LINK *item,LINKL *entry,int absolute,int direction) {
+    const wchar_t *descr = L"LINKL *LinksBase::CompareWeightFinding(LINK *item,LINKL *entry,int absolute,int direction)\r\n";
+    LINKL *rval = _CompareWeightFinding(item,entry,absolute,direction);
+    if (log) {
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"item:%x,entry:%x,absolute:%d,direction:%d,return:0",
+                         item,entry,absolute,direction);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"item:%x,entry:%x,absolute:%d,direction:%d,return:%x",
+                              item,entry,absolute,direction, rval);
     }
     return rval;
 }
@@ -247,9 +326,9 @@ int LinksBase::DeleteLinkWList(LINK *it) {
     int rval = 0;
     rval = _DeleteLinkWList(it);
     if (log) {
-	if (!rval)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"it:%x,return:0", it);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"it:0,return:%d", rval);
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"it:%x,return:0", it);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"it:0,return:%d", rval);
     }
     return rval;
 }
@@ -259,9 +338,9 @@ int LinksBase::DeleteLinksList(LINKL *first) {
     int rval = 0;
     rval = _DeleteLinksList(first);
     if (log) {
-	if (!rval)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:%x,return:0", first);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:0,return:%d", rval);
+        if (!rval)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:%x,return:0", first);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:0,return:%d", rval);
     }
     return rval;
 }

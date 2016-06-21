@@ -55,7 +55,7 @@ DLL_EXPORT void _ConvertInfoToNeuronCard(NEURON *from, NC *card) {
     memset(card, 0, sizeof (NC));
     card->val = from->val;
     card->retval = from->retval;
-    card->postost = from->postost;
+    card->type = from->type;
     card->incount = from->incount;
     card->outcount = from->outcount;
     card->state = from->state;
@@ -70,7 +70,7 @@ DLL_EXPORT void _ConvertInfoToNeuronCard(NEURON *from, NC *card) {
 DLL_EXPORT void _ConvertInfoToNeuron(NEURON *to, NC *card) {
     to->val = card->val;
     to->retval = card->retval;
-    to->postost = card->postost;
+    to->type = card->type;
     to->incount = card->incount;
     to->outcount = card->outcount;
     to->state = card->state;
@@ -96,13 +96,13 @@ DLL_EXPORT long _BuryOnceNeuron(NEURON *it, FILE *fh) {
     _ConvertInfoToNeuronCard(curn, &ncard);
 
     if (it->IDOffset == -1) {
-	fseek(fh, 0, SEEK_END);
-	it->IDOffset = ftell(fh);
-	if (fwrite(&ncard, sizeof (NC), 1, fh) != 1)
-	    it->IDOffset = -1;
+        fseek(fh, 0, SEEK_END);
+        it->IDOffset = ftell(fh);
+        if (fwrite(&ncard, sizeof (NC), 1, fh) != 1)
+            it->IDOffset = -1;
     } else {
-	fseek(fh, it->IDOffset, SEEK_SET);
-	fwrite(&ncard, sizeof (NC), 1, fh);
+        fseek(fh, it->IDOffset, SEEK_SET);
+        fwrite(&ncard, sizeof (NC), 1, fh);
 
     }
 
@@ -113,9 +113,9 @@ DLL_EXPORT int _BuryListBlock(FILE *fh, long ListOffset, LICX *link) {
     if (ListOffset == (-1))return -1;
 
     if (!fseek(fh, ListOffset, SEEK_SET)) {
-	if (fwrite(link, sizeof (LICX), 1, fh) == 1)
-	    return 0;
-	else return -2;
+        if (fwrite(link, sizeof (LICX), 1, fh) == 1)
+            return 0;
+        else return -2;
     } else return -1;
 }
 
@@ -123,9 +123,9 @@ DLL_EXPORT int _BuryListLink(FILE *fh, long LinkOffset, LICL *link) {
     if (LinkOffset == (-1))return -1;
 
     if (!fseek(fh, LinkOffset, SEEK_SET)) {
-	if (fwrite(link, sizeof (LICL), 1, fh) == 1)
-	    return 0;
-	else return -2;
+        if (fwrite(link, sizeof (LICL), 1, fh) == 1)
+            return 0;
+        else return -2;
     } else return -1;
 }
 

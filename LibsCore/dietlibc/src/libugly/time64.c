@@ -187,8 +187,7 @@ static const int dow_year_start[SOLAR_CYCLE_LENGTH] = {
 #endif
 
 
-static int is_exception_century(Year year)
-{
+static int is_exception_century(Year year) {
     int is_exception = ((year % 100 == 0) && !(year % 400 == 0));
     TRACE1("# is_exception_century: %s\n", is_exception ? "yes" : "no");
 
@@ -211,8 +210,7 @@ Time64_T timegm64(const struct TM *date) {
         cycles = (orig_year - 100) / 400;
         orig_year -= cycles * 400;
         days      += (Time64_T)cycles * days_in_gregorian_cycle;
-    }
-    else if( orig_year < -300 ) {
+    } else if( orig_year < -300 ) {
         cycles = (orig_year - 100) / 400;
         orig_year -= cycles * 400;
         days      += (Time64_T)cycles * days_in_gregorian_cycle;
@@ -225,8 +223,7 @@ Time64_T timegm64(const struct TM *date) {
             days += length_of_year[IS_LEAP(year)];
             year++;
         }
-    }
-    else if ( orig_year < 70 ) {
+    } else if ( orig_year < 70 ) {
         year = 69;
         do {
             days -= length_of_year[IS_LEAP(year)];
@@ -248,8 +245,7 @@ Time64_T timegm64(const struct TM *date) {
 }
 
 
-static int check_tm(struct TM *tm)
-{
+static int check_tm(struct TM *tm) {
     /* Don't forget leap seconds */
     assert(tm->tm_sec >= 0);
     assert(tm->tm_sec <= 61);
@@ -268,7 +264,7 @@ static int check_tm(struct TM *tm)
 
     assert(tm->tm_wday >= 0);
     assert(tm->tm_wday <= 6);
-   
+
     assert(tm->tm_yday >= 0);
     assert(tm->tm_yday <= length_of_year[IS_LEAP(tm->tm_year)]);
 
@@ -284,8 +280,7 @@ static int check_tm(struct TM *tm)
 /* The exceptional centuries without leap years cause the cycle to
    shift by 16
 */
-static Year cycle_offset(Year year)
-{
+static Year cycle_offset(Year year) {
     const Year start_year = 2000;
     Year year_diff  = year - start_year;
     Year exceptions;
@@ -297,7 +292,7 @@ static Year cycle_offset(Year year)
     exceptions -= year_diff / 400;
 
     TRACE3("# year: %lld, exceptions: %lld, year_diff: %lld\n",
-          year, exceptions, year_diff);
+           year, exceptions, year_diff);
 
     return exceptions * 16;
 }
@@ -319,8 +314,7 @@ static Year cycle_offset(Year year)
    It doesn't need the same leap year status since we only care about
    January 1st.
 */
-static int safe_year(const Year year)
-{
+static int safe_year(const Year year) {
     int safe_year = 0;
     Year year_cycle;
 
@@ -356,7 +350,7 @@ static int safe_year(const Year year)
         assert(0);
 
     TRACE3("# year: %lld, year_cycle: %lld, safe_year: %d\n",
-          year, year_cycle, safe_year);
+           year, year_cycle, safe_year);
 
     assert(safe_year <= MAX_SAFE_YEAR && safe_year >= MIN_SAFE_YEAR);
 
@@ -367,30 +361,29 @@ static int safe_year(const Year year)
 static void copy_tm_to_TM(const struct tm *src, struct TM *dest) {
     if( src == NULL ) {
         memset(dest, 0, sizeof(*dest));
-    }
-    else {
+    } else {
 #       ifdef USE_TM64
-            dest->tm_sec        = src->tm_sec;
-            dest->tm_min        = src->tm_min;
-            dest->tm_hour       = src->tm_hour;
-            dest->tm_mday       = src->tm_mday;
-            dest->tm_mon        = src->tm_mon;
-            dest->tm_year       = (Year)src->tm_year;
-            dest->tm_wday       = src->tm_wday;
-            dest->tm_yday       = src->tm_yday;
-            dest->tm_isdst      = src->tm_isdst;
+        dest->tm_sec        = src->tm_sec;
+        dest->tm_min        = src->tm_min;
+        dest->tm_hour       = src->tm_hour;
+        dest->tm_mday       = src->tm_mday;
+        dest->tm_mon        = src->tm_mon;
+        dest->tm_year       = (Year)src->tm_year;
+        dest->tm_wday       = src->tm_wday;
+        dest->tm_yday       = src->tm_yday;
+        dest->tm_isdst      = src->tm_isdst;
 
 #           ifdef HAS_TM_TM_GMTOFF
-                dest->tm_gmtoff  = src->tm_gmtoff;
+        dest->tm_gmtoff  = src->tm_gmtoff;
 #           endif
 
 #           ifdef HAS_TM_TM_ZONE
-                dest->tm_zone  = src->tm_zone;
+        dest->tm_zone  = src->tm_zone;
 #           endif
 
 #       else
-            /* They're the same type */
-            memcpy(dest, src, sizeof(*dest));
+        /* They're the same type */
+        memcpy(dest, src, sizeof(*dest));
 #       endif
     }
 }
@@ -399,30 +392,29 @@ static void copy_tm_to_TM(const struct tm *src, struct TM *dest) {
 static void copy_TM_to_tm(const struct TM *src, struct tm *dest) {
     if( src == NULL ) {
         memset(dest, 0, sizeof(*dest));
-    }
-    else {
+    } else {
 #       ifdef USE_TM64
-            dest->tm_sec        = src->tm_sec;
-            dest->tm_min        = src->tm_min;
-            dest->tm_hour       = src->tm_hour;
-            dest->tm_mday       = src->tm_mday;
-            dest->tm_mon        = src->tm_mon;
-            dest->tm_year       = (int)src->tm_year;
-            dest->tm_wday       = src->tm_wday;
-            dest->tm_yday       = src->tm_yday;
-            dest->tm_isdst      = src->tm_isdst;
+        dest->tm_sec        = src->tm_sec;
+        dest->tm_min        = src->tm_min;
+        dest->tm_hour       = src->tm_hour;
+        dest->tm_mday       = src->tm_mday;
+        dest->tm_mon        = src->tm_mon;
+        dest->tm_year       = (int)src->tm_year;
+        dest->tm_wday       = src->tm_wday;
+        dest->tm_yday       = src->tm_yday;
+        dest->tm_isdst      = src->tm_isdst;
 
 #           ifdef HAS_TM_TM_GMTOFF
-                dest->tm_gmtoff  = src->tm_gmtoff;
+        dest->tm_gmtoff  = src->tm_gmtoff;
 #           endif
 
 #           ifdef HAS_TM_TM_ZONE
-                dest->tm_zone  = src->tm_zone;
+        dest->tm_zone  = src->tm_zone;
 #           endif
 
 #       else
-            /* They're the same type */
-            memcpy(dest, src, sizeof(*dest));
+        /* They're the same type */
+        memcpy(dest, src, sizeof(*dest));
 #       endif
     }
 }
@@ -437,8 +429,7 @@ struct tm * fake_localtime_r(const time_t *clock, struct tm *result) {
     if( static_result == NULL ) {
         memset(result, 0, sizeof(*result));
         return NULL;
-    }
-    else {
+    } else {
         memcpy(result, static_result, sizeof(*result));
         return result;
     }
@@ -455,8 +446,7 @@ struct tm * fake_gmtime_r(const time_t *clock, struct tm *result) {
     if( static_result == NULL ) {
         memset(result, 0, sizeof(*result));
         return NULL;
-    }
-    else {
+    } else {
         memcpy(result, static_result, sizeof(*result));
         return result;
     }
@@ -472,8 +462,7 @@ static Time64_T seconds_between_years(Year left_year, Year right_year) {
         cycles = (left_year - 2400) / 400;
         left_year -= cycles * 400;
         seconds   += cycles * seconds_in_gregorian_cycle;
-    }
-    else if( left_year < 1600 ) {
+    } else if( left_year < 1600 ) {
         cycles = (left_year - 1600) / 400;
         left_year += cycles * 400;
         seconds   += cycles * seconds_in_gregorian_cycle;
@@ -518,8 +507,7 @@ Time64_T timelocal64(const struct TM *date) {
 }
 
 
-struct TM *gmtime64_r (const Time64_T *in_time, struct TM *p)
-{
+struct TM *gmtime64_r (const Time64_T *in_time, struct TM *p) {
     int v_tm_sec, v_tm_min, v_tm_hour, v_tm_mon, v_tm_wday;
     Time64_T v_tm_tday;
     int leap;
@@ -645,8 +633,7 @@ struct TM *gmtime64_r (const Time64_T *in_time, struct TM *p)
 }
 
 
-struct TM *localtime64_r (const Time64_T *time, struct TM *local_tm)
-{
+struct TM *localtime64_r (const Time64_T *time, struct TM *local_tm) {
     time_t safe_time;
     struct tm safe_date;
     struct TM gm_tm;
@@ -677,9 +664,8 @@ struct TM *localtime64_r (const Time64_T *time, struct TM *local_tm)
     orig_year = gm_tm.tm_year;
 
     if (gm_tm.tm_year > (2037 - 1900) ||
-        gm_tm.tm_year < (1970 - 1900)
-       )
-    {
+            gm_tm.tm_year < (1970 - 1900)
+       ) {
         TRACE1("Mapping tm_year %lld to safe_year\n", (Year)gm_tm.tm_year);
         gm_tm.tm_year = safe_year((Year)(gm_tm.tm_year + 1900)) - 1900;
     }
@@ -695,7 +681,7 @@ struct TM *localtime64_r (const Time64_T *time, struct TM *local_tm)
     local_tm->tm_year = orig_year;
     if( local_tm->tm_year != orig_year ) {
         TRACE2("tm_year overflow: tm_year %lld, orig_year %lld\n",
-              (Year)local_tm->tm_year, (Year)orig_year);
+               (Year)local_tm->tm_year, (Year)orig_year);
 
 #ifdef EOVERFLOW
         errno = EOVERFLOW;
@@ -757,11 +743,11 @@ char *asctime64_r( const struct TM* date, char *result ) {
         return NULL;
 
     sprintf(result, "%.3s %.3s%3d %.2d:%.2d:%.2d %d\n",
-        wday_name[date->tm_wday],
-        mon_name[date->tm_mon],
-        date->tm_mday, date->tm_hour,
-        date->tm_min, date->tm_sec,
-        1900 + date->tm_year);
+            wday_name[date->tm_wday],
+            mon_name[date->tm_mon],
+            date->tm_mday, date->tm_hour,
+            date->tm_min, date->tm_sec,
+            1900 + date->tm_year);
 
     return result;
 }

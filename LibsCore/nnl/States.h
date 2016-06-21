@@ -28,11 +28,11 @@ typedef struct _statistics_lib {
 extern "C" {
 #endif
 
-    DLL_EXPORT STLib *GetStateVariable();
-    DLL_EXPORT void AddNeuronsCount(int count);
-    DLL_EXPORT void AddLincsCount(int count);
-    DLL_EXPORT void AddLinclistsCount(int count);
-    DLL_EXPORT void AddLayersCount(int count);
+DLL_EXPORT STLib *GetStateVariable();
+DLL_EXPORT void AddNeuronsCount(int count);
+DLL_EXPORT void AddLincsCount(int count);
+DLL_EXPORT void AddLinclistsCount(int count);
+DLL_EXPORT void AddLayersCount(int count);
 
 #ifdef __cplusplus
 }

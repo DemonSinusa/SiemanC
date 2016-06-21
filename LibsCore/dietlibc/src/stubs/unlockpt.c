@@ -2,8 +2,7 @@
 
 
 int
-unlockpt (int fd)
-{
+unlockpt (int fd) {
 
-  return 0;
+    return 0;
 }

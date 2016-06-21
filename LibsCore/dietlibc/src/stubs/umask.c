@@ -3,8 +3,7 @@
 
 
 mode_t
-umask(mode_t mode)
-{
+umask(mode_t mode) {
 
-        return 0777;
+    return 0777;
 }

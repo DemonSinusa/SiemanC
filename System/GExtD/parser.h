@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   parser.h
  * Author: Tonich
  *
@@ -11,21 +11,21 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-    
+
 #define NONE_COMMENT            0
 #define MULTILINE_COMMENT       1
 #define ONELINE_COMMENT         2
 
-typedef struct _str_in_mem{
+typedef struct _str_in_mem {
     char *str;
     int len;
-}SIM;
+} SIM;
 
-typedef struct _strs_in_mem{
+typedef struct _strs_in_mem {
     SIM str;
     char comtype;
     struct _strs_in_mem *next,*prev;
-}SSIM;
+} SSIM;
 
 SSIM *DoParse(char *mem);
 void ParseClear(SSIM *root);

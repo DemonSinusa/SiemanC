@@ -58,24 +58,24 @@ LGP_Item LGPTAGS[] = {
 DLL_EXPORT void lgpModifyLGPStringByTag(char *tagstr, wchar_t *lgpstr) {
     for (int i = 0; i < LGP_DATA_NUM; i++) {
 
-	if (!strcmp(LGPTAGS[i].tag, tagstr)&&(LGPTAGS[i].id != LGP_LibCopyLeWrongERR)) {
-	    if (LGPTAGS[i].LgpData)free(LGPTAGS[i].LgpData);
-	    LGPTAGS[i].LgpData = (wchar_t *)_MallocZeroBytes((wcslen(lgpstr) + 1) * sizeof (wchar_t));
-	    wcsncpy(LGPTAGS[i].LgpData, lgpstr, wcslen(lgpstr));
-	    break;
-	}
+        if (!strcmp(LGPTAGS[i].tag, tagstr)&&(LGPTAGS[i].id != LGP_LibCopyLeWrongERR)) {
+            if (LGPTAGS[i].LgpData)free(LGPTAGS[i].LgpData);
+            LGPTAGS[i].LgpData = (wchar_t *)_MallocZeroBytes((wcslen(lgpstr) + 1) * sizeof (wchar_t));
+            wcsncpy(LGPTAGS[i].LgpData, lgpstr, wcslen(lgpstr));
+            break;
+        }
     }
 }
 
 DLL_EXPORT void lgpModifyLGPStringByID(int id, wchar_t *lgpstr) {
     for (int i = 0; i < LGP_DATA_NUM; i++) {
 
-	if ((LGPTAGS[i].id == id)&&(LGPTAGS[i].id != LGP_LibCopyLeWrongERR)) {
-	    if (LGPTAGS[i].LgpData)free(LGPTAGS[i].LgpData);
-	    LGPTAGS[i].LgpData = (wchar_t *)_MallocZeroBytes((wcslen(lgpstr) + 1) * sizeof (wchar_t));
-	    wcsncpy(LGPTAGS[i].LgpData, lgpstr, wcslen(lgpstr));
-	    break;
-	}
+        if ((LGPTAGS[i].id == id)&&(LGPTAGS[i].id != LGP_LibCopyLeWrongERR)) {
+            if (LGPTAGS[i].LgpData)free(LGPTAGS[i].LgpData);
+            LGPTAGS[i].LgpData = (wchar_t *)_MallocZeroBytes((wcslen(lgpstr) + 1) * sizeof (wchar_t));
+            wcsncpy(LGPTAGS[i].LgpData, lgpstr, wcslen(lgpstr));
+            break;
+        }
     }
 }
 
@@ -135,20 +135,20 @@ DLL_EXPORT int lgpSaveLangpackByFile(wchar_t *file_path) {
     hFile = _wCrossFopen(file_path, L"w+b");
 
     if (!hFile)
-	return -1;
+        return -1;
 
     for (int i = 0; i < LGP_DATA_NUM; i++) {
-	lgfb.id = LGPTAGS[i].id;
-	lgfb.taglen = strlen(LGPTAGS[i].tag) + 1;
-	lgfb.lgpdatalen = (wcslen(LGPTAGS[i].LgpData) + 1) * sizeof (wchar_t);
+        lgfb.id = LGPTAGS[i].id;
+        lgfb.taglen = strlen(LGPTAGS[i].tag) + 1;
+        lgfb.lgpdatalen = (wcslen(LGPTAGS[i].LgpData) + 1) * sizeof (wchar_t);
 
-	memblk = (char *) _MallocZeroBytes(lgfb.taglen + lgfb.lgpdatalen);
-	memcpy(memblk, LGPTAGS[i].tag, lgfb.taglen);
-	memcpy(&memblk[lgfb.taglen], LGPTAGS[i].LgpData, lgfb.lgpdatalen);
-	//	hui = (wchar_t *) & memblk[lgfb.taglen];
-	fwrite(&lgfb, sizeof (LGPFB), 1, hFile);
-	fwrite(memblk, lgfb.taglen + lgfb.lgpdatalen, 1, hFile);
-	free(memblk);
+        memblk = (char *) _MallocZeroBytes(lgfb.taglen + lgfb.lgpdatalen);
+        memcpy(memblk, LGPTAGS[i].tag, lgfb.taglen);
+        memcpy(&memblk[lgfb.taglen], LGPTAGS[i].LgpData, lgfb.lgpdatalen);
+        //	hui = (wchar_t *) & memblk[lgfb.taglen];
+        fwrite(&lgfb, sizeof (LGPFB), 1, hFile);
+        fwrite(memblk, lgfb.taglen + lgfb.lgpdatalen, 1, hFile);
+        free(memblk);
     }
     fclose(hFile);
 
@@ -169,7 +169,7 @@ DLL_EXPORT int lgpSaveLangpack(wchar_t *settings_path) {
 
     wcscpy(lang_file, settings_path);
     if (lang_file[wcslen(lang_file) - 1] != ((wchar_t *) TRUE_SLASH)[0])
-	wcsncat(lang_file, (wchar_t *) TRUE_SLASH, 1);
+        wcsncat(lang_file, (wchar_t *) TRUE_SLASH, 1);
     wcscat(lang_file, TEMPLATES_LGFILE);
 
 
@@ -190,7 +190,7 @@ DLL_EXPORT int lgpLoadLangpackByFile(const wchar_t *file_path) {
     hFile = _wCrossFopen(file_path, L"rb");
 
     if (!hFile)
-	return 0;
+        return 0;
 
     fseek(hFile, 0, SEEK_END);
     size = ftell(hFile);
@@ -199,23 +199,23 @@ DLL_EXPORT int lgpLoadLangpackByFile(const wchar_t *file_path) {
     //--------------Здесь ошибка, надо проверить?---
     //--И начался парсинг формата
     for (ptr = 0; ptr < size;) {
-	if ((fread(&lgfb, sizeof (LGPFB), 1, hFile)) == 1) {
-	    tagblk = (char *) malloc(lgfb.taglen + lgfb.lgpdatalen);
-	    //	    lgpstr = (wchar_t *)malloc(lgfb.lgpdatalen);
-	    if ((fread(tagblk, lgfb.taglen + lgfb.lgpdatalen, 1, hFile)) == 1) {
-	    }
-	    lgpModifyLGPStringByTag(tagblk, (wchar_t *) & tagblk[lgfb.taglen]);
+        if ((fread(&lgfb, sizeof (LGPFB), 1, hFile)) == 1) {
+            tagblk = (char *) malloc(lgfb.taglen + lgfb.lgpdatalen);
+            //	    lgpstr = (wchar_t *)malloc(lgfb.lgpdatalen);
+            if ((fread(tagblk, lgfb.taglen + lgfb.lgpdatalen, 1, hFile)) == 1) {
+            }
+            lgpModifyLGPStringByTag(tagblk, (wchar_t *) & tagblk[lgfb.taglen]);
 
-	    free(tagblk);
-	    //	    free(lgpstr);
-	}
-	//	if ((fread(lgpstr, lgfb.lgpdatalen, 1, hFile)) == 1) {
-	//
-	//	}
-	//	(wchar_t *) & buf[ptr + lgfb->taglen + sizeof(LGPFB)];
-	//--Добавляем,сверяем, и всё остальное.
+            free(tagblk);
+            //	    free(lgpstr);
+        }
+        //	if ((fread(lgpstr, lgfb.lgpdatalen, 1, hFile)) == 1) {
+        //
+        //	}
+        //	(wchar_t *) & buf[ptr + lgfb->taglen + sizeof(LGPFB)];
+        //--Добавляем,сверяем, и всё остальное.
 
-	ptr += lgfb.lgpdatalen + lgfb.taglen + sizeof (LGPFB);
+        ptr += lgfb.lgpdatalen + lgfb.taglen + sizeof (LGPFB);
     }
     //--И все, что могли, загрузили.
 
@@ -238,7 +238,7 @@ DLL_EXPORT int lgpLoadLangpack(wchar_t *settings_path) {
 
     wcscpy(lang_file, settings_path);
     if (lang_file[wcslen(lang_file) - 1] != ((wchar_t *) TRUE_SLASH)[0])
-	wcscat(lang_file, (wchar_t *) TRUE_SLASH);
+        wcscat(lang_file, (wchar_t *) TRUE_SLASH);
     wcscat(lang_file, TEMPLATES_LGFILE);
 
     //	lgpData = (wchar_t **)malloc(LGP_DATA_NUM * sizeof(wchar_t *));
@@ -259,9 +259,9 @@ DLL_EXPORT int lgpLoadLangpack(wchar_t *settings_path) {
 DLL_EXPORT void lgpFreeLangPack(void) {
     int i, id;
     for (i = 0; i < LGP_DATA_NUM; i++) {
-	id = LGPTAGS[i].id;
-	if (id != LGP_LibCopyLeWrongERR)
-	    free(LGPTAGS[id].LgpData);
+        id = LGPTAGS[i].id;
+        if (id != LGP_LibCopyLeWrongERR)
+            free(LGPTAGS[id].LgpData);
     }
     //lgpLoadDefault();
 }

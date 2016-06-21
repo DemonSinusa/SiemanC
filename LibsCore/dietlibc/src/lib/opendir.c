@@ -10,8 +10,7 @@ DIR*  opendir ( const char* name ) {
 
     DIR *dir = malloc(sizeof(DIR));
 
-    if( !FindFirstFile(&dir->dir, name, 0) )
-    {
+    if( !FindFirstFile(&dir->dir, name, 0) ) {
         free(dir);
         dir = 0;
     }

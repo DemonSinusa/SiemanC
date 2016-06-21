@@ -39,11 +39,11 @@ private:
 extern "C" {
 #endif
 
-    DLL_EXPORT NLAYER *_UseManyToOneConnect(char vectorcompass, int MaxFOfMainLay, int MaxFOfEndLay, char DefConnectLayMet, int (*func)(NLAYER *from, NLAYER *to));
-    DLL_EXPORT NLAYER *_UseOneToManyConnect(char vectorcompass, int MaxFOfMainLay, int MaxFOfEndLay, char DefConnectLayMet, int (*func)(NLAYER *from, NLAYER *to));
+DLL_EXPORT NLAYER *_UseManyToOneConnect(char vectorcompass, int MaxFOfMainLay, int MaxFOfEndLay, char DefConnectLayMet, int (*func)(NLAYER *from, NLAYER *to));
+DLL_EXPORT NLAYER *_UseOneToManyConnect(char vectorcompass, int MaxFOfMainLay, int MaxFOfEndLay, char DefConnectLayMet, int (*func)(NLAYER *from, NLAYER *to));
 
-    DLL_EXPORT NLAYER *_CreateFrameworkNet(char vectorcompass, int MaxFOfMainLay, int MaxFOfEndLay, char DefConnectLayMet, int (*func)(NLAYER *from, NLAYER *to));
-    DLL_EXPORT NLAYER *_GetDeeperLayer(NLAYER *mainlay, char vectorcompass);
+DLL_EXPORT NLAYER *_CreateFrameworkNet(char vectorcompass, int MaxFOfMainLay, int MaxFOfEndLay, char DefConnectLayMet, int (*func)(NLAYER *from, NLAYER *to));
+DLL_EXPORT NLAYER *_GetDeeperLayer(NLAYER *mainlay, char vectorcompass);
 
 #ifdef __cplusplus
 }

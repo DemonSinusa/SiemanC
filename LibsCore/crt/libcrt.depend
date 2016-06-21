@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1462088253 source:/home/aveman/SiemanC-git/LibsCore/crt/__cxa_atexit.cpp
+	<swilib.h>
+
+1456777248 source:/home/aveman/SiemanC-git/LibsCore/crt/main.c
+	<swilib.h>
+	<ep3/loader.h>
+

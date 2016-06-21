@@ -13,30 +13,31 @@
 #else
 #define ABS_LONG_MIN 2147483648UL
 #endif
-long int strtol(const char *nptr, char **endptr, int base)
-{
-  int neg=0;
-  unsigned long int v;
-  const char*orig=nptr;
+long int strtol(const char *nptr, char **endptr, int base) {
+    int neg=0;
+    unsigned long int v;
+    const char*orig=nptr;
 
-  while(isspace(*nptr)) nptr++;
+    while(isspace(*nptr)) nptr++;
 
-  if (*nptr == '-' && isalnum(nptr[1])) { neg=-1; ++nptr; }
-  v=strtoul(nptr,endptr,base);
-  if (endptr && *endptr==nptr) *endptr=(char *)orig;
-  if (v>=ABS_LONG_MIN) {
-    if (v==ABS_LONG_MIN && neg) {
-      errno=0;
-      return v;
+    if (*nptr == '-' && isalnum(nptr[1])) {
+        neg=-1;
+        ++nptr;
     }
-    errno=ERANGE;
-    return (neg?LONG_MIN:LONG_MAX);
-  }
-  return (neg?-v:v);
+    v=strtoul(nptr,endptr,base);
+    if (endptr && *endptr==nptr) *endptr=(char *)orig;
+    if (v>=ABS_LONG_MIN) {
+        if (v==ABS_LONG_MIN && neg) {
+            errno=0;
+            return v;
+        }
+        errno=ERANGE;
+        return (neg?LONG_MIN:LONG_MAX);
+    }
+    return (neg?-v:v);
 }
 #else
-long int strtol(const char *nptr, char **endptr, int base)
-{
+long int strtol(const char *nptr, char **endptr, int base) {
     __def_noinline(0x0119, long int, nptr, endptr, base)
 }
 

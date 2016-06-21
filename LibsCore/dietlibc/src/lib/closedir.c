@@ -5,8 +5,7 @@
 #include <stdlib.h>
 
 
-int closedir (DIR* d)
-{
+int closedir (DIR* d) {
     int res = FindClose(&d->dir, 0);
     free(d);
     return res;

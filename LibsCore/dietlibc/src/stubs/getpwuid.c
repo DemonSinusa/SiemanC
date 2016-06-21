@@ -2,15 +2,13 @@
 #include <errno.h>
 
 
-void *getpwuid ()
-{
+void *getpwuid () {
     errno = ENOSYS;
     return 0;
 }
 
 
-void * getpwnam()
-{
+void * getpwnam() {
     errno = ENOSYS;
     return 0;
 }

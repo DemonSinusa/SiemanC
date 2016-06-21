@@ -17,6 +17,17 @@ typedef struct _link_list {
     struct _link_list *next, *prev;
 } LINKL;
 
+#define ABSOLUTE_MIN	0
+#define ABSOLUTE_MAX	1
+#define ABSOLUTE_LAST   8
+#define ABSOLUTE_WEIGHT 2
+#define ABSOLUTE_ACTIVE 4
+
+
+#define DIRECT_TOPREV	0
+#define DIRECT_TONEXT	1
+
+
 class DLL_EXPORT LinksBase {
 public:
     LinksBase();
@@ -32,6 +43,8 @@ public:
     LINKL *CreateLinkListItem(LINKL *prev);
     LINKL *FreeLinkListItem(LINKL *it);
     LINKL *GetEndListItem(LINKL *first);
+    LINKL *IncertListItem(LINKL *item,LINKL *prev,LINKL *next);
+    LINKL *CompareWeightFinding(LINK *item,LINKL *entry,int absolute,int direction);
     int DeleteLinkWList(LINK *it);
     int DeleteLinksList(LINKL *first);
 private:
@@ -49,6 +62,8 @@ extern "C" {
     DLL_EXPORT LINKL *_CreateLinkListItem(LINKL *prev);
     DLL_EXPORT LINKL *_FreeLinkListItem(LINKL *it);
     DLL_EXPORT LINKL *_GetEndListItem(LINKL *first);
+    DLL_EXPORT LINKL *_IncertListItem(LINKL *item,LINKL *prev,LINKL *next);
+    DLL_EXPORT LINKL *_CompareWeightFinding(LINK *item,LINKL *entry,int absolute,int direction);
     DLL_EXPORT int _DeleteLinkWList(LINK *it);
     DLL_EXPORT int _DeleteLinksList(LINKL *first);
 

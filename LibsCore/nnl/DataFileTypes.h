@@ -48,7 +48,7 @@ typedef struct _linc_cardX {
 typedef struct _neuron_card {
     long neuronnext, neuronprev;
     ntype val, retval;
-    int postost;
+    short type;
     char state, chance;
     short incount, outcount;
     long LListin, LListout;

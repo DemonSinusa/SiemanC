@@ -19,6 +19,11 @@
 ** ID
 */
 
+#ifndef lint
+#ifndef NOID
+static char privatehid[] = "@(#)private.h   8.2";
+#endif /* !defined NOID */
+#endif /* !defined lint */
 
 #define GRANDPARENTED   "Local time zone must be set--see zic manual page"
 

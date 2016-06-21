@@ -1,12 +1,8 @@
-
 #include <swihelper.h>
 #include <stddef.h>
-#include <spl/memctl.h>
-#include <unistd.h>
 
 
-void *calloc(size_t nelem, size_t elsize)
-{
-    return memoryAlloc(getpid(), nelem * elsize);
+void *calloc(size_t nelem, size_t elsize) {
+    __def_noinline(146, void*, nelem, elsize);
 }
 

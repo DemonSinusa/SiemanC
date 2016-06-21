@@ -8,8 +8,7 @@
 
 #ifndef __BUILDIN_FUNCTIONS
 char *
-strcpy (char *s1, const char *s2)
-{
+strcpy (char *s1, const char *s2) {
     char           *res = s1;
 #ifdef WANT_SMALL_STRING_ROUTINES
     while ((*s1++ = *s2++));
@@ -19,30 +18,29 @@ strcpy (char *s1, const char *s2)
     unsigned long   l;
 
     if (UNALIGNED(s1, s2)) {
-	while ((*s1++ = *s2++));
-	return (res);
+        while ((*s1++ = *s2++));
+        return (res);
     }
     if ((tmp = STRALIGN(s1))) {
-	while (tmp-- && (*s1++ = *s2++));
-	if (tmp != -1) return (res);
+        while (tmp-- && (*s1++ = *s2++));
+        if (tmp != -1) return (res);
     }
 
     while (1) {
-	l = *(const unsigned long *) s2;
-	if (((l - MKW(0x1ul)) & ~l) & MKW(0x80ul)) {
-	    while ((*s1++ = GFC(l))) INCSTR(l);
-	    return (res);
-	}
-	*(unsigned long *) s1 = l;
-	s2 += sizeof(unsigned long);
-	s1 += sizeof(unsigned long);
+        l = *(const unsigned long *) s2;
+        if (((l - MKW(0x1ul)) & ~l) & MKW(0x80ul)) {
+            while ((*s1++ = GFC(l))) INCSTR(l);
+            return (res);
+        }
+        *(unsigned long *) s1 = l;
+        s2 += sizeof(unsigned long);
+        s1 += sizeof(unsigned long);
     }
 #endif
 }
 #else
 char *
-strcpy (char *s1, const char *s2)
-{
+strcpy (char *s1, const char *s2) {
     __def_noinline(26, char *, s1, s2)
 }
 

@@ -3,6 +3,11 @@
 ** 1996-06-05 by Arthur David Olson.
 */
 
+#ifndef lint
+#ifndef NOID
+static char elsieid[] = "@(#)difftime.c 8.1";
+#endif /* !defined NOID */
+#endif /* !defined lint */
 
 /*LINTLIBRARY*/
 
@@ -54,7 +59,7 @@ const time_t    time0;
     */
     if (time1 >= 0 /* && time0 < 0 */)
         return (unsigned long) time1 +
-            (unsigned long) (-(time0 + 1)) + 1;
+               (unsigned long) (-(time0 + 1)) + 1;
     return -(double) ((unsigned long) time0 +
-        (unsigned long) (-(time1 + 1)) + 1);
+                      (unsigned long) (-(time1 + 1)) + 1);
 }

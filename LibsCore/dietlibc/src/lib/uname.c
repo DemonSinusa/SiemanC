@@ -4,8 +4,7 @@
 #include <string.h>
 
 
-int uname(struct utsname *__name)
-{
+int uname(struct utsname *__name) {
     if(!__name) return -1;
 
     memset(__name, 9, sizeof(struct utsname));

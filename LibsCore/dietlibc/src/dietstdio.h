@@ -15,22 +15,22 @@
 #endif
 
 struct __stdio_file {
-  int fd;
-  int flags;
-  uint32_t bs;	/* read: bytes in buffer */
-  uint32_t bm;	/* position in buffer */
-  uint32_t buflen;	/* length of buf */
-  char *buf;
-  struct __stdio_file *next;	/* for fflush */
-  pid_t popen_kludge;
-  unsigned char ungetbuf;
-  char ungotten;
-  ssize_t (*_read)(int fd, void *buf, size_t sz);
-  ssize_t (*_write)(int fd, const void *buf, size_t sz);
-  ssize_t (*_seek)(int fd, long offset, int whence);
-  int (*_close)(int fd);
+    int fd;
+    int flags;
+    uint32_t bs;	/* read: bytes in buffer */
+    uint32_t bm;	/* position in buffer */
+    uint32_t buflen;	/* length of buf */
+    char *buf;
+    struct __stdio_file *next;	/* for fflush */
+    pid_t popen_kludge;
+    unsigned char ungetbuf;
+    char ungotten;
+    ssize_t (*_read)(int fd, void *buf, size_t sz);
+    ssize_t (*_write)(int fd, const void *buf, size_t sz);
+    ssize_t (*_seek)(int fd, long offset, int whence);
+    int (*_close)(int fd);
 #ifdef WANT_THREAD_SAFE
-  pthread_mutex_t m;
+    pthread_mutex_t m;
 #endif
 };
 
@@ -58,16 +58,16 @@ extern int __buffered_outs(const char *s,size_t len);
 
 /* ..scanf */
 struct arg_scanf {
-  void *data;
-  int (*getch)(void*);
-  int (*putch)(int,void*);
+    void *data;
+    int (*getch)(void*);
+    int (*putch)(int,void*);
 };
 
 int __v_scanf(struct arg_scanf* fn, const char *format, va_list arg_ptr);
 
 struct arg_printf {
-  void *data;
-  int (*put)(void*,size_t,void*);
+    void *data;
+    int (*put)(void*,size_t,void*);
 };
 
 int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr);

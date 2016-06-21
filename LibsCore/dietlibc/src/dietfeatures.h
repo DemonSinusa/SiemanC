@@ -23,7 +23,7 @@
 //#define SLASH_PROC_OK
 
 /* use errno_location instead of errno */
-//#define WANT_THREAD_SAFE
+#define WANT_THREAD_SAFE
 
 /* support __thread */
 //#define WANT_TLS

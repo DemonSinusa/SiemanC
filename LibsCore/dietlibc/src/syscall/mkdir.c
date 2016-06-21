@@ -9,8 +9,6 @@
 #include <errno.h>
 
 
-
-int mkdir(const char *dir)
-{
+int mkdir(const char *dir) {
     return _mkdir(dir, (unsigned int*)__errno_location());
 }

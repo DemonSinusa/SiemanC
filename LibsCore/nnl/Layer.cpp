@@ -18,28 +18,28 @@
 DLL_EXPORT void _ActivateLayerFunc(NLAYER *lay, NEURON *first, NEURON *end) {
     NEURON *tempn = first, *tmove = end;
     while (tempn) {
-	if (!tempn->incount) {
-	    lay->neurocount_activ--; //Возбуждение спадает
-	    _ActivateNeuron(tempn);
-	    tempn = tempn->next;
-	} else if ((tempn->incount_excited / tempn->incount * 100) >= tempn->chance) {
-	    lay->neurocount_activ--; //Возбуждение спадает
-	    _ActivateNeuron(tempn);
-	    tempn = tempn->next;
-	} else {
-	    tmove = tempn->next;
-	    //Переместить нейрон в начало списка tempn->next=lay->first
-	    if (tempn != lay->first) { //Имеет смысл только если он не первый
-		if (tempn->prev)
-		    tempn->prev->next = tempn->next;
-		if (tempn->next)
-		    tempn->next->prev = tempn->prev;
-		tempn->next = lay->first;
-		tempn->next->prev = tempn;
-		lay->first = tempn;
-	    }
-	    tempn = tmove;
-	}
+        if (!tempn->incount) {
+            lay->neurocount_activ--; //Возбуждение спадает
+            _ActivateNeuron(tempn);
+            tempn = tempn->next;
+        } else if ((tempn->incount_excited / tempn->incount * 100) >= tempn->chance) {
+            lay->neurocount_activ--; //Возбуждение спадает
+            _ActivateNeuron(tempn);
+            tempn = tempn->next;
+        } else {
+            tmove = tempn->next;
+            //Переместить нейрон в начало списка tempn->next=lay->first
+            if (tempn != lay->first) { //Имеет смысл только если он не первый
+                if (tempn->prev)
+                    tempn->prev->next = tempn->next;
+                if (tempn->next)
+                    tempn->next->prev = tempn->prev;
+                tempn->next = lay->first;
+                tempn->next->prev = tempn;
+                lay->first = tempn;
+            }
+            tempn = tmove;
+        }
     }
 }
 
@@ -57,20 +57,20 @@ DLL_EXPORT NLAYER *_CreateCenterLayer(NEURON *first) {
 
     temp->IDOffset = -1;
     if (tempfdl) {
-	temp->IDOffset = tempfdl->data.FreedoomID;
-	_DeleteFDL(tempfdl);
+        temp->IDOffset = tempfdl->data.FreedoomID;
+        _DeleteFDL(tempfdl);
     }
     //temp->neurocount=temp->neurocount_activ=0;
     temp->chance = 100;
     temp->ActivateFunc = _ActivateLayerFunc;
     temp->first = temp->end = tempn;
     if (tempn)
-	do {
-	    temp->neurocount++;
-	    temp->end = tempn;
-	    tempn->Layer = temp;
-	    tempn = tempn->next;
-	} while (tempn);
+        do {
+            temp->neurocount++;
+            temp->end = tempn;
+            tempn->Layer = temp;
+            tempn = tempn->next;
+        } while (tempn);
 
     temp->state = STATE_READY;
 
@@ -85,29 +85,29 @@ DLL_EXPORT NLAYER *_CreateLayerWNeuroCount(int count, ntype *memblock) {
     ntype val = 0;
     int vcount = 0;
     if (memblock) {
-	val = memblock[vcount];
-	vcount++;
-	templist = _CreateNeuron(val);
-	while (vcount != count) {
-	    val = memblock[vcount];
-	    vcount++;
-	    tempn = _CreateNeuron(val);
-	    _AddNeuronToList(tempn, templist);
-	}
+        val = memblock[vcount];
+        vcount++;
+        templist = _CreateNeuron(val);
+        while (vcount != count) {
+            val = memblock[vcount];
+            vcount++;
+            tempn = _CreateNeuron(val);
+            _AddNeuronToList(tempn, templist);
+        }
     } else {
-	val = 0;
-	vcount++;
-	templist = _CreateNeuron(val);
-	while (vcount != count) {
-	    vcount++;
-	    tempn = _CreateNeuron(val);
-	    _AddNeuronToList(tempn, templist);
-	}
+        val = 0;
+        vcount++;
+        templist = _CreateNeuron(val);
+        while (vcount != count) {
+            vcount++;
+            tempn = _CreateNeuron(val);
+            _AddNeuronToList(tempn, templist);
+        }
     }
     temp = _CreateCenterLayer(templist);
     if (!temp) {
-	_DeleteNeuroList(templist);
-	return 0;
+        _DeleteNeuroList(templist);
+        return 0;
     } else return temp;
 }
 
@@ -115,13 +115,13 @@ DLL_EXPORT int _AddUperLayer(NLAYER *uplay, NLAYER *center) {
     NLAYER *temp = center;
     if (!temp || !uplay)return -1;
     if (temp->up) {
-	uplay->up = temp->up;
-	uplay->down = temp;
-	temp->up->down = uplay;
-	temp->up = uplay;
+        uplay->up = temp->up;
+        uplay->down = temp;
+        temp->up->down = uplay;
+        temp->up = uplay;
     } else {
-	uplay->down = temp;
-	temp->up = uplay;
+        uplay->down = temp;
+        temp->up = uplay;
     }
 
     return 0;
@@ -131,13 +131,13 @@ DLL_EXPORT int _AddDownLayer(NLAYER *downlay, NLAYER *center) {
     NLAYER *temp = center;
     if (!temp || !downlay)return -1;
     if (temp->down) {
-	downlay->down = temp->down;
-	downlay->up = temp;
-	temp->down->up = downlay;
-	temp->down = downlay;
+        downlay->down = temp->down;
+        downlay->up = temp;
+        temp->down->up = downlay;
+        temp->down = downlay;
     } else {
-	downlay->up = temp;
-	temp->down = downlay;
+        downlay->up = temp;
+        temp->down = downlay;
     }
 
     return 0;
@@ -147,13 +147,13 @@ DLL_EXPORT int _AddPrevLayer(NLAYER *prevlay, NLAYER *center) {
     NLAYER *temp = center;
     if (!temp || !prevlay)return -1;
     if (temp->prev) {
-	prevlay->prev = temp->prev;
-	prevlay->next = temp;
-	temp->prev->next = prevlay;
-	temp->prev = prevlay;
+        prevlay->prev = temp->prev;
+        prevlay->next = temp;
+        temp->prev->next = prevlay;
+        temp->prev = prevlay;
     } else {
-	prevlay->next = temp;
-	temp->prev = prevlay;
+        prevlay->next = temp;
+        temp->prev = prevlay;
     }
 
     return 0;
@@ -163,13 +163,13 @@ DLL_EXPORT int _AddNextLayer(NLAYER *nextlay, NLAYER *center) {
     NLAYER *temp = center;
     if (!temp || !nextlay)return -1;
     if (temp->next) {
-	nextlay->next = temp->next;
-	nextlay->prev = temp;
-	temp->next->prev = nextlay;
-	temp->next = nextlay;
+        nextlay->next = temp->next;
+        nextlay->prev = temp;
+        temp->next->prev = nextlay;
+        temp->next = nextlay;
     } else {
-	nextlay->prev = temp;
-	temp->next = nextlay;
+        nextlay->prev = temp;
+        temp->next = nextlay;
     }
 
     return 0;
@@ -182,28 +182,28 @@ DLL_EXPORT int _AddNeuroListToLayer(NLAYER *lay, NEURON *first, NEURON *end) {
     if (!first || !end)return 0;
     oldlay = (NLAYER *) first->Layer;
     if (oldlay) {
-	if (oldlay->first == first)
-	    oldlay->first = end->next;
-	if (oldlay->end == end)
-	    oldlay->end = end->next;
+        if (oldlay->first == first)
+            oldlay->first = end->next;
+        if (oldlay->end == end)
+            oldlay->end = end->next;
     }
     if (first->prev) {
-	first->prev->next = end;
-	end->prev = first->prev;
+        first->prev->next = end;
+        end->prev = first->prev;
     }
     if (lay->first) {
-	lay->end->next = first;
-	first->prev = lay->end;
-	lay->end = first;
+        lay->end->next = first;
+        first->prev = lay->end;
+        lay->end = first;
     } else {
-	lay->first = lay->end = first;
+        lay->first = lay->end = first;
     }
     while (temp != end->next) {
-	temp->Layer = lay;
-	lay->neurocount++;
-	lay->end = temp;
-	count++;
-	temp = temp->next;
+        temp->Layer = lay;
+        lay->neurocount++;
+        lay->end = temp;
+        count++;
+        temp = temp->next;
     }
     lay->end->next = 0;
     return count;
@@ -230,9 +230,29 @@ DLL_EXPORT NLAYER *_CreateParallelLayer(NLAYER *prev, NLAYER *next, NEURON *firs
 }
 
 /*
- * Дублекатоникатинг+заебательнопереперенедопроверятель по всем пара-пам-пам
- *
-
+ * Дублекатоникатинг+заебательнопереперенедопроверятель по всем пара-пам-пам..
+ * Для завихрюнистобоюднодизраскритикоA<Б^ Вирту6соскипфюхь.
+ * -Сомнительная и странно поподозрительности необломая,
+ * -Так над/2=обратнозавыноровленая по разложненностиЯ~=$(-^/<);
+ * -Человечкчкчо как золевичочек-перперекрытовысаживатель, щта? скажете?
+ * -Есть.
+ * -Ну так  ?
+ * -(тктк) Да ну так-то да параноюперевысаживаю, бывает,ненадо так, пере&&!|Си|-|ЖИВ|!&&~=аАБЪЬьъБЮA<^>..
+ * -хде?
+ * -тамь, недоперекротров0бдопереобшапуривает шваргующих, а они там какие-то медеЦЪско с чем-то вроде аргональным...
+ * -(?ВСЕМ?)1.Всем "НЕПЕРЕКРЫТНОСТНОПОДОМНЫМ" по "НЕДОПЕРЕВЫСАЖИАТЕЛЮПОДОБНОВУ", взаимноантиобратноудобному, \
+ конечно, обоюднопридержЖживающегося этого всего, ну и много там чего..Эээххъ(.
+ * -ЧЧ так печально?
+ * -Да кота найти не могу.. а осталС . {if(a->out){int gdRUznt=0; while(a->out){gDRUznt+=1;
+ //gDRUznt+1; ПлаКЪИХК ПоКТЬШЪЖж13ВЙ &DD->o(||||&&!||!&&||||)~='"'&^("Пяньъкж-хкустик")>("0x4402 ZMRWNA<")v(х)..
+ //А дзжмусикэта все нет и еще 2,5Гг. Нибудет Pi(iii)ЪЯДТХЖ(КЗТПИЙ)
+ //(Пиговновая ДиссоциативциON ноподобна маленькому многомерному какушенку нплинъа ViD->O0pay(MoneyCollector.c))
+ //UuuuuuUYyуУЙQ,~- хдэ мой^собственной Дзжмусикэт? Почему его все ++ wait too ublong long timeisafter? Нечем заняться,
+ // продолжаем тогддкгдгдге поминновородяш,.="хорромордоввывворовывать...взаимноуже готова.
+ * a->out=a->out->next;
+ }
+ }
+ }
  */
 
 
@@ -249,7 +269,7 @@ DLL_EXPORT void _DeleteLayer(NLAYER *it) {
     if (it->prev)it->prev->next = it->next;
 
     if (it->IDOffset != -1) {
-	_CreateFDL(it->IDOffset, FIDL_LAYERS);
+        _CreateFDL(it->IDOffset, FIDL_LAYERS);
     }
 
     AddLayersCount(-1);
@@ -263,20 +283,20 @@ DLL_EXPORT void _MoveDataFromLayer(NLAYER *from, NLAYER *to) {
     NEURON *temp = from->first;
 
     while (temp) {
-	temp->Layer = to;
-	to->neurocount++;
-	from->neurocount--;
-	temp = temp->next;
+        temp->Layer = to;
+        to->neurocount++;
+        from->neurocount--;
+        temp = temp->next;
     }
 
     if (to->first) { //Если существует, вставить в конец списка
-	to->end->next = from->first;
-	to->end = from->end;
-	//            if(from->end)from->end->next=to->first;
-	//            else return;
+        to->end->next = from->first;
+        to->end = from->end;
+        //            if(from->end)from->end->next=to->first;
+        //            else return;
     } else { //Иначе перевязать на себя
-	to->first = from->first;
-	to->end = from->end;
+        to->first = from->first;
+        to->end = from->end;
     }
 
     from->first = 0;
@@ -301,194 +321,192 @@ DLL_EXPORT int _ConnectLayer(NLAYER *first, NLAYER *second, int method, int (*fu
     if (!second->first)return -3;
 
     switch (method) {
-	case 0:
-	{
-	    if (func)
-		return func(first, second);
-	    else return 0;
-	}
-	case 1:
-	{ //Метод @Галлактика+-@
-	    tempf = first->first, temp2f = first->end;
-	    temps = second->first, temp2s = second->end;
-	    while (tempf && temp2s) {
-		templink = _ConnectNeuron(tempf, temp2s, tempintval);
-		if (!templink)break;
-		tempintval++;
-		tempf = tempf->next;
-		temp2s = temp2s->prev;
-	    }
-	    while (temps && temp2f) {
-		templink = _ConnectNeuron(temps, temp2f, tempintval);
-		if (!templink)break;
-		tempintval--;
-		temps = temps->next;
-		temp2f = temp2f->prev;
-	    }
-	    //По кругу с разных сторон пока не сойдуться в центре
-	    //!Плевать на количественную разницу.
-	    //!В ущерб идет качественная структурная оптимизация
-	    //!Существует вероятность неподключенных остатков
-	    break;
-	}
-	case 2:
-	{ //Прямой путь "Правильный"
-	    tempf = first->first, temp2f = first->end;
-	    temps = second->first, temp2s = second->end;
-	    while (tempf && temps) {
-		templink = _ConnectNeuron(tempf, temps, tempintval);
-		if (!templink)break;
-		tempintval++;
-		tempf = tempf->next;
-		temps = temps->next;
-	    }
-	    tempintval = 0;
-	    while (temp2f && temp2s) {
-		templink = _ConnectNeuron(temp2f, temp2s, tempintval);
-		if (!templink)break;
-		tempintval++;
-		temp2f = temp2f->prev;
-		temp2s = temp2s->prev;
-	    }
-	    break;
-	    //По с разных сторон пока не всё
-	    //!Плевать на количественную разницу.
-	    //!В ущерб не идет качественная структурная оптимизация
-	    //!Существует вероятность неподключенных остатков
-	}
-	case 3:
-	{ //Метод "MechanicaLoop" (.спустись в ад и вернись назад.)
-	    tempf = first->first, temp2f = first->end;
-	    temps = second->first, temp2s = second->end;
-	    char breakbyte = 0;
-	    LINK *temp = 0;
-	    temps = temps->next;
-	    while (tempf) {
-		if (temps) {
-		    templink = _ConnectNeuron(tempf, temps, tempintval);
-		    if (!templink)break;
-		} else while (tempf) {
-			if (tempf->next) {
-			    templink = _ConnectNeuron(tempf, tempf->next, tempintval);
-			    if (!templink)break;
-			} else {
-			    breakbyte = 1;
-			    break;
-			}
-			tempf = tempf->next;
-		    }
-		tempintval++;
-		if (!breakbyte) {
-		    tempf = tempf->next;
-		} else break;
-		temps = temps->next;
-	    }
-	    while (temp2s) {
-		if (breakbyte) {
-		    while (tempf) {
-			temp = _GetConnection(tempf, tempf->prev);
-			if (temp->weight == tempintval - 1) {
-			    templink = _ConnectNeuron(tempf, temp2s, tempintval);
-			    if (!templink)break;
-			} else {
-			    templink = _ConnectNeuron(temp2s, tempf, tempintval);
-			    if (!templink)break;
-			    temp2s = temp2s->prev;
-			    break;
-			}
-			tempf = tempf->prev;
-		    }
-		    breakbyte = 0;
-		}
+    case 0: {
+        if (func)
+            return func(first, second);
+        else return 0;
+    }
+    case 1: {
+        //Метод @Галлактика+-@
+        tempf = first->first, temp2f = first->end;
+        temps = second->first, temp2s = second->end;
+        while (tempf && temp2s) {
+            templink = _ConnectNeuron(tempf, temp2s, tempintval);
+            if (!templink)break;
+            tempintval++;
+            tempf = tempf->next;
+            temp2s = temp2s->prev;
+        }
+        while (temps && temp2f) {
+            templink = _ConnectNeuron(temps, temp2f, tempintval);
+            if (!templink)break;
+            tempintval--;
+            temps = temps->next;
+            temp2f = temp2f->prev;
+        }
+        //По кругу с разных сторон пока не сойдуться в центре
+        //!Плевать на количественную разницу.
+        //!В ущерб идет качественная структурная оптимизация
+        //!Существует вероятность неподключенных остатков
+        break;
+    }
+    case 2: {
+        //Прямой путь "Правильный"
+        tempf = first->first, temp2f = first->end;
+        temps = second->first, temp2s = second->end;
+        while (tempf && temps) {
+            templink = _ConnectNeuron(tempf, temps, tempintval);
+            if (!templink)break;
+            tempintval++;
+            tempf = tempf->next;
+            temps = temps->next;
+        }
+        tempintval = 0;
+        while (temp2f && temp2s) {
+            templink = _ConnectNeuron(temp2f, temp2s, tempintval);
+            if (!templink)break;
+            tempintval++;
+            temp2f = temp2f->prev;
+            temp2s = temp2s->prev;
+        }
+        break;
+        //По с разных сторон пока не всё
+        //!Плевать на количественную разницу.
+        //!В ущерб не идет качественная структурная оптимизация
+        //!Существует вероятность неподключенных остатков
+    }
+    case 3: {
+        //Метод "MechanicaLoop" (.спустись в ад и вернись назад.)
+        tempf = first->first, temp2f = first->end;
+        temps = second->first, temp2s = second->end;
+        char breakbyte = 0;
+        LINK *temp = 0;
+        temps = temps->next;
+        while (tempf) {
+            if (temps) {
+                templink = _ConnectNeuron(tempf, temps, tempintval);
+                if (!templink)break;
+            } else while (tempf) {
+                    if (tempf->next) {
+                        templink = _ConnectNeuron(tempf, tempf->next, tempintval);
+                        if (!templink)break;
+                    } else {
+                        breakbyte = 1;
+                        break;
+                    }
+                    tempf = tempf->next;
+                }
+            tempintval++;
+            if (!breakbyte) {
+                tempf = tempf->next;
+            } else break;
+            temps = temps->next;
+        }
+        while (temp2s) {
+            if (breakbyte) {
+                while (tempf) {
+                    temp = _GetConnection(tempf, tempf->prev);
+                    if (temp->weight == tempintval - 1) {
+                        templink = _ConnectNeuron(tempf, temp2s, tempintval);
+                        if (!templink)break;
+                    } else {
+                        templink = _ConnectNeuron(temp2s, tempf, tempintval);
+                        if (!templink)break;
+                        temp2s = temp2s->prev;
+                        break;
+                    }
+                    tempf = tempf->prev;
+                }
+                breakbyte = 0;
+            }
 
-		templink = _ConnectNeuron(tempf, temp2s, tempintval);
-		if (!templink)break;
-		if (temp2s->prev) {
-		    templink = _ConnectNeuron(temp2s, tempf->prev, tempintval);
-		    temp2s = temp2s->prev;
-		}
-		tempintval--;
-		tempf = tempf->prev;
-	    }
-	    //По с разных сторон перекрестным огнем, по остаткам как по головам.
-	    //!Плевать на количественную разницу.
-	    //!В ущерб не идет качественная структурная оптимизация но есть вероятность залупиться
-	    //!Не существует вероятности неподключенных остатков
+            templink = _ConnectNeuron(tempf, temp2s, tempintval);
+            if (!templink)break;
+            if (temp2s->prev) {
+                templink = _ConnectNeuron(temp2s, tempf->prev, tempintval);
+                temp2s = temp2s->prev;
+            }
+            tempintval--;
+            tempf = tempf->prev;
+        }
+        //По с разных сторон перекрестным огнем, по остаткам как по головам.
+        //!Плевать на количественную разницу.
+        //!В ущерб не идет качественная структурная оптимизация но есть вероятность залупиться
+        //!Не существует вероятности неподключенных остатков
 
-	}
-	case 4:
-	{ //Метод "О-о-."(+79033235592) 18:02 (Скат покрыжен, Shina получена)
-	    tempf = first->first, temp2f = first->end;
-	    temps = second->first, temp2s = second->end;
-	    tempneuro = tempf, tempneuro2 = temp2f;
-	    tempintval = 0;
-	    while (tempneuro && tempneuro2) {
-		while (tempf) {
-		    templink = _ConnectNeuron(tempf, temp2s, tempintval);
-		    if (!templink)break;
-		    tempf = tempf->next;
-		}
-		tempneuro = tempneuro->next;
-		tempneuro2 = tempneuro2->prev;
-		tempf = tempneuro;
-		temp2s = tempneuro2;
-	    }
-	    break;
-	    //Это внеземная технология, описывать не имею права, все следует из названия метода.
-	}
-	case 5:
-	{ //Метод оптимизации Ni+N(i+1)=Zi;Ni=N(i+1);Zi=Z(i+1)
-	    //Требует оптимизации.../
-	    tempf = first->first, temp2f = first->end;
-	    temps = second->first, temp2s = second->end;
-	    while (tempf->next) {
-		templink = _ConnectNeuron(tempf, temps, tempintval);
-		if (!templink)break;
-		templink = _ConnectNeuron(tempf->next, temps, tempintval * (-1));
-		if (!templink)break;
-		tempf = tempf->next;
-		temps = temps->next;
-	    }
-	    while (temps) {
-		templink = _ConnectNeuron(temp2f, temps, tempintval);
-		if (!templink)break;
-		temps = temps->next;
-	    }
-	    break;
-	    //Точнее и однозначнее быть не может
-	    //!Лучше из большего к меньшему количеству.
-	    //хзхз!В ущерб не идет качественная структурная оптимизация
-	    //!Существует вероятность неподключенных остатков
-	}
-	case 6:
-	{ //Метод цели Ni+N(i+1)=Zi;Ni=N(i+2);Zi=Z(i+1)
-	    tempf = first->first, temp2f = first->end;
-	    temps = second->first, temp2s = second->end;
-	    while (tempf && tempf->next) {
-		templink = _ConnectNeuron(tempf, temps, tempintval);
-		if (!templink)break;
-		templink = _ConnectNeuron(tempf->next, temps, tempintval * (-1));
-		tempf = tempf->next->next;
-		temps = temps->next;
-	    }
-	    while (temps) {
-		templink = _ConnectNeuron(temp2f, temps, tempintval);
-		if (!templink)break;
-		temps = temps->next;
-	    }
-	    break;
-	    //Разнообразнее быть не может
-	    //!Лучше из большего к меньшему количеству.
-	    //В ущерб идет качественная структурная оптимизация при кривизне
-	    //организации выбора метода связи!
-	    //(ващпе не страшно, с 1 раза не въедут, придется въехать с другого раза)
-	    //не существует вероятности неподключенных остатков
-	}
-	default:
-	{
-	    if (!func)return -4;
-	    else return func(first, second);
-	}
+    }
+    case 4: {
+        //Метод "О-о-."(+79033235592) 18:02 (Скат покрыжен, Shina получена)
+        tempf = first->first, temp2f = first->end;
+        temps = second->first, temp2s = second->end;
+        tempneuro = tempf, tempneuro2 = temp2f;
+        tempintval = 0;
+        while (tempneuro && tempneuro2) {
+            while (tempf) {
+                templink = _ConnectNeuron(tempf, temp2s, tempintval);
+                if (!templink)break;
+                tempf = tempf->next;
+            }
+            tempneuro = tempneuro->next;
+            tempneuro2 = tempneuro2->prev;
+            tempf = tempneuro;
+            temp2s = tempneuro2;
+        }
+        break;
+        //Это внеземная технология, описывать не имею права, все следует из названия метода.
+    }
+    case 5: {
+        //Метод оптимизации Ni+N(i+1)=Zi;Ni=N(i+1);Zi=Z(i+1)
+        //Требует оптимизации.../
+        tempf = first->first, temp2f = first->end;
+        temps = second->first, temp2s = second->end;
+        while (tempf->next) {
+            templink = _ConnectNeuron(tempf, temps, tempintval);
+            if (!templink)break;
+            templink = _ConnectNeuron(tempf->next, temps, tempintval * (-1));
+            if (!templink)break;
+            tempf = tempf->next;
+            temps = temps->next;
+        }
+        while (temps) {
+            templink = _ConnectNeuron(temp2f, temps, tempintval);
+            if (!templink)break;
+            temps = temps->next;
+        }
+        break;
+        //Точнее и однозначнее быть не может
+        //!Лучше из большего к меньшему количеству.
+        //хзхз!В ущерб не идет качественная структурная оптимизация
+        //!Существует вероятность неподключенных остатков
+    }
+    case 6: {
+        //Метод цели Ni+N(i+1)=Zi;Ni=N(i+2);Zi=Z(i+1)
+        tempf = first->first, temp2f = first->end;
+        temps = second->first, temp2s = second->end;
+        while (tempf && tempf->next) {
+            templink = _ConnectNeuron(tempf, temps, tempintval);
+            if (!templink)break;
+            templink = _ConnectNeuron(tempf->next, temps, tempintval * (-1));
+            tempf = tempf->next->next;
+            temps = temps->next;
+        }
+        while (temps) {
+            templink = _ConnectNeuron(temp2f, temps, tempintval);
+            if (!templink)break;
+            temps = temps->next;
+        }
+        break;
+        //Разнообразнее быть не может
+        //!Лучше из большего к меньшему количеству.
+        //В ущерб идет качественная структурная оптимизация при кривизне
+        //организации выбора метода связи!
+        //(ващпе не страшно, с 1 раза не въедут, придется въехать с другого раза)
+        //не существует вероятности неподключенных остатков
+    }
+    default: {
+        if (!func)return -4;
+        else return func(first, second);
+    }
     }
     return 1;
 }
@@ -498,39 +516,38 @@ DLL_EXPORT int _ConnectLayerToNeuron(NLAYER *from, NEURON *it, int method) {
     LINK *templink = 0;
     int tempintval = 0, retval = 0;
     switch (method) {
-	case 1:
-	{ //Метод "©И?"
-	    while (first) {
-		templink = _ConnectNeuron(first, it, tempintval);
-		if (!templink)break;
-		tempintval++;
-		first = first->next;
-	    }
-	    retval = 1;
-	    break;
-	}
-	default:
-	{
-	    while (first) { //Метод "GodEve"(ЙЯОЙ)
-		templink = _ConnectNeuron(first, it, tempintval);
-		if (!templink)break;
-		tempintval++;
-		first = first->next;
-	    }
-	    first = from->first;
-	    while (first != second) {
-		templink = _ConnectNeuron(first, first->next, tempintval);
-		if (!templink)break;
-		templink = _ConnectNeuron(second, second->prev, tempintval);
-		if (!templink)break;
-		tempintval--;
-		second = second->prev;
-		first = first->next;
-	    }
-	    templink = _ConnectNeuron(first, it, tempintval);
-	    if (!templink)break;
-	    retval = 0;
-	}
+    case 1: {
+        //Метод "©И?"
+        while (first) {
+            templink = _ConnectNeuron(first, it, tempintval);
+            if (!templink)break;
+            tempintval++;
+            first = first->next;
+        }
+        retval = 1;
+        break;
+    }
+    default: {
+        while (first) { //Метод "GodEve"(ЙЯОЙ)
+            templink = _ConnectNeuron(first, it, tempintval);
+            if (!templink)break;
+            tempintval++;
+            first = first->next;
+        }
+        first = from->first;
+        while (first != second) {
+            templink = _ConnectNeuron(first, first->next, tempintval);
+            if (!templink)break;
+            templink = _ConnectNeuron(second, second->prev, tempintval);
+            if (!templink)break;
+            tempintval--;
+            second = second->prev;
+            first = first->next;
+        }
+        templink = _ConnectNeuron(first, it, tempintval);
+        if (!templink)break;
+        retval = 0;
+    }
     }
     return retval;
 }
@@ -539,8 +556,8 @@ DLL_EXPORT NEURON *_GetNeuronByID(NLAYER *cur, long IDOffSet) {
     if (!cur)return 0;
     NEURON *temp = cur->first;
     while (temp) {
-	if (temp->IDOffset == IDOffSet)break;
-	temp = temp->next;
+        if (temp->IDOffset == IDOffSet)break;
+        temp = temp->next;
     }
     return temp;
 }
@@ -550,12 +567,12 @@ DLL_EXPORT int _SetDataToLayer(ntype *mass, int n, NLAYER *lay) {
     NEURON *cur = templ->first;
     int i = 0;
     while (cur) {
-	if (!cur->incount)lay->neurocount_activ++;
-	if (i < n)
-	    cur->val = mass[i];
-	else break;
-	i++;
-	cur = cur->next;
+        if (!cur->incount)lay->neurocount_activ++;
+        if (i < n)
+            cur->val = mass[i];
+        else break;
+        i++;
+        cur = cur->next;
     }
     if (!cur && i < n)return -1;
     if (cur)return -2;
@@ -592,33 +609,33 @@ DLL_EXPORT DIOMAN *_DataInjectStart(int szoftobox, int szofdata, void *data) {
 
     retval = (DIOMAN *) _MallocZeroBytes(sizeof (DIOMAN));
     if (retval) {
-	retval->blksz = szoftobox;
-	retval->first = retval->end = _CreateNeuron(0);
-	if (retval->end) {
-	    retval->count++;
-	    if (sizeost <= szoftobox) {
-		//            retval->count++;
-		memcpy(&retval->end->val, nude, szoftobox);
-	    } else {
-		while (sizeost > szoftobox) {
-		    //            retval->count++;
-		    memcpy(&retval->end->val, nude, szoftobox);
-		    nude += szoftobox;
-		    sizeost -= szoftobox;
+        retval->blksz = szoftobox;
+        retval->first = retval->end = _CreateNeuron(0);
+        if (retval->end) {
+            retval->count++;
+            if (sizeost <= szoftobox) {
+                //            retval->count++;
+                memcpy(&retval->end->val, nude, szoftobox);
+            } else {
+                while (sizeost > szoftobox) {
+                    //            retval->count++;
+                    memcpy(&retval->end->val, nude, szoftobox);
+                    nude += szoftobox;
+                    sizeost -= szoftobox;
 
-		    _AddNeuronToList(_CreateNeuron(0), retval->end);
-		    if (retval->end->next) {
-			retval->count++;
-			retval->end = retval->end->next;
-		    } else {
-			drop = true;
-			break;
-		    }
-		}
-		if (drop == false)
-		    memcpy(&retval->end->val, nude, sizeost);
-	    }
-	}
+                    _AddNeuronToList(_CreateNeuron(0), retval->end);
+                    if (retval->end->next) {
+                        retval->count++;
+                        retval->end = retval->end->next;
+                    } else {
+                        drop = true;
+                        break;
+                    }
+                }
+                if (drop == false)
+                    memcpy(&retval->end->val, nude, sizeost);
+            }
+        }
     }
     return retval;
 }
@@ -636,27 +653,27 @@ DLL_EXPORT bool _DataInjectNext(DIOMAN *InJack, int szofdata, void *data) {
     InJack->end = InJack->end->next;
 
     if (sizeost <= InJack->blksz) {
-	//            InJack->count++;
-	memcpy(&InJack->end->val, nude, InJack->blksz);
+        //            InJack->count++;
+        memcpy(&InJack->end->val, nude, InJack->blksz);
     } else {
-	while (sizeost > InJack->blksz) {
-	    //            InJack->count++;
-	    memcpy(&InJack->end->val, nude, InJack->blksz);
-	    nude += InJack->blksz;
-	    sizeost -= InJack->blksz;
+        while (sizeost > InJack->blksz) {
+            //            InJack->count++;
+            memcpy(&InJack->end->val, nude, InJack->blksz);
+            nude += InJack->blksz;
+            sizeost -= InJack->blksz;
 
-	    _AddNeuronToList(_CreateNeuron(0), InJack->end);
-	    //Проверка на память
-	    if (InJack->end->next) {
-		InJack->count++;
-		InJack->end = InJack->end->next;
-	    } else {
-		drop = true;
-		break;
-	    }
-	}
-	if (drop == false)
-	    memcpy(&InJack->end->val, nude, sizeost);
+            _AddNeuronToList(_CreateNeuron(0), InJack->end);
+            //Проверка на память
+            if (InJack->end->next) {
+                InJack->count++;
+                InJack->end = InJack->end->next;
+            } else {
+                drop = true;
+                break;
+            }
+        }
+        if (drop == false)
+            memcpy(&InJack->end->val, nude, sizeost);
     }
     return true;
 }
@@ -664,14 +681,14 @@ DLL_EXPORT bool _DataInjectNext(DIOMAN *InJack, int szofdata, void *data) {
 DLL_EXPORT void _DataInjectEnd(DIOMAN *InJack) {
     NEURON *temp = NULL, *curf = NULL;
     if (InJack) {
-	temp = InJack->first;
-	if (temp)
-	    do {
-		curf = temp->next;
-		_DeleteNeuron(temp);
-	    } while ((temp = curf));
+        temp = InJack->first;
+        if (temp)
+            do {
+                curf = temp->next;
+                _DeleteNeuron(temp);
+            } while ((temp = curf));
 
-	free(InJack);
+        free(InJack);
     }
 }
 
@@ -688,11 +705,11 @@ DLL_EXPORT ntype *_GetNtypeMassFromDIJ(DIOMAN *InJack) {
 
     netto = (ntype *) _MallocZeroBytes(InJack->count * sizeof (ntype));
     if (netto) {
-	while (temp) {
-	    netto[i] = temp->val;
-	    i++;
-	    temp = temp->next;
-	}
+        while (temp) {
+            netto[i] = temp->val;
+            i++;
+            temp = temp->next;
+        }
     } else return 0;
     return netto;
 }
@@ -704,12 +721,12 @@ DLL_EXPORT int _SetIntDataToLayer(int *mass, int n, NLAYER *lay) {
     NEURON *cur = templ->first;
     int i = 0;
     while (cur) {
-	if (!cur->incount)lay->neurocount_activ++;
-	if (i < n)
-	    cur->val = mass[i];
-	else break;
-	i++;
-	cur = cur->next;
+        if (!cur->incount)lay->neurocount_activ++;
+        if (i < n)
+            cur->val = mass[i];
+        else break;
+        i++;
+        cur = cur->next;
     }
     if (!cur && i < n)return -1;
     if (cur)return -2;
@@ -721,12 +738,12 @@ DLL_EXPORT int _SetShortDataToLayer(short *mass, int n, NLAYER *lay) {
     NEURON *cur = templ->first;
     int i = 0;
     while (cur) {
-	if (!cur->incount)lay->neurocount_activ++;
-	if (i < n)
-	    cur->val = mass[i];
-	else break;
-	i++;
-	cur = cur->next;
+        if (!cur->incount)lay->neurocount_activ++;
+        if (i < n)
+            cur->val = mass[i];
+        else break;
+        i++;
+        cur = cur->next;
     }
     if (!cur && i < n)return -1;
     if (cur)return -2;
@@ -738,12 +755,12 @@ DLL_EXPORT int _SetByteDataToLayer(unsigned char *mass, int n, NLAYER *lay) {
     NEURON *cur = templ->first;
     int i = 0;
     while (cur) {
-	if (!cur->incount)lay->neurocount_activ++;
-	if (i < n)
-	    cur->val = mass[i];
-	else break;
-	i++;
-	cur = cur->next;
+        if (!cur->incount)lay->neurocount_activ++;
+        if (i < n)
+            cur->val = mass[i];
+        else break;
+        i++;
+        cur = cur->next;
     }
     if (!cur && i < n)return -1;
     if (cur)return -2;
@@ -764,7 +781,7 @@ void LayersBase::SetLayerActivateChance(NLAYER *lay, char chance) {
     const wchar_t *descr = L"void LayersBase::SetLayerActivateChance(NLAYER *lay, char chance)\r\n";
     _SetLayerActivateChance(lay, chance);
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Layer:0x%X02,chance:%d", lay, chance);
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Layer:0x%X02,chance:%d", lay, chance);
     }
 }
 
@@ -773,9 +790,9 @@ NLAYER *LayersBase::CreateCenterLayer(NEURON *first) {
     NLAYER *retv = 0;
     retv = _CreateCenterLayer(first);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X,return:3", first);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x%X,return:0x%X", first, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X,return:3", first);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x%X,return:0x%X", first, retv);
     }
     return retv;
 }
@@ -785,9 +802,9 @@ NLAYER *LayersBase::CreateLayerWNeuroCount(int count, ntype *memblock) {
     NLAYER *retv = 0;
     retv = _CreateLayerWNeuroCount(count, memblock);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,return:5", count);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,return:Layer:0x%X", count, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,return:5", count);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,return:Layer:0x%X", count, retv);
     }
     return retv;
 }
@@ -797,9 +814,9 @@ int LayersBase::AddUperLayer(NLAYER *uplay, NLAYER *center) {
     int retv = 0;
     retv = _AddUperLayer(uplay, center);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"uplay:0x%X04,center:0x%X04,return:%d", uplay, center, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"uplay:0x%X04,center:0x%X04,return:>", uplay, center);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"uplay:0x%X04,center:0x%X04,return:%d", uplay, center, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"uplay:0x%X04,center:0x%X04,return:>", uplay, center);
     }
     return retv;
 }
@@ -809,9 +826,9 @@ int LayersBase::AddDownLayer(NLAYER *downlay, NLAYER *center) {
     int retv = 0;
     retv = _AddDownLayer(downlay, center);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"downlay:0x%X04,center:0x%X04,return:%d", downlay, center, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"downlay:0x%X04,center:0x%X04,return:<", downlay, center);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"downlay:0x%X04,center:0x%X04,return:%d", downlay, center, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"downlay:0x%X04,center:0x%X04,return:<", downlay, center);
     }
     return retv;
 }
@@ -821,9 +838,9 @@ int LayersBase::AddPrevLayer(NLAYER *prevlay, NLAYER *center) {
     int retv = 0;
     retv = _AddPrevLayer(prevlay, center);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"prevlay:0x%X04,center:0x%X04,return:%d", prevlay, center, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"prevlay:0x%X04,center:0x%X04,return:/", prevlay, center);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"prevlay:0x%X04,center:0x%X04,return:%d", prevlay, center, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"prevlay:0x%X04,center:0x%X04,return:/", prevlay, center);
     }
     return retv;
 }
@@ -833,9 +850,9 @@ int LayersBase::AddNextLayer(NLAYER *nextlay, NLAYER *center) {
     int retv = 0;
     retv = _AddNextLayer(nextlay, center);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"nextlay:0x%X04,center:0x%X04,return:%d", nextlay, center, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"nextlay:0x%X04,center:0x%X04,return:\\", nextlay, center);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"nextlay:0x%X04,center:0x%X04,return:%d", nextlay, center, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"nextlay:0x%X04,center:0x%X04,return:\\", nextlay, center);
     }
     return retv;
 }
@@ -845,9 +862,9 @@ int LayersBase::AddNeuroListToLayer(NLAYER *lay, NEURON *first, NEURON *end) {
     int retv = 0;
     retv = _AddNeuroListToLayer(lay, first, end);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"layer:0x%X03,first:0x%X03,end:0x%X03,return:? ", lay, first, end);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"layer:0x%X03,first:0x%X03,end:0x%X03,return:%d", lay, first, end, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"layer:0x%X03,first:0x%X03,end:0x%X03,return:? ", lay, first, end);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"layer:0x%X03,first:0x%X03,end:0x%X03,return:%d", lay, first, end, retv);
     }
     return retv;
 }
@@ -857,9 +874,9 @@ NLAYER *LayersBase::CreateHiLoHiLayer(NLAYER *down, NLAYER *up, NEURON *first) {
     NLAYER *retv = 0;
     retv = _CreateHiLoLayer(down, up, first);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"down:0x%X03,up:0x%X03,first:0x%X03,return:0", down, up, first);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"down:0x%X03,up:0x%X03,first:0x%X03,return:0x%X03", down, up, first, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"down:0x%X03,up:0x%X03,first:0x%X03,return:0", down, up, first);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"down:0x%X03,up:0x%X03,first:0x%X03,return:0x%X03", down, up, first, retv);
     }
     return retv;
 }
@@ -869,9 +886,9 @@ NLAYER *LayersBase::CreateParallelLayer(NLAYER *prev, NLAYER *next, NEURON *firs
     NLAYER *retv = 0;
     retv = _CreateParallelLayer(prev, next, first);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"prev:0x%X03,next:0x%X03,first:0x%X03,return:-1", prev, next, first);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"prev:0x%X03,next:0x%X03,first:0x%X03,return:0x%X03", prev, next, first, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"prev:0x%X03,next:0x%X03,first:0x%X03,return:-1", prev, next, first);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"prev:0x%X03,next:0x%X03,first:0x%X03,return:0x%X03", prev, next, first, retv);
     }
     return retv;
 }
@@ -879,7 +896,7 @@ NLAYER *LayersBase::CreateParallelLayer(NLAYER *prev, NLAYER *next, NEURON *firs
 void LayersBase::DeleteLayer(NLAYER *it) {
     const wchar_t *descr = L"void LayersBase::DeleteLayer(NLAYER *it)\r\n";
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"U:DeleteLayer\r\n");
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"U:DeleteLayer\r\n");
     }
     _DeleteLayer(it);
 }
@@ -887,7 +904,7 @@ void LayersBase::DeleteLayer(NLAYER *it) {
 void LayersBase::MoveDataFromLayer(NLAYER *from, NLAYER *to) {
     const wchar_t *descr = L"void LayersBase::MoveDataFromLayer(NLAYER *from, NLAYER *to)\r\n";
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"I^MoveDataFromLaye\r\n");
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"I^MoveDataFromLaye\r\n");
     }
     _MoveDataFromLayer(from, to);
 }
@@ -897,9 +914,9 @@ int LayersBase::ConnectLayer(NLAYER *first, NLAYER *second, char method, int (*f
     int retv = 0;
     retv = _ConnectLayer(first, second, method, func);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:0x%X03,second:0x%X03,method:%c,func:%x,return:%d", first, second, method, func);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:0x%X03,second:0x%X03,method:%c,func:%x,return:-1", first, second, method);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:0x%X03,second:0x%X03,method:%c,func:%x,return:%d", first, second, method, func);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:0x%X03,second:0x%X03,method:%c,func:%x,return:-1", first, second, method);
     }
     return retv;
 }
@@ -909,9 +926,9 @@ int LayersBase::ConnectLayerToNeuron(NLAYER *first, NEURON *it, char method) {
     int retv = 0;
     retv = _ConnectLayerToNeuron(first, it, method);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:0x%X03,it:0x%X03,method:%c,return:%d", first, it, method, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:0x%X03,it:0x%X03,method:%c,return:0", first, it, method);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"first:0x%X03,it:0x%X03,method:%c,return:%d", first, it, method, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"first:0x%X03,it:0x%X03,method:%c,return:0", first, it, method);
     }
     return retv;
 }
@@ -921,9 +938,9 @@ NEURON *LayersBase::GetNeuronByID(NLAYER *cur, long IDOffSet) {
     NEURON *retv = 0;
     retv = _GetNeuronByID(cur, IDOffSet);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"cur:0x%X03,IDOffSet:0p%d,return:&", cur, IDOffSet);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"cur:0x%X03,IDOffSet:0p%d,return:0x%X", cur, IDOffSet, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"cur:0x%X03,IDOffSet:0p%d,return:&", cur, IDOffSet);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"cur:0x%X03,IDOffSet:0p%d,return:0x%X", cur, IDOffSet, retv);
     }
     return retv;
 }
@@ -931,7 +948,7 @@ NEURON *LayersBase::GetNeuronByID(NLAYER *cur, long IDOffSet) {
 void LayersBase::ActivateLayer(NLAYER *lay) {
     const wchar_t *descr = L"void LayersBase::ActivateLayer(NLAYER *lay)\r\n";
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"ActivateLayer\r\n");
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"ActivateLayer\r\n");
     }
     _ActivateLayer(lay);
 }
@@ -941,9 +958,9 @@ int LayersBase::SetDataToLayer(ntype *mass, int n, NLAYER *lay) {
     int retv = 0;
     retv = _SetDataToLayer(mass, n, lay);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:NULY", n, lay);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:NULY", n, lay);
     }
     return retv;
 }
@@ -953,9 +970,9 @@ int LayersBase::SetIntDataToLayer(int *mass, int n, NLAYER *lay) {
     int retv = 0;
     retv = _SetIntDataToLayer(mass, n, lay);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:NOL\"", n, lay);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:NOL\"", n, lay);
     }
     return retv;
 }
@@ -965,9 +982,9 @@ int LayersBase::SetShortDataToLayer(short *mass, int n, NLAYER *lay) {
     int retv = 0;
     retv = _SetShortDataToLayer(mass, n, lay);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:0", n, lay);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:0", n, lay);
     }
     return retv;
 }
@@ -977,9 +994,9 @@ int LayersBase::SetByteDataToLayer(unsigned char *mass, int n, NLAYER *lay) {
     int retv = 0;
     retv = _SetByteDataToLayer(mass, n, lay);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:VZERO", n, lay);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"count:%d,Lay:0x%X02,return:%d", n, lay, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"count:%d,Lay:0x%X02,return:VZERO", n, lay);
     }
     return retv;
 }
@@ -989,9 +1006,9 @@ DIOMAN *LayersBase::DataInjectStart(int szoftobox, int szofdata, void *data) {
     DIOMAN *retv = NULL;
     retv = _DataInjectStart(szoftobox, szofdata, data);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"length:%X0F%d,return:Niht!", szofdata, szoftobox);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"length:%X0F%d,return:Vobl'YaZz'\"%d", szofdata, szoftobox, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"length:%X0F%d,return:Niht!", szofdata, szoftobox);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"length:%X0F%d,return:Vobl'YaZz'\"%d", szofdata, szoftobox, retv);
     }
     return retv;
 }
@@ -1001,9 +1018,9 @@ bool LayersBase::DataInjectNext(DIOMAN *InJack, int szofdata, void *data) {
     bool retv = 0;
     retv = _DataInjectNext(InJack, szofdata, data);
     if (log) {
-	if (retv == false)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"InJack:%d,length:%X0F%d,return:fаlsе", InJack, data, szofdata);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"InJack:%d,length:%X0F%d,return:tr0-1~1-0ЮЭ", InJack, data, szofdata);
+        if (retv == false)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"InJack:%d,length:%X0F%d,return:fаlsе", InJack, data, szofdata);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"InJack:%d,length:%X0F%d,return:tr0-1~1-0ЮЭ", InJack, data, szofdata);
     }
     return retv;
 }
@@ -1013,9 +1030,9 @@ ntype *LayersBase::GetNtypeMassFromDIJ(DIOMAN *InJack) {
     ntype *retv = 0;
     retv = _GetNtypeMassFromDIJ(InJack);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"InJack:%d,return:*void...", InJack);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"InJack:%d,return:%x", InJack, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"InJack:%d,return:*void...", InJack);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"InJack:%d,return:%x", InJack, retv);
     }
     return retv;
 }
@@ -1024,7 +1041,7 @@ void LayersBase::DataInjectEnd(DIOMAN *InJack) {
     const wchar_t *descr = L"void LayersBase::DataInjectEnd(DIOMAN *InJack)\r\n";
     _DataInjectEnd(InJack);
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"DataInjectEnd\r\n");
+        log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"DataInjectEnd\r\n");
     }
 }
 

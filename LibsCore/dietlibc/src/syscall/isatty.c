@@ -30,7 +30,6 @@
 #include <errno.h>
 
 int
-isatty (int  fd)
-{
+isatty (int  fd) {
     return -1;
 }

@@ -3,8 +3,7 @@
 #include <errno.h>
 
 
-int dup (int oldfd)
-{
+int dup (int oldfd) {
     errno = ENOSYS;
     return -1;
 }

@@ -3,18 +3,15 @@
 #include <sys/types.h>
 #include <string.h>
 
-void *memccpy(void *dst, const void *src, int c, size_t count)
-{
-  char *a = dst;
-  const char *b = src;
-  while (count--)
-  {
-    *a++ = *b;
-    if (*b==c)
-    {
-      return (void *)a;
+void *memccpy(void *dst, const void *src, int c, size_t count) {
+    char *a = dst;
+    const char *b = src;
+    while (count--) {
+        *a++ = *b;
+        if (*b==c) {
+            return (void *)a;
+        }
+        b++;
     }
-    b++;
-  }
-  return 0;
+    return 0;
 }

@@ -25,87 +25,116 @@ bool ThreadFlag = true;
 
 //void RaspFunc(NEURON *neuron,LINKL *in,LINKL *out);
 
-DLL_EXPORT void OptimiZActivateNeuronFunc(NEURON *n, LINKL *in, LINKL *out){
-	LINKL *inlist = in, *outlist = out, *tlist = NULL,*curpozl=NULL;
+
+DLL_EXPORT void OptimiZActivateNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
+    LINKL *inlist = in, *outlist = out, *tlist = NULL,*curpozl=NULL;
     LINK *curlink = 0;
-    NEURON *nto = 0;
+    NEURON *nto = NULL,*hidden=NULL;
     NLAYER *remlay = 0;
     ntype incurval = 0, devizor = 1;
+    int badslowlink=n->chance/100*n->incount,nextminactivated=0;
+
+    /*
+        //Slowest method
+        while(inlist){
+        		//Опираться на актуальный шанс активации
+        		//Количество связей = MaxChance-chance/100*n->incount (с минимальным activated)--;
+        		//отправлять в отдельный Нейрон.
+        		//Повесить их на отдельный нейрон Х->incount>1 && X->outcount=1;
+        		inlist=inlist->next;
+        }
+
+        inlist=in;
+    */
+    while(inlist) {
+        curlink=inlist->link;
+        incurval+=curlink->weight/n->incount;
 
 
-    while(inlist){
-		curlink=inlist->link;
-		incurval+=curlink->weight/n->incount;
+        tlist=inlist->prev;
+        curpozl=inlist;
 
-	curpozl=inlist->next;
+        if(curpozl->prev)
+        while(curpozl->link->activated>curpozl->prev->link->activated){
+            tlist=curpozl->prev;
+            tlist->next=curpozl->next;
+            curpozl->next=tlist;
+            curpozl->prev=tlist->prev;
+            tlist->prev=curpozl;
+            tlist=tlist->prev;
+            curpozl=curpozl->prev;
+        }
 
-	if(curlink->activated>0){
-		curlink->activated=0;
-		n->incount_excited--;
-	}
-
-		if(curlink->weight>=in->link->weight){
-			tlist=_GetEndListItem(in);
-			if(inlist->next)
-				inlist->next->prev=inlist->prev;
-			if(inlist->prev)
-				inlist->prev->next=inlist->next;
-			inlist->prev=tlist;
-			tlist->next=inlist;
-		}else{
-			if(inlist->next)
-				inlist->next->prev=inlist->prev;
-			if(inlist->prev)
-				inlist->prev->next=inlist->next;
-			inlist->next=n->in;
-			n->in=n->in->prev=inlist;
-		}
-
-
-		inlist=curpozl;
+        if(!(curpozl=inlist->next)){
+                curpozl=inlist;
+                if(badslowlink>1){
+                        _AddNeuronToList((hidden=_CreateNeuron(n->val)),((NLAYER *)n->Layer)->end);
+                    if(hidden)_ConnectNeuron(hidden,n,0);
+                }
+                while(curpozl){
+                    if(badslowlink>0&&hidden){
+                            if(!hidden->links.in){
+                                    _IncertListItem(curpozl,NULL,NULL);
+                                    hidden->links.in=curpozl;
+                            }else {
+                                _IncertListItem(curpozl,hidden->links.in,hidden->links.in->next);
+                            }
+                        badslowlink--;
+                    }
+        if(curpozl->link->activated>0){
+            curpozl->link->activated=0;
+            n->incount_excited--;
+        }
+        curpozl=curpozl->prev;
+                }
+        }
+        inlist=curpozl;
     }
 
+//Автоматическое наращивание сети по мере поступлений данных в зависимости от необходимости в этом.
+//Все тормозящие в конце списка.
 
-    	if(n->val){
-		n->val/2+incurval/2;	//Запопаламлин
-	}else n->val=incurval;
+    if(n->val) {
+        n->val/2+incurval/2;	//Запопаламлин
+    } else n->val=incurval;     //Желательно взять ближайшее существующее значение, а не просто высчитаное.
 
-	if (n->outcount>0 && n->incount > 0)
-	devizor = (n->incount + 1) / n->outcount;	//Ва сколько будет изменяться вес каждой связи, ориг.поставщик n->val
+    if (n->outcount>0 && n->incount > 0)
+        devizor = (n->incount + 1) / n->outcount;	//На сколько будет изменяться вес каждой связи, ориг.поставщик n->val
 
-	if(!outlist){			//Некуда дальше идти
-		if (n->ReturnFunc) //И есть функция возврата
-	    n->ReturnFunc(n, n->in, n->out);
-	}else while(outlist){
-		curlink = outlist->link;
-	    nto = (NEURON *)((LINKL *)curlink->to)->Neuron;
-	    if (curlink->activated == 0)nto->incount_excited++;
-	    //-----Всем рассказать насколько Я крут
-		//----------------Меняем флаг активных связей у нейрона последователя
-	    curlink->weight = curlink->weight / 2 + (n->val * devizor) / 2;
-	    //Даже связь выстрелевшего Нейрона остается что-то весить.. Или нет?
-	    curlink->activated++;
+    if(!outlist) {			//Некуда дальше идти
+        #warning "В зависимости от типа принять ближайшее к вычисленному значение???"
+        if (n->ReturnFunc) //И есть функция возврата
+            n->ReturnFunc(n, n->links.in, n->links.out);
+    } else while(outlist) {
+            curlink = outlist->link;
+            nto = (NEURON *)((LINKL *)curlink->to)->Neuron;
+            if (curlink->activated == 0)nto->incount_excited++;
+            //-----Всем рассказать насколько Я крут
+            //----------------Меняем флаг активных связей у нейрона последователя
+            curlink->weight = curlink->weight / 2 + (n->val * devizor) / 2;
+            //Даже связь выстрелевшего Нейрона остается что-то весить.. Или нет?
+            curlink->activated++;
 
-	    //Рекуринама хорошанама
-	    if ((nto->incount_excited / nto->incount * 100) >= nto->chance) {
-	    		//Если шанс набрался...
-		if (!nto->Layer) {
-				//И слоя неть...
-		    if (nto->ActivateFunc)
-			nto->ActivateFunc(nto, nto->in, nto->out);
-		} else {
-				//И есть слой
-		    remlay = (NLAYER *) nto->Layer;
-		    remlay->neurocount_activ++; //Возбуждение как и шанс нарастает...
-		    if (((remlay->neurocount_activ / remlay->neurocount * 100) >= remlay->chance)&&remlay->ActivateFunc)
-			remlay->ActivateFunc(remlay, remlay->first, remlay->end);
-		}
-	    }
+            //Рекуринама хорошанама
+            if ((nto->incount_excited / nto->incount * 100) >= nto->chance) {
+                //Если шанс набрался...
+                if (!nto->Layer) {
+                    //И слоя неть...
+                    if (nto->ActivateFunc)
+                        nto->ActivateFunc(nto, nto->links.in, nto->links.out);
+                } else {
+                    //И есть слой
+                    remlay = (NLAYER *) nto->Layer;
+                    remlay->neurocount_activ++; //Возбуждение как и шанс нарастает...
+                    if (((remlay->neurocount_activ / remlay->neurocount * 100) >= remlay->chance)&&remlay->ActivateFunc)
+                        remlay->ActivateFunc(remlay, remlay->first, remlay->end);
+                }
+            }
 
-	    outlist=outlist->next;
-	}
+            outlist=outlist->next;
+        }
 
-	/*
+    /*
      * Хорошая идея- использовать эту библиотеку как карказ для сайта -соц сетей.
      * Кнопка-"рассказать" только создает указатель на олригинальный пост, без копирования текста,
      * И при изменении оригинала, все рассказанное,перерассказанное, оставленное без изменений
@@ -126,9 +155,9 @@ DLL_EXPORT void OptimiZActivateNeuronFunc(NEURON *n, LINKL *in, LINKL *out){
 //Раздать по входящим c флагom на возврат значения
 //И запустить функцию возврата во входящем если шанс норм
 
-DLL_EXPORT void OptimiZReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out){
-	LINKL *inlist = in, *outlist = out;
-    LINK *curlink = NULL;
+DLL_EXPORT void OptimiZReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
+    LINKL *inlist = in, *outlist = out;
+    LINK *curlink = NULL,*minweight=NULL;
     NEURON *nto = NULL, *nfrom = NULL;
     ntype outcurval = 0,delta=0;
 
@@ -139,35 +168,44 @@ DLL_EXPORT void OptimiZReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out){
     ...Самооптимизация или тип того..Ответы и так были точны и интересны,
     а теперь еще с каждым запросом они становяться точнее без ущерба к ресурсоемкости.
     */
+    minweight=outlist->link;
+    while(outlist) {
+        if(minweight->weight>outlist->link->weight)minweight=outlist->link;
+        outlist=outlist->next;
+    }
+    outlist=out;
 
-    while(outlist){
-		    curlink = outlist->link;
-			nto = (NEURON *) ((LINKL *) curlink->to)->Neuron;
-			n->outcount_excited--;
-			//Получаем размер шага, умножаем на количество таких шагов.
-			outcurval+=(nto->retval/nto->in->link->weight)*(curlink->weight/nto->in->link->weight);
-		    outlist=outlist->next;
+    while(outlist) {
+        curlink = outlist->link;
+        nto = (NEURON *) ((LINKL *) curlink->to)->Neuron;
+        n->outcount_excited--;
+        //Получаем размер шага от 1-ого (минимальное удобнее максимального) элемента,
+        //умножаем на количество таких шагов.
+        outcurval+=(nto->retval/minweight->weight)*(curlink->weight/minweight->weight);
+        outlist=outlist->next;
     }
 
+    #warning "М.б. где-то здесь проверить ближайшее существующее и доделать."
+
     if(n->retval)			//Бывалый Нейрон
-    	n->retval = n->retval / 2 + outcurval / 2;		//*Стабилизатор
-	else if(n->outcount>0)	//Не замыкающий, связаный Нейрон
-		n->retval=outcurval;
-	else n->retval=n->val;	//Замыкающий Нейрон
+        n->retval = n->retval / 2 + outcurval / 2;		//*Стабилизатор
+    else if(n->outcount>0)	//Не замыкающий, связаный Нейрон
+        n->retval=outcurval;
+    else n->retval=n->val;	//Замыкающий Нейрон
 
 
-	while(inlist){
-		curlink = inlist->link;
-		nfrom = (NEURON *) ((LINKL *) curlink->from)->Neuron;
-		nfrom->incount_excited++;
-	//Если пора возвращать
-	//Что это за натурально порн... Износилован за недодОдодачу...
-	if (((nfrom->incount_excited / nfrom->incount * 100) >= nfrom->chance)&&nfrom->ReturnFunc)
-			//И есть функция возврата
-		nfrom->ReturnFunc(nfrom, nfrom->in, nfrom->out);
+    while(inlist) {
+        curlink = inlist->link;
+        nfrom = (NEURON *) ((LINKL *) curlink->from)->Neuron;
+        nfrom->incount_excited++;
+        //Если пора возвращать
+        //Что это за натурально порн... Износилован за недодОдодачу...
+        if (((nfrom->incount_excited / nfrom->incount * 100) >= nfrom->chance)&&nfrom->ReturnFunc)
+            //И есть функция возврата
+            nfrom->ReturnFunc(nfrom, nfrom->links.in, nfrom->links.out);
 
-		inlist=inlist->next;
-	}
+        inlist=inlist->next;
+    }
 
 }
 
@@ -194,18 +232,18 @@ DLL_EXPORT void TrueReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
     else n->retval = n->val;
 
     */
-    /*
-    Принцип распростронения.
-    1.Найти минимальный = Ь
-    2.Значение от возврата / Ь = Д и совмещение\замена на тот с чем.
-    3.Пройти остальные меряя в Этот/Ь*Д...
+/*
+Принцип распростронения.
+1.Найти минимальный = Ь
+2.Значение от возврата / Ь = Д и совмещение\замена на тот с чем.
+3.Пройти остальные меряя в Этот/Ь*Д...
 
-    Это еще одна вариация.....
-    1.Значение предидущего возврата заменять\совмещать с полученой частью.
-    Это даст ~статичный выхлоп для равных вхлопов после полной прогонки по набору из значений.
-    ...Самооптимизация или тип того..Ответы и так были точны и интересны,
-    а теперь еще с каждым запросом они становяться точнее без ущерба к ресурсоемкости.
-    */
+Это еще одна вариация.....
+1.Значение предидущего возврата заменять\совмещать с полученой частью.
+Это даст ~статичный выхлоп для равных вхлопов после полной прогонки по набору из значений.
+...Самооптимизация или тип того..Ответы и так были точны и интересны,
+а теперь еще с каждым запросом они становяться точнее без ущерба к ресурсоемкости.
+*/
 /*
     while (inlist) {
 	curlink = inlist->link;
@@ -221,6 +259,7 @@ DLL_EXPORT void TrueReturnNeuronFunc(NEURON *n, LINKL *in, LINKL *out) {
     }
 }
 */
+/*
 //Функция должна работать как надо,
 //можно сказать, что это среднепсихологическая функция :)
 
@@ -230,12 +269,12 @@ DLL_EXPORT void DefActivateFunc(NEURON *neuron, LINKL *in, LINKL *out) {
     LINKL *inmode = in, *outmode = out;
     ntype weight = 0, halfweight = 0, temp = 0;
     while (inmode) {
-	if (inmode->state == STATE_READY) {
-	    inmode->link->weight = inmode->link->weight * inmode->link->activated / linkcount;
-	    weight += inmode->link->weight;
-	    inmode->link->activated = 0;
-	}
-	inmode = inmode->next;
+        if (inmode->state == STATE_READY) {
+            inmode->link->weight = inmode->link->weight * inmode->link->activated / linkcount;
+            weight += inmode->link->weight;
+            inmode->link->activated = 0;
+        }
+        inmode = inmode->next;
     }
 
     if (!linkcountout)linkcountout = 1; //Раз больше некому, то мне
@@ -243,25 +282,25 @@ DLL_EXPORT void DefActivateFunc(NEURON *neuron, LINKL *in, LINKL *out) {
 
     halfweight = (neuron->val + weight) / linkcount; //Вес среднего распространения.
     if (neuron->val >= 0) //Значение нейрона всегда стремиться к 0
-	neuron->val -= halfweight;
+        neuron->val -= halfweight;
     else neuron->val += halfweight;
 
     temp = halfweight / linkcountout; //Мы делили апельсин,много нас а он 1
     ost = (int) (halfweight - linkcountout * temp); //Что осталось подберем
     neuron->postost += ost; //И к излишькам занесем
     while (outmode) { //Не нравиться мне это...
-	if (outmode->state == STATE_READY) {
-	    outmode->link->weight += temp;
-	    outmode->link->activated++;
-	}
-	outmode = outmode->next;
+        if (outmode->state == STATE_READY) {
+            outmode->link->weight += temp;
+            outmode->link->activated++;
+        }
+        outmode = outmode->next;
     }
 
 }
 
 //Функцию разврата надо подправить, она должна изменять retval
 //По нему находиться так сказать успешность действий
-/*
+
 DLL_EXPORT void DefReturnFunc(NEURON *neuron, LINKL *in, LINKL *out) {
     int linkcount = neuron->incount, linkcountout = neuron->outcount;
     int ost = 0;
@@ -304,11 +343,11 @@ void TrueActivateNeuronT(void *cb) {
     CBT *cbt = (CBT *) cb;
     NEURON *n = cbt->neuron;
     if (n) {
-	if (n->ActivateFunc)
-	    n->ActivateFunc(n, n->in, n->out);
-	if (!n->out) //И если некуда дальше идти,
-	    if (n->ReturnFunc) //И есть функция возврата
-		n->ReturnFunc(n, n->in, n->out);
+        if (n->ActivateFunc)
+            n->ActivateFunc(n, n->links.in, n->links.out);
+        if (!n->links.out) //И если некуда дальше идти,
+            if (n->ReturnFunc) //И есть функция возврата
+                n->ReturnFunc(n, n->links.in, n->links.out);
     }
 
     _FreeCBT(cbt);
@@ -320,9 +359,9 @@ DLL_EXPORT void _ZalipNULL() {
     ThreadFlag = false;
     while (temp) {
 #ifdef NEURO_LIB_WTHREAD
-	temp->cbt->ThreadTime = SuspendThread(temp->cbt->ThreadH);
+        temp->cbt->ThreadTime = SuspendThread(temp->cbt->ThreadH);
 #endif
-	temp = temp->prev;
+        temp = temp->prev;
     }
 
 }
@@ -333,11 +372,11 @@ DLL_EXPORT void _NeZaliPay() {
     ThreadFlag = true;
     while (temp) {
 #ifdef NEURO_LIB_WTHREAD
-	temp->cbt->ThreadTime = ResumeThread(temp->cbt->ThreadH);
+        temp->cbt->ThreadTime = ResumeThread(temp->cbt->ThreadH);
 #else
-	TrueActivateNeuronT((void *) temp->data.FreedoomID);
+        TrueActivateNeuronT((void *) temp->data.FreedoomID);
 #endif
-	temp = temp->prev;
+        temp = temp->prev;
     }
 }
 
@@ -347,8 +386,8 @@ DLL_EXPORT CBT *_NewCBT(NEURON *n) {
     if (ThreadFlag == false)return NULL;
     retval = (CBT *) _MallocZeroBytes(sizeof (CBT));
     if (retval) {
-	retval->neuron = n;
-	retval->listpointer = _CreateFDL((long) retval, FIDL_THREADS);
+        retval->neuron = n;
+        retval->listpointer = _CreateFDL((long) retval, FIDL_THREADS);
     }
     return retval;
 }
@@ -383,8 +422,8 @@ DLL_EXPORT NEURON *_CreateNeuron(ntype val) { //Создает нейрон в �
 
     temp->IDOffset = -1;
     if (tempfdl) {
-	temp->IDOffset = tempfdl->data.FreedoomID;
-	_DeleteFDL(tempfdl);
+        temp->IDOffset = tempfdl->data.FreedoomID;
+        _DeleteFDL(tempfdl);
     }
     temp->val = val;
     temp->chance = 100;
@@ -405,21 +444,21 @@ DLL_EXPORT NEURON *_FreeNeuron(NEURON *n) { //Функция удаляет вы
     NEURON *nnext = n->next, *nprev = n->prev, *ntemp = 0;
 
     if (n->state == STATE_READY)
-	n->state = STATE_NOT_READY;
+        n->state = STATE_NOT_READY;
     else return 0;
 
     if (nnext) {
-	ntemp = nnext;
-	nnext->prev = nprev;
+        ntemp = nnext;
+        nnext->prev = nprev;
     }
 
     if (nprev) {
-	ntemp = nprev;
-	nprev->next = nnext;
+        ntemp = nprev;
+        nprev->next = nnext;
     }
 
     if (n->IDOffset != -1) {
-	_CreateFDL(n->IDOffset, FIDL_NEURONS);
+        _CreateFDL(n->IDOffset, FIDL_NEURONS);
     }
 
     AddNeuronsCount(-1);
@@ -432,22 +471,22 @@ DLL_EXPORT int _DeleteNeuron(NEURON *n) { //Функция удаляет ней
     if (!n)return -1;
 
     if (n->state == STATE_READY)
-	n->state = STATE_NOT_READY;
+        n->state = STATE_NOT_READY;
     else return -2;
 
     NLAYER *nlay = (NLAYER *) n->Layer;
     //	NEURON *nnext=n->next,*nprev=n->prev;
-    LINKL *lin = n->in, *lout = n->out;
+    LINKL *lin = n->links.in, *lout = n->links.out;
 
     if (lin)retval += _DeleteLinksList(lin);
     if (lout)retval += _DeleteLinksList(lout);
 
     if (n == nlay->first) {
-	if (nlay->first == nlay->end)
-	    nlay->first = nlay->end = _FreeNeuron(n);
-	else nlay->first = _FreeNeuron(n);
+        if (nlay->first == nlay->end)
+            nlay->first = nlay->end = _FreeNeuron(n);
+        else nlay->first = _FreeNeuron(n);
     } else if (n == nlay->end)
-	nlay->end = _FreeNeuron(n);
+        nlay->end = _FreeNeuron(n);
     else _FreeNeuron(n);
 
     return retval;
@@ -457,7 +496,7 @@ DLL_EXPORT int _AddNeuronToList(NEURON *it, NEURON *listitem) { //Функция
     if (!it || !listitem)return -1;
     NEURON *next = listitem->next;
     if (next) {
-	next->prev = it;
+        next->prev = it;
     }
     it->next = next;
     it->prev = listitem;
@@ -471,8 +510,8 @@ DLL_EXPORT int _DeleteNeuroList(NEURON *first) {
     if (!first)return -1;
     NEURON *temp = first, *curf = 0;
     do {
-	curf = temp->next;
-	_DeleteNeuron(temp);
+        curf = temp->next;
+        _DeleteNeuron(temp);
     } while ((temp = curf));
     return 0;
 }
@@ -485,12 +524,12 @@ DLL_EXPORT LINK *_ConnectNeuron(NEURON *from, NEURON *to, ntype weight) { //Со
 
     if (!(curlink = _CreateLink(weight)))return 0;
 //_GetEndListItem
-    if (!from->out) {
-	from->out = lfrom = _CreateLinkListItem(NULL);
-    } else lfrom = _CreateLinkListItem(from->out);
-    if (!to->in) {
-	to->in = lto = _CreateLinkListItem(NULL);
-    } else lto = _CreateLinkListItem(to->in);
+    if (!from->links.out) {
+        from->links.out = lfrom = _CreateLinkListItem(NULL);
+    } else lfrom = _CreateLinkListItem(from->links.out);
+    if (!to->links.in) {
+        to->links.in = lto = _CreateLinkListItem(NULL);
+    } else lto = _CreateLinkListItem(to->links.in);
 
     lfrom->Neuron = from;
     lto->Neuron = to;
@@ -504,19 +543,59 @@ DLL_EXPORT LINK *_ConnectNeuron(NEURON *from, NEURON *to, ntype weight) { //Со
 
 DLL_EXPORT LINK *_GetConnection(NEURON *from, NEURON *to) {
     if (!from || !to)return 0;
-    LINKL *lfrom = from->out, *lto = to->in;
+    LINKL *lfrom = from->links.out, *lto = to->links.in;
     if (lfrom) {
-	while (lfrom) {
-	    if (lfrom->link->to == to)return lfrom->link;
-	    lfrom = lfrom->next;
-	}
+        while (lfrom) {
+            if (lfrom->link->to == to)return lfrom->link;
+            lfrom = lfrom->next;
+        }
     } else if (lto) {
-	while (lto) {
-	    if (lto->link->from == from)return lto->link;
-	    lto = lto->prev;
-	}
+        while (lto) {
+            if (lto->link->from == from)return lto->link;
+            lto = lto->prev;
+        }
     } else return 0;
     return 0;
+}
+
+DLL_EXPORT LINKL *_RelinkNeuro(LINKL *item,NEURON *ncontainer,bool InLink){ //Функция переприсваивает имеющийся элемент списка.
+    if(item->prev){
+        item->prev->next=item->next;
+    }else{
+        if(item->Neuron)((NEURON *)item->Neuron)->links.in=item->next;
+    }
+    if(item->next){
+        item->next->prev=item->prev;
+    }
+    if(InLink=true){
+        if(item==ncontainer->links.max_in)
+        ncontainer->links.max_in=_CompareWeightFinding(item->link,ncontainer->links.in,ABSOLUTE_MAX|ABSOLUTE_WEIGHT,DIRECT_TONEXT);
+        item->link->to=ncontainer;
+        if(ncontainer->links.in){
+    _IncertListItem(item,ncontainer->in,ncontainer->in->next);
+    }else{
+        _IncertListItem(item,NULL,NULL);
+        ncontainer->in=item;
+    }
+    }else{
+        item->link->from=ncontainer;
+        if(ncontainer->out)
+            _IncertListItem(item,ncontainer->out,ncontainer->out->next);
+        else{
+            _IncertListItem(item,NULL,NULL);
+            ncontainer->out=item;
+        }
+    }
+    return item;
+}
+
+DLL_EXPORT NEURON *_GetArounddExist(NEURON *ncontainer,ntype miDerived,bool InLink){
+    if(!ncontainer)return NULL;
+    NEURON *cur=NULL;
+    LINKL *active=InLink==true?ncontainer->in:ncontainer->out;
+    ntype anydelta=miDerived<0?miDerived*(-1):miDerived;
+    ntype checkval=anydelta;
+#warning "Ljltkfnm"
 }
 
 DLL_EXPORT NEURON *_GetNeuronByConnectIndex(NEURON *from, int index, bool InLink) {
@@ -524,20 +603,20 @@ DLL_EXPORT NEURON *_GetNeuronByConnectIndex(NEURON *from, int index, bool InLink
     LINKL *cur = 0;
     int count = 0;
     if (InLink)
-	cur = from->in;
+        cur = from->in;
     else
-	cur = from->out;
+        cur = from->out;
     if (cur) {
-	do {
-	    if (count == index) {
-		if (InLink) {
-		    return (NEURON *) ((LINKL *) cur->link->from)->Neuron;
-		} else {
-		    return (NEURON *) ((LINKL *) cur->link->to)->Neuron;
-		}
-	    }
-	    count++;
-	} while ((cur = cur->next));
+        do {
+            if (count == index) {
+                if (InLink) {
+                    return (NEURON *) ((LINKL *) cur->link->from)->Neuron;
+                } else {
+                    return (NEURON *) ((LINKL *) cur->link->to)->Neuron;
+                }
+            }
+            count++;
+        } while ((cur = cur->next));
     }
     return 0;
 }
@@ -547,20 +626,20 @@ DLL_EXPORT NEURON *_GetNeuronByConnectWeight(NEURON *from, ntype index, bool InL
     LINKL *cur = 0;
     int count = 0;
     if (InLink)
-	cur = from->in;
+        cur = from->in;
     else
-	cur = from->out;
+        cur = from->out;
     if (cur) {
-	do {
-	    if (cur->link->weight == index) {
-		if (InLink) {
-		    return (NEURON *) ((LINKL *) cur->link->from)->Neuron;
-		} else {
-		    return (NEURON *) ((LINKL *) cur->link->to)->Neuron;
-		}
-	    }
-	    count++;
-	} while ((cur = cur->next));
+        do {
+            if (cur->link->weight == index) {
+                if (InLink) {
+                    return (NEURON *) ((LINKL *) cur->link->from)->Neuron;
+                } else {
+                    return (NEURON *) ((LINKL *) cur->link->to)->Neuron;
+                }
+            }
+            count++;
+        } while ((cur = cur->next));
     }
     return 0;
 }
@@ -568,37 +647,38 @@ DLL_EXPORT NEURON *_GetNeuronByConnectWeight(NEURON *from, ntype index, bool InL
 DLL_EXPORT void _DisConnectNeuron(NEURON *from, NEURON *to) {
     LINKL *listf = from->out;
     while (listf) {
-	if (listf->state == STATE_READY)
-	    if (listf->link->to == to) {
-		_DeleteLinkWList(listf->link);
-		from->outcount--;
-		to->incount--;
-		break;
-	    }
-	listf = listf->next;
+        if (listf->state == STATE_READY)
+            if (listf->link->to == to) {
+                _DeleteLinkWList(listf->link);
+                from->outcount--;
+                to->incount--;
+                break;
+            }
+        listf = listf->next;
     }
 
 }
 
 DLL_EXPORT int _ActivateNeuron(NEURON *n) { //Функция активации нейрона в отдельном потоке
     if (n) {
-	CBT *act = _NewCBT(n);
-	if (act) {
-	    if (n->incount) { //|Не будем делить на 0... Пока что (:
-		//Здесь формула рассчета, а пора ли на самом деле.
-		if ((n->incount_excited / n->incount * 100) >= n->chance) //Нейрон готов к активации
+        CBT *act = _NewCBT(n);
+        if (act) {
+            if (n->incount) { //|Не будем делить на 0... Пока что (:
+                //Здесь формула рассчета, а пора ли на самом деле.
+                if ((n->incount_excited / n->incount * 100) >= n->chance) //Нейрон готов к активации
 
 #ifdef NEURO_LIB_WTHREAD
-		    act->ThreadH = CreateThread(NULL, 0, ActivateNeuronT, act, 0, &act->ThreadId);
-	    } else act->ThreadH = CreateThread(NULL, 0, ActivateNeuronT, act, 0, &act->ThreadId);
+                    act->ThreadH = CreateThread(NULL, 0, ActivateNeuronT, act, 0, &act->ThreadId);
+            } else act->ThreadH = CreateThread(NULL, 0, ActivateNeuronT, act, 0, &act->ThreadId);
 #else
-		    TrueActivateNeuronT(act);
-	    } else TrueActivateNeuronT(act); //Скорее всего стартовый слой(один из)
+                    TrueActivateNeuronT(act);
+            } else TrueActivateNeuronT(act); //Скорее всего стартовый слой(один из)
 #endif
 
 
-	} else return -1;
-    } else return -2;
+        } else return -1;
+    }
+    else return -2;
     return 0;
 }
 
@@ -608,7 +688,7 @@ DLL_EXPORT int _ActivateNeuron(NEURON *n) { //Функция активации 
 NeuronsBase::NeuronsBase() {
 
     /*    CBTLroot = NULL;
-	CBTLend = NULL;
+    CBTLend = NULL;
      */
     ThreadFlag = true;
     log = NULL;
@@ -628,14 +708,14 @@ NeuronsBase::~NeuronsBase() {
 void NeuronsBase::SimulateComa() {
     _ZalipNULL();
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, L"SimulateComa");
+        log->AddInfo(DI_LOG_LEVEL_INFO, L"SimulateComa");
     }
 }
 
 void NeuronsBase::OutOfComa() {
     _NeZaliPay();
     if (log) {
-	log->AddInfo(DI_LOG_LEVEL_INFO, L"OutOfComa");
+        log->AddInfo(DI_LOG_LEVEL_INFO, L"OutOfComa");
     }
 }
 
@@ -657,9 +737,9 @@ NEURON *NeuronsBase::CreateNeuron(ntype val) {
     NEURON *retv = 0;
     retv = _CreateNeuron(val);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"val:%x,return:0x0", val);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"val:%x,Return:0x%X02", val, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"val:%x,return:0x0", val);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"val:%x,Return:0x%X02", val, retv);
     }
     return retv;
 }
@@ -669,9 +749,9 @@ NEURON *NeuronsBase::FreeNeuron(NEURON *n) {
     NEURON *retv = 0;
     retv = _FreeNeuron(n);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X02,return:0", n);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x0,return:0x%X02", retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X02,return:0", n);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x0,return:0x%X02", retv);
     }
     return retv;
 }
@@ -681,9 +761,9 @@ int NeuronsBase::DeleteNeuron(NEURON *n) {
     int retv = 0;
     retv = _DeleteNeuron(n);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X02,return:0", n);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x0,return:%d", retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X02,return:0", n);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x0,return:%d", retv);
     }
     return retv;
 }
@@ -693,9 +773,9 @@ int NeuronsBase::AddNeuronToList(NEURON *it, NEURON *listitem) {
     int retv = 0;
     retv = _AddNeuronToList(it, listitem);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X02,NeuroList:0x%X02,return:%d", it, listitem, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x%X02,NeuroList:0x%X02,return:0kау", it, listitem);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"Neuron:0x%X02,NeuroList:0x%X02,return:%d", it, listitem, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"Neuron:0x%X02,NeuroList:0x%X02,return:0kау", it, listitem);
     }
     return retv;
 }
@@ -705,9 +785,9 @@ LINK *NeuronsBase::ConnectNeuron(NEURON *from, NEURON *to, ntype weight) {
     LINK *retv = 0;
     retv = _ConnectNeuron(from, to, weight);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,To:0x%X02,return:0", from, to);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,To:0x%X02,return:%d", from, to, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,To:0x%X02,return:0", from, to);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,To:0x%X02,return:%d", from, to, retv);
     }
     return retv;
 }
@@ -717,9 +797,23 @@ LINK *NeuronsBase::GetConnection(NEURON *from, NEURON *to) {
     LINK *retv = 0;
     retv = _GetConnection(from, to);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,To:0x%X02,return:0x0", from, to);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,To:0x%X02,return:0x%x", from, to, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,To:0x%X02,return:0x0", from, to);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,To:0x%X02,return:0x%x", from, to, retv);
+    }
+    return retv;
+}
+
+LINKL *NeuronsBase::RelinkNeuro(LINKL *item,NEURON *ncontainer,bool InLink){
+    const wchar_t *descr = L"LINKL *NeuronsBase::RelinkNeuro(LINKL *item,NEURON *ncontainer,bool InLink)\r\n";
+    LINKL *retv = 0;
+    retv = _RelinkNeuro(item,ncontainer,InLink);
+    if (log) {
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"item:0x%X02,ncontainer:0x%X02,InLink:%d,return:0x0",
+                         item,ncontainer,InLink);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"item:0x%X02,ncontainer:0x%X02,InLink:%d,return:0x%x",
+                          item,ncontainer,InLink, retv);
     }
     return retv;
 }
@@ -729,9 +823,9 @@ NEURON *NeuronsBase::GetNeuronByConnectIndex(NEURON *from, int index, bool InLin
     NEURON *retv = 0;
     retv = _GetNeuronByConnectIndex(from, index, InLink);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,index:%d,Return:0", from, index);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,index:%d,Return:0x%X02", from, index, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,index:%d,Return:0", from, index);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,index:%d,Return:0x%X02", from, index, retv);
     }
     return retv;
 
@@ -742,9 +836,9 @@ NEURON *NeuronsBase::GetNeuronByConnectWeight(NEURON *from, ntype index, bool In
     NEURON *retv = 0;
     retv = _GetNeuronByConnectWeight(from, index, InLink);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,weight:%x,Return:0", from, index);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,weight:%x,Return:0x%X02", from, index, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"From:0x%X02,weight:%x,Return:0", from, index);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"From:0x%X02,weight:%x,Return:0x%X02", from, index, retv);
     }
     return retv;
 
@@ -755,9 +849,9 @@ int NeuronsBase::ActivateNeuron(NEURON *n) {
     int retv = 0;
     retv = _ActivateNeuron(n);
     if (log) {
-	if (retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"!NEURON!:0x%X02,return:%d", n, retv);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"!NEURON!:0x%X02,return:-0", n);
+        if (retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"!NEURON!:0x%X02,return:%d", n, retv);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"!NEURON!:0x%X02,return:-0", n);
     }
     return retv;
 }
@@ -767,9 +861,9 @@ int NeuronsBase::DeleteNeuroList(NEURON *first) {
     int retv = 0;
     retv = _DeleteNeuroList(first);
     if (log) {
-	if (!retv)
-	    log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"First:0x%X02,return:+0", first);
-	else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"First:0x%X02,return:%d", first, retv);
+        if (!retv)
+            log->AddInfo(DI_LOG_LEVEL_WARNING, descr, L"First:0x%X02,return:+0", first);
+        else log->AddInfo(DI_LOG_LEVEL_INFO, descr, L"First:0x%X02,return:%d", first, retv);
     }
     return retv;
 }

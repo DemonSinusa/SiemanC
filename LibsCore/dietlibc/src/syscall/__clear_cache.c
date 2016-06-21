@@ -3,8 +3,7 @@
 #include <unistd.h>
 
 __attribute__((naked))
-void ExecuteIMB()
-{
+void ExecuteIMB() {
     asm(".arm   \n"
         "STR	LR,[SP, #-4]!\n"
         "MRS	R2,CPSR\n"
@@ -22,7 +21,7 @@ void ExecuteIMB()
         "NOP\n"
         "NOP\n"
         // Выполняем необходимую требуху с кешем
-    "clean_loop:\n"
+        "clean_loop:\n"
         "MRC 	p15, 0, r15, c7, c10, 3\n" // clean entire dcache using test and clean
         "NOP\n"
         "NOP\n"
@@ -45,13 +44,11 @@ void ExecuteIMB()
 }
 
 
-void __clear_cache(void *begin, void *end)
-{
+void __clear_cache(void *begin, void *end) {
     ExecuteIMB();
 }
 
-void libc_clear_cpu_cache()
-{
+void libc_clear_cpu_cache() {
     ExecuteIMB();
 }
 

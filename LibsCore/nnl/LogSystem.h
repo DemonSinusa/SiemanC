@@ -19,7 +19,7 @@
  * Пользуясь случаем хочу выразить благодарность коллективу энтузиастов из кадастра
  * и этим ж закадастрить каждый &пальцеклацный& |Окаменений| !в заголовках заголовка достаточно будет!
  * текст по методу рекурсивного последовательного разложения "Кадастровой Важности". Хоть это и был Я)
- * 
+ *
  * Пример:Х.ХХ.ХХХ
  * Вибратор.хи
  * Вибратор.си	2.
@@ -33,14 +33,14 @@
  *
  * Для Вовки эт важнее, но он и без нас там как на зоне
  * Для меня вот важно-оченьважно-чутьповажнее вызывает некоторый
- * "Затруднительный интерес" но если как по приммеру то после ознакомления
+ * "Затруднительный интерес =~ странностью?():ЖзржаУвевововрымороженииЙ разоворазноразовостнокаждов" но если как по приммеру то после ознакомления
  *  может вызвать некоторое негодование и бурление масс,из технаря,а если
  *  зарекурсивить по степени важности,то разрабов.
  *
  *
  */
 
-//Открыт новый параметр "Кадастровой важности" по методу рекурсивного разложения.
+//Открыт новый параметр "Кадастровой важности" по методу рекурсивного разл жения.
 //Инженеры,падаем,падшие поднимаются с вопросом, "а что такое тогороттрнаоброт?"
 //Это и есть простое понятие рекурсии для Российского сленгпака.
 //тогороттрнаоброт!&|тогороттрнаоброт|&!тогороттрнаоброт
@@ -87,10 +87,10 @@ private:
 extern "C" {
 #endif
 
-    DLL_EXPORT LSD *_OpenLogFramework(char lvl, wchar_t *path);
-    DLL_EXPORT int _AddInfo(LSD *LogSystemDatabase, char lvl, const wchar_t *info);
-    DLL_EXPORT int _AddNoRestructInfo(LSD *LogSystemDatabase, char lvl, const wchar_t *descr, const wchar_t *fmt, ...);
-    DLL_EXPORT void _CloseLogFramework(LSD *LogSystemDatabase);
+DLL_EXPORT LSD *_OpenLogFramework(char lvl, wchar_t *path);
+DLL_EXPORT int _AddInfo(LSD *LogSystemDatabase, char lvl, const wchar_t *info);
+DLL_EXPORT int _AddNoRestructInfo(LSD *LogSystemDatabase, char lvl, const wchar_t *descr, const wchar_t *fmt, ...);
+DLL_EXPORT void _CloseLogFramework(LSD *LogSystemDatabase);
 
 #ifdef __cplusplus
 }

@@ -9,7 +9,11 @@
 ** whereas the output of asctime is supposed to be constant.
 */
 
-
+#ifndef lint
+#ifndef NOID
+static char elsieid[] = "@(#)asctime.c  8.2";
+#endif /* !defined NOID */
+#endif /* !defined lint */
 
 /*LINTLIBRARY*/
 
@@ -104,11 +108,11 @@ char *              buf;
     ** We avoid using snprintf since it's not available on all systems.
     */
     (void) sprintf(result,
-        ((strlen(year) <= 4) ? ASCTIME_FMT : ASCTIME_FMT_B),
-        wn, mn,
-        timeptr->tm_mday, timeptr->tm_hour,
-        timeptr->tm_min, timeptr->tm_sec,
-        year);
+                   ((strlen(year) <= 4) ? ASCTIME_FMT : ASCTIME_FMT_B),
+                   wn, mn,
+                   timeptr->tm_mday, timeptr->tm_hour,
+                   timeptr->tm_min, timeptr->tm_sec,
+                   year);
     if (strlen(result) < STD_ASCTIME_BUF_SIZE || buf == buf_asctime) {
         (void) strcpy(buf, result);
         return buf;

@@ -28,30 +28,30 @@ const wchar_t *log_levels_prefix[] = {
 int _ConstructRestructedMSG(LSD *LogSystemDatabase, char lvl, const wchar_t *descr, const wchar_t *fmt, va_list args) {
     LSD *lst = LogSystemDatabase;
     if (lst) {
-	if (lvl <= lst->levl) {
-	    int msglen = 1024;
-	    wchar_t *fullmsg = NULL, *fulldescr = NULL;
+        if (lvl <= lst->levl) {
+            int msglen = 1024;
+            wchar_t *fullmsg = NULL, *fulldescr = NULL;
 
-	    descr ? msglen += wcslen(descr) + 2 : msglen += 32;
+            descr ? msglen += wcslen(descr) + 2 : msglen += 32;
 
-	    fullmsg = (wchar_t *)malloc(sizeof (wchar_t) * msglen); // new wchar_t[msglen];
+            fullmsg = (wchar_t *)malloc(sizeof (wchar_t) * msglen); // new wchar_t[msglen];
 
-	    vswprintf(fullmsg, msglen, fmt, args);
+            vswprintf(fullmsg, msglen, fmt, args);
 
-	    if (descr) {
-		fulldescr = (wchar_t *)malloc(sizeof (wchar_t)*(wcslen(descr) + 3)); // new wchar_t[wcslen(descr) + 3];
-		wcscpy(fulldescr, L"(");
-		wcscat(fulldescr, descr);
-		wcscat(fulldescr, L")");
-		wcscat(fullmsg, fulldescr);
-		free(fulldescr);
-	    }
-	    lst->WriteTo(lst, fullmsg, lvl);
+            if (descr) {
+                fulldescr = (wchar_t *)malloc(sizeof (wchar_t)*(wcslen(descr) + 3)); // new wchar_t[wcslen(descr) + 3];
+                wcscpy(fulldescr, L"(");
+                wcscat(fulldescr, descr);
+                wcscat(fulldescr, L")");
+                wcscat(fullmsg, fulldescr);
+                free(fulldescr);
+            }
+            lst->WriteTo(lst, fullmsg, lvl);
 
-	    free(fullmsg);
+            free(fullmsg);
 
-	    return 0;
-	} else return 1;
+            return 0;
+        } else return 1;
     } else return -1;
 }
 
@@ -65,8 +65,8 @@ void _WriteTo(LSD *LogSystemDeeemmOoOnn, wchar_t *msg, int lvl) {
     fullmsg = (wchar_t *)malloc(sizeof (wchar_t) * wlen);
     swprintf(fullmsg, wlen, L"%d:%ls|%ls|:%ls", LogSystemDeeemmOoOnn->msgcount, log_levels_prefix[lvl], dtime, msg);
     if (LogSystemDeeemmOoOnn->fh) {
-	fwprintf(LogSystemDeeemmOoOnn->fh, L"%ls\r\n", fullmsg);
-	fflush(LogSystemDeeemmOoOnn->fh);
+        fwprintf(LogSystemDeeemmOoOnn->fh, L"%ls\r\n", fullmsg);
+        fflush(LogSystemDeeemmOoOnn->fh);
     }
     wprintf(L"%ls\r\n", fullmsg);
     free(fullmsg);
@@ -78,11 +78,11 @@ DLL_EXPORT LSD *_OpenLogFramework(char lvl, wchar_t *path) {
     lst = (LSD *) _MallocZeroBytes(sizeof (LSD));
     lst->levl = lvl;
     if (path) {
-	lst->fh = _wCrossFopen(path, L"wb+");
-	if (lst->fh) {
-	    lst->LPath = (wchar_t *)malloc(sizeof (wchar_t)*(wcslen(path) + 1));
-	    lst->LPath = wcscpy(lst->LPath, path);
-	}
+        lst->fh = _wCrossFopen(path, L"wb+");
+        if (lst->fh) {
+            lst->LPath = (wchar_t *)malloc(sizeof (wchar_t)*(wcslen(path) + 1));
+            lst->LPath = wcscpy(lst->LPath, path);
+        }
     }
     lst->WriteTo = _WriteTo;
     return lst;
@@ -90,10 +90,10 @@ DLL_EXPORT LSD *_OpenLogFramework(char lvl, wchar_t *path) {
 
 DLL_EXPORT int _AddInfo(LSD *LogSystemDatabase, char lvl, const wchar_t *flirtish) {
     if (LogSystemDatabase) {
-	if (lvl <= LogSystemDatabase->levl) {
-	    LogSystemDatabase->WriteTo(LogSystemDatabase, (wchar_t *)flirtish, lvl);
-	    return 0;
-	} else return 1;
+        if (lvl <= LogSystemDatabase->levl) {
+            LogSystemDatabase->WriteTo(LogSystemDatabase, (wchar_t *)flirtish, lvl);
+            return 0;
+        } else return 1;
     } else return -1;
 }
 
@@ -111,11 +111,11 @@ DLL_EXPORT void _CloseLogFramework(LSD *LogSystemDatabase) {
     LSD *tlst = LogSystemDatabase;
 
     if (tlst) {
-	if (tlst->fh)
-	    fclose(tlst->fh);
-	if (tlst->LPath)
-	    free(tlst->LPath);
-	free(tlst);
+        if (tlst->fh)
+            fclose(tlst->fh);
+        if (tlst->LPath)
+            free(tlst->LPath);
+        free(tlst);
     }
 }
 

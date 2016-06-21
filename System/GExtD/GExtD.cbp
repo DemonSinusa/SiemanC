@@ -51,6 +51,7 @@
 		<Compiler>
 			<Add option="-Os" />
 			<Add option="-O" />
+			<Add option="-Weffc++" />
 			<Add option="-std=gnu99" />
 			<Add directory="../include" />
 		</Compiler>
@@ -58,11 +59,10 @@
 			<Add option="-s" />
 			<Add option="--defsym __ex=0" />
 			<Add option="--gc-section" />
-			<Add library="c-1.0" />
-			<Add library="gcc-4.6.1" />
 			<Add library="crt" />
 			<Add library="crt_helper" />
-			<Add library="spl" />
+			<Add library="c-1.0" />
+			<Add library="gcc-4.6.1" />
 			<Add directory="../libs" />
 		</Linker>
 		<Unit filename="IPCExtD.c">

@@ -56,17 +56,17 @@ private:
 extern "C" {
 #endif
 
-    DLL_EXPORT FIDL *_CreateFDL(long IDOffSet, char type);
-    DLL_EXPORT FIDL *_DeleteFDL(FIDL *cur);
-    DLL_EXPORT FIDL *_FindFDLByAnyParams(long IDOffSet, char type);
-    DLL_EXPORT FIDL *_DeleteFDLByParm(long IDOffSet, char type);
-    DLL_EXPORT BFIDL *_DeleteFDLList(BFIDL *cur);
-    DLL_EXPORT BFIDL *_DeleteFDLListByType(char type);
+DLL_EXPORT FIDL *_CreateFDL(long IDOffSet, char type);
+DLL_EXPORT FIDL *_DeleteFDL(FIDL *cur);
+DLL_EXPORT FIDL *_FindFDLByAnyParams(long IDOffSet, char type);
+DLL_EXPORT FIDL *_DeleteFDLByParm(long IDOffSet, char type);
+DLL_EXPORT BFIDL *_DeleteFDLList(BFIDL *cur);
+DLL_EXPORT BFIDL *_DeleteFDLListByType(char type);
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111111111111!!!!!!!!!!!!!!!!!!!!!!!!!1111111!!!!!!!11
-    //Сделать сохранение и загрузку свободных ID, не сложнее метода SimulateComa().
-    //!!!!!!!!!!111111111!11!!11!1111111!!!!11!!11!1111111!111!11!!11111111!!1!!11!11!
-    extern BFIDL *ultrastack;
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111111111111!!!!!!!!!!!!!!!!!!!!!!!!!1111111!!!!!!!11
+//Сделать сохранение и загрузку свободных ID, не сложнее метода SimulateComa().
+//!!!!!!!!!!111111111!11!!11!1111111!!!!11!!11!1111111!111!11!!11111111!!1!!11!11!
+extern BFIDL *ultrastack;
 
 #ifdef __cplusplus
 }

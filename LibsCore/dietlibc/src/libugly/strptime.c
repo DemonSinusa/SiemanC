@@ -95,14 +95,12 @@ static  unsigned char *_strptime(const unsigned char *, const char *, struct tm 
 
 
 char *
-strptime(const char *buf, const char *fmt, struct tm *tm)
-{
+strptime(const char *buf, const char *fmt, struct tm *tm) {
     return (char*)(_strptime((const unsigned char*)buf, fmt, tm, 1));
 }
 
 static unsigned char *
-_strptime(const unsigned char *buf, const char *fmt, struct tm *tm, int initialize)
-{
+_strptime(const unsigned char *buf, const char *fmt, struct tm *tm, int initialize) {
     unsigned char c;
     const unsigned char *bp;
     size_t len = 0;
@@ -132,13 +130,14 @@ _strptime(const unsigned char *buf, const char *fmt, struct tm *tm, int initiali
             goto literal;
 
 
-again:      switch (c = *fmt++) {
+again:
+        switch (c = *fmt++) {
         case '%':   /* "%%" is converted to "%". */
 literal:
-        if (c != *bp++)
-            return (NULL);
+            if (c != *bp++)
+                return (NULL);
 
-        break;
+            break;
 
         /*
          * "Alternative" modifiers. Just set the appropriate flag
@@ -266,7 +265,7 @@ literal:
 
         case 'k':   /* The hour (24-hour clock representation). */
             _LEGAL_ALT(0);
-            /* FALLTHROUGH */
+        /* FALLTHROUGH */
         case 'H':
             _LEGAL_ALT(_ALT_O);
             if (!(_conv_num(&bp, &tm->tm_hour, 0, 23)))
@@ -275,7 +274,7 @@ literal:
 
         case 'l':   /* The hour (12-hour clock representation). */
             _LEGAL_ALT(0);
-            /* FALLTHROUGH */
+        /* FALLTHROUGH */
         case 'I':
             _LEGAL_ALT(_ALT_O);
             if (!(_conv_num(&bp, &tm->tm_hour, 1, 12)))
@@ -345,9 +344,9 @@ literal:
              * point to calculate a real value, so just check the
              * range for now.
              */
-             if (!(_conv_num(&bp, &i, 0, 53)))
+            if (!(_conv_num(&bp, &i, 0, 53)))
                 return (NULL);
-             break;
+            break;
 
         case 'w':   /* The day of week, beginning on sunday. */
             _LEGAL_ALT(_ALT_O);
@@ -408,8 +407,7 @@ literal:
 
 
 static int
-_conv_num(const unsigned char **buf, int *dest, int llim, int ulim)
-{
+_conv_num(const unsigned char **buf, int *dest, int llim, int ulim) {
     int result = 0;
     int rulim = ulim;
 

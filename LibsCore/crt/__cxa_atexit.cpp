@@ -30,15 +30,20 @@ int __cxa_atexit(void (*func)(void*), void *arg, void *__dsohandle) {
 }
 
 
-extern "C"
+#ifdef __cplusplus
+extern "C" {
+#endif
 int
 __aeabi_atexit (void *arg, void (*func) (void *), void *d) {
     return __cxa_atexit (func, arg, d);
 }
 
 
-extern "C"
 int
 atexit (void (*func) ()) {
     return __cxa_atexit ((void (*)(void*))func, 0, 0);
 }
+
+#ifdef __cplusplus
+}
+#endif

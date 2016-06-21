@@ -24,16 +24,14 @@ extern "C" {
 
 
 
-typedef struct
-{
-  CSM_RAM csm;
-}MAIN_CSM;
+typedef struct {
+    CSM_RAM csm;
+} MAIN_CSM;
 
-typedef struct
-{
-  int err;
-  char *param;
-}IPC_CHECK;
+typedef struct {
+    int err;
+    char *param;
+} IPC_CHECK;
 
 CSM_RAM *under_idle;
 

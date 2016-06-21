@@ -3,7 +3,6 @@
 
 
 
-clock_t clock(void)
-{
+clock_t clock(void) {
     return 0;
 }

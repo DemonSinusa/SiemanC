@@ -9,9 +9,7 @@
 #include <errno.h>
 
 
-
-int rmdir(const char *dir)
-{
+int rmdir(const char *dir) {
     return _rmdir(dir, (unsigned int*)__errno_location());
 }
 

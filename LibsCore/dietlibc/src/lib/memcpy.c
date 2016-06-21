@@ -7,8 +7,7 @@
 
 #ifndef __BUILDIN_FUNCTIONS
 void *
-memcpy (void *dst, const void *src, size_t n)
-{
+memcpy (void *dst, const void *src, size_t n) {
     void           *res = dst;
     unsigned char  *c1, *c2;
 #ifdef WANT_SMALL_STRING_ROUTINES
@@ -23,29 +22,29 @@ memcpy (void *dst, const void *src, size_t n)
 
     if (!UNALIGNED(dst, src) && n > sizeof(unsigned long)) {
 
-	if ((tmp = STRALIGN(dst))) {
-	    c1 = (unsigned char *) dst;
-	    c2 = (unsigned char *) src;
-	    while (tmp-- && n--)
-		*c1++ = *c2++;
-	    if (n == (size_t) - 1)
-		return (res);
-	    dst = c1;
-	    src = c2;
-	}
+        if ((tmp = STRALIGN(dst))) {
+            c1 = (unsigned char *) dst;
+            c2 = (unsigned char *) src;
+            while (tmp-- && n--)
+                *c1++ = *c2++;
+            if (n == (size_t) - 1)
+                return (res);
+            dst = c1;
+            src = c2;
+        }
 
-	lx1 = (unsigned long *) dst;
-	lx2 = (unsigned long *) src;
+        lx1 = (unsigned long *) dst;
+        lx2 = (unsigned long *) src;
 
-	for (; n >= sizeof(unsigned long); n -= sizeof(unsigned long))
-	    *lx1++ = *lx2++;
+        for (; n >= sizeof(unsigned long); n -= sizeof(unsigned long))
+            *lx1++ = *lx2++;
     }
 
     if (n) {
-	c1 = (unsigned char *) (lx1?lx1:dst);
-	c2 = (unsigned char *) (lx1?lx2:src);
-	while (n--)
-	    *c1++ = *c2++;
+        c1 = (unsigned char *) (lx1?lx1:dst);
+        c2 = (unsigned char *) (lx1?lx2:src);
+        while (n--)
+            *c1++ = *c2++;
     }
 
     return (res);
@@ -54,8 +53,7 @@ memcpy (void *dst, const void *src, size_t n)
 #else
 
 void *
-memcpy (void *dst, const void *src, size_t n)
-{
+memcpy (void *dst, const void *src, size_t n) {
     __def_noinline(0x011E, void*, dst, src, n)
 }
 

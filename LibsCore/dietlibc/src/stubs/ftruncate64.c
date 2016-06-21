@@ -4,8 +4,8 @@
 
 
 int ftruncate64 (fd, length)
-     int fd;
-     off64_t length;
+int fd;
+off64_t length;
 {
     errno = ENOSYS;
     return -1;

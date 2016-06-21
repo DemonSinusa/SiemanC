@@ -4,6 +4,6 @@
 
 
 int pclose(FILE *stream) {
-  errno = ENOSYS;
-  return -1;
+    errno = ENOSYS;
+    return -1;
 }

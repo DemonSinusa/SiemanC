@@ -48,11 +48,11 @@ FILE* _wCrossFopen(const wchar_t* filename, const wchar_t* mode) {
     i = (int) wcsrtombs(NULL, &ss, 0, NULL);
     char *fmode = 0;
     if (i < 0) {
-	fmode = (char *) "a+b";
+        fmode = (char *) "a+b";
     } else {
-	fmode = (char *) malloc(i + 1);
-	wcsrtombs(fmode, &mode, i, NULL);
-	fmode[i] = 0;
+        fmode = (char *) malloc(i + 1);
+        wcsrtombs(fmode, &mode, i, NULL);
+        fmode[i] = 0;
     }
     fh = fopen(ffile, fmode);
 

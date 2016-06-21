@@ -11,21 +11,22 @@
 //link_warning("tmpnam","\e[1;33;41m>>> tmpnam stinks! NEVER ! NEVER USE IT ! <<<\e[0m");
 
 char* tmpnam(char* s) {
-  static char buf[100];
-  char *tmp;
-  if (s) tmp=s; else tmp=buf;
-  strcpy(tmp,"0:\\System\\temp_");
-  for (;;) {
-    struct stat s;
-    int i,j;
-    i=rand();
-    for (j=0; j<8; ++j) {
-      char c=i&0xf;
-      tmp[9+j]=c>9?c+'a'-10:c+'0';
-      i>>=4;
+    static char buf[100];
+    char *tmp;
+    if (s) tmp=s;
+    else tmp=buf;
+    strcpy(tmp,"0:\\System\\temp_");
+    for (;;) {
+        struct stat s;
+        int i,j;
+        i=rand();
+        for (j=0; j<8; ++j) {
+            char c=i&0xf;
+            tmp[9+j]=c>9?c+'a'-10:c+'0';
+            i>>=4;
+        }
+        tmp[17]=0;
+        if (lstat(tmp,&s)==-1 && errno==ENOENT) break;
     }
-    tmp[17]=0;
-    if (lstat(tmp,&s)==-1 && errno==ENOENT) break;
-  }
-  return tmp;
+    return tmp;
 }

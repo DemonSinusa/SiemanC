@@ -100,7 +100,6 @@ __arch char* LoadData(Elf32_Exec* ex, int offset, int size)
         }
         else mfree(data);
     }
-
     return 0;
 }
 

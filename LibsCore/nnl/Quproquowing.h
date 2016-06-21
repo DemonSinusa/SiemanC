@@ -74,39 +74,39 @@ private:
 #ifdef __cplusplus
 extern "C" {
 #endif
-    DLL_EXPORT BBNB *_OpenBaseBlock(wchar_t *wpath, char UseLog);
+DLL_EXPORT BBNB *_OpenBaseBlock(wchar_t *wpath, char UseLog);
 
-    DLL_EXPORT int _WriteFreedomCase(BBNB *wco);
-    DLL_EXPORT int _ReadFreedomCase(BBNB *wco);
+DLL_EXPORT int _WriteFreedomCase(BBNB *wco);
+DLL_EXPORT int _ReadFreedomCase(BBNB *wco);
 
-    DLL_EXPORT long _AddLICXblk(BBNB *wco);
-    DLL_EXPORT int _ShtampPointers(long linkOS, LAR *around, LINKL *lnk, BBNB *wco);
-    DLL_EXPORT int _TransmutateAndWriteLink(LINKL *cur, NEURON *carrier, BBNB *wco);
-    DLL_EXPORT int _TransmutateAndWriteLinks(LINKL *first, NEURON *carrier, BBNB *wco);
+DLL_EXPORT long _AddLICXblk(BBNB *wco);
+DLL_EXPORT int _ShtampPointers(long linkOS, LAR *around, LINKL *lnk, BBNB *wco);
+DLL_EXPORT int _TransmutateAndWriteLink(LINKL *cur, NEURON *carrier, BBNB *wco);
+DLL_EXPORT int _TransmutateAndWriteLinks(LINKL *first, NEURON *carrier, BBNB *wco);
 
-    //    DLL_EXPORT int _AtomizeLINKLfeatsLICX(LINKL *cur, BBNB *wco, LICX *cLINK);
-    //    DLL_EXPORT long _TransmutateAndWriteLList(LINKL *first, NEURON *carrier, BBNB *wco);
-
-
-    DLL_EXPORT int _AtomizeNEURONfeatsNC(NEURON *n, NLAYER *lay, NC *card, BBNB *wco);
-    DLL_EXPORT long _TransmutateAndWriteNeurons(NEURON *first, NEURON *end, NLAYER *lay, BBNB *wco);
-    DLL_EXPORT long _SaveLayerWONeurons(NLAYER *lay, LayAround *quadro, BBNB *wco);
-    DLL_EXPORT int _UpdatePointers(long Offset, LayAround *quadro, BBNB *wco);
-    DLL_EXPORT int _MultiSaveLayers(NLAYER *FromLAY, NLAYER *curlay, BBNB *wco, int deep);
-
-    DLL_EXPORT int _SaveNet(NLAYER *center, int deep, BBNB *wco);
+//    DLL_EXPORT int _AtomizeLINKLfeatsLICX(LINKL *cur, BBNB *wco, LICX *cLINK);
+//    DLL_EXPORT long _TransmutateAndWriteLList(LINKL *first, NEURON *carrier, BBNB *wco);
 
 
-    //    DLL_EXPORT LINKL *_UnTransmutateAndReadLinks(BBNB *wco, long first, NEURON *carrier, bool InList);
-    DLL_EXPORT LINKL * _ReadAndUnTransmutateLinks(BBNB *wco, long in, long out, NEURON *carrier, int *err);
-    DLL_EXPORT NEURON *_UnBuryOnceNeuron(BBNB *wco, long NeuronFP, int *err);
-    DLL_EXPORT NEURON *_UnTransmutateAndReadNeurons(BBNB *wco, long NeuronFP, NLAYER *carrier, int *err);
-    DLL_EXPORT NLAYER *_LoadLayerWONeurons(BBNB *wco, long LayerID, LayAround *quadro, int *err);
-    DLL_EXPORT NLAYER *_MultiLoadLayers(BBNB *wco, NLAYER *FromLOS, long LayerOS, int deep, int *err);
+DLL_EXPORT int _AtomizeNEURONfeatsNC(NEURON *n, NLAYER *lay, NC *card, BBNB *wco);
+DLL_EXPORT long _TransmutateAndWriteNeurons(NEURON *first, NEURON *end, NLAYER *lay, BBNB *wco);
+DLL_EXPORT long _SaveLayerWONeurons(NLAYER *lay, LayAround *quadro, BBNB *wco);
+DLL_EXPORT int _UpdatePointers(long Offset, LayAround *quadro, BBNB *wco);
+DLL_EXPORT int _MultiSaveLayers(NLAYER *FromLAY, NLAYER *curlay, BBNB *wco, int deep);
 
-    DLL_EXPORT NLAYER *_LoadNet(BBNB *wco, int deep, int *err);
+DLL_EXPORT int _SaveNet(NLAYER *center, int deep, BBNB *wco);
 
-    DLL_EXPORT void _CloseBaseBlock(BBNB *BB);
+
+//    DLL_EXPORT LINKL *_UnTransmutateAndReadLinks(BBNB *wco, long first, NEURON *carrier, bool InList);
+DLL_EXPORT LINKL * _ReadAndUnTransmutateLinks(BBNB *wco, long in, long out, NEURON *carrier, int *err);
+DLL_EXPORT NEURON *_UnBuryOnceNeuron(BBNB *wco, long NeuronFP, int *err);
+DLL_EXPORT NEURON *_UnTransmutateAndReadNeurons(BBNB *wco, long NeuronFP, NLAYER *carrier, int *err);
+DLL_EXPORT NLAYER *_LoadLayerWONeurons(BBNB *wco, long LayerID, LayAround *quadro, int *err);
+DLL_EXPORT NLAYER *_MultiLoadLayers(BBNB *wco, NLAYER *FromLOS, long LayerOS, int deep, int *err);
+
+DLL_EXPORT NLAYER *_LoadNet(BBNB *wco, int deep, int *err);
+
+DLL_EXPORT void _CloseBaseBlock(BBNB *BB);
 
 
 #ifdef __cplusplus

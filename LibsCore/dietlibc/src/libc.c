@@ -2,13 +2,11 @@
 #include <fcntl.h>
 
 
-int __libc_open(const char *fn, int flags,...)
-{
+int __libc_open(const char*fn,int flags,...) {
     return open(fn, flags);
 }
 
-int __libc_close(int fd)
-{
+int __libc_close(int fd) {
     return close(fd);
 }
 

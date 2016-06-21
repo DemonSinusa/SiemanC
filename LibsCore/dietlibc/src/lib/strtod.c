@@ -13,9 +13,12 @@ double strtod(const char* s, char** endptr) {
         p++;
 
     switch (*p) {
-    case '-': sign = -1;
-    case '+': p++;
-    default : break;
+    case '-':
+        sign = -1;
+    case '+':
+        p++;
+    default :
+        break;
     }
 
     while ( (unsigned int)(*p - '0') < 10u )
@@ -36,14 +39,26 @@ double strtod(const char* s, char** endptr) {
         factor = 10.L;
 
         switch (*++p) {                 // ja hier weiß ich nicht, was mindestens nach einem 'E' folgenden MUSS.
-        case '-': factor = 0.1;
-        case '+': p++;
-                  break;
-        case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-                  break;
-        default : value = 0.L;
-                  p     = s;
-                  goto done;
+        case '-':
+            factor = 0.1;
+        case '+':
+            p++;
+            break;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            break;
+        default :
+            value = 0.L;
+            p     = s;
+            goto done;
         }
 
         while ( (unsigned int)(*p - '0') < 10u )
