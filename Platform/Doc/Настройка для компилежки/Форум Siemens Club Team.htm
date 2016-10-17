@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>Форум Siemens Club Team</title>
+<style type="text/css">
+body { background-color : #DCDCDC; color: #494949; font-family: sans-serif; font-size: 12px; }
+td { font-size: 12px; }
+a:link,a:active,a:visited { color: #0000FF; text-decoration: none; }
+a:hover { text-decoration: none; color: black; position: relative; top: 1px; }
+div.cat { color: #DDDDDD; background: url(images/fon_grey.gif); background-color: #696969; padding: 0px 2px 0px; }
+td.catSides { background: url(images/vista.gif); background-color: #696969; border-bottom: 1px solid #DCDCDC; height: 28px; }
+td.row1 { background-color: #EBEBEB; border-bottom: 1px solid #DCDCDC; }
+td.row_easy { background-color: #EBEBEB; }
+td.row_hard { background-color: #D4D6D4; }
+.forumline { font-size: none; background-color: #999999;}
+.genmed { font-size : 11px; }
+.cattitle {
+color: #FFFFFF;
+font-weight: bold;
+font-size: 12px; }
+a.cattitle { color: #FFFFFF; text-decoration: none; }
+a.mainmenu { color: #333333; text-decoration: none; font-weight: bold; }
+a.buttom { color: #494949; border: 1px solid #C4C6C4; background: #D4D6D4; padding: 0px 2px 0px; line-height: 1.5; }
+.link {display:none}
+
+</style>
+</head>
+<body>
+
+<p><a href="index.php">Форумы</a>|<a href="viewforum.php?f=71" accesskey="2">Эльфы</a><br/>
+ELFPack 3.0 by Z.Vova &amp; Ganster (Develop zone)<br/>
+</p>
+
+<p>&lt;&lt;Пред. | <a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=10">След.&gt;&gt;</a><br/><b>1</b>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=10">2</a>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=20">3</a>...<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=1120">113</a>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=1130">114</a>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=1140">115</a><form action="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc" method="post"><br/>Стр.<input type="text" name="start1" size="3" value="1"><input type="submit" value="&gt;&gt;"/></form></p>
+<table width="100%" cellpadding="4" cellspacing="0" border="0" class="forumline">
+<tr>
+<td class="catSides">
+<span class="cattitle">Сообщения</span>
+</td>
+</tr>
+<tr>
+<td class="row_easy">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136130">Цит</a><br/>
+<b>15 Июл, 19:29</b><br/>
+<b>ELFPack 3.0 by Z.Vova &amp; Ganster (Develop zone)</b>
+<br />
+Та же информация находится <a href="http://code.google.com/p/sieelf-dev/wiki/CodeBlocks_GCC_ARM?tm=6">тут</a> в виде вики.
+<br />
+Подготовка тулчейнов:
+<br />
+ !Примечание!
+<br />
+Если вы хотите чтоб работал режим __NO_DIRECT_SWI(использование комманды swi), вам понадобится <a href="http://team-sc.ru/files/gcc_462_swi_call_siemens2patch_129.zip">патч</a>(gcc 4.6.2) 
+<br />
+написанный Barracuda для использования атрибута __attribute__((swi(NUM))).
+<br />
+Чтобы применить патч, распаковываем его в корень исходников гцц и
+<br />
+patch -p1 &lt; ./Имя_патча. 
+<br />
+
+<br />
+<b>Сборка gcc в UNIX системах:</b>
+<br />
+1. Выкачиваем сорцы гцц <a href="http://mirrors-us.seosue.com/gcc/releases/gcc-4.6.2/gcc-4.6.2.tar.bz2" target="_blank">http://mirrors-us.seosue.com/gcc/releases/gcc-4.6.2/gcc-4.6.2.tar.bz2</a>
+<br />
+2. расспаковываем
+<br />
+3. Если нужно, ставим патч на сви ^
+<br />
+4. конфигурим и собираем
+<br />
+ 
+<br />
+mkdir build &amp;&amp; cd build
+<br />
+../configure --target=arm-eabi --prefix=/usr --enable-interwork --enable-languages=c,c++
+<br />
+make all-gcc -j3
+<br />
+make install-gcc
+<br />
+
+<br />
+ 
+<br />
+4. Выкачиваем binutils <a href="http://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" target="_blank">http://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2</a>
+<br />
+5. расспаковываем
+<br />
+6. конфигурим и собираем
+<br />
+ 
+<br />
+./configure --prefix=/usr --target=arm-eabi --enable-interwork --enable-multilib --with-float=soft --disable-werror
+<br />
+make -j3
+<br />
+make install
+<br />
+ 
+<br />
+
+<br />
+С компиляторами разобрались. Можете скачать devkitArm он тоже подходит.
+<br />
+<a href="http://rghost.ru/36905044">gcc-4.6.3-swisupport-win32</a>
+<hr/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/gcc_462_swi_call_siemens2patch_129.zip">gcc-4.6.2_swi_call-siemens2.patch.zip</a> (2.28 KB)<br/>
+Скачано 184 раз(а)<br/>
+</td>
+</tr>
+<tr>
+<td class="row_hard">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136131">Цит</a><br/>
+<b>15 Июл, 19:29</b><br/>
+как собственно конпилять эльфы?
+<br />
+
+<br />
+Баш скрипт в котором вы можете узреть флаги и все опции.
+<br />
+ 
+<br />
+CFLAGS=&quot;-msoft-float -fshort-wchar -marm -mlittle-endian -mcpu=arm926ej-s
+<br />
+-IПапка с инклудами -O2 -nostdlib -pipe -fno-exceptions -fdata-sections -ffunction-sections&quot;
+<br />
+
+<br />
+syms=&quot;--defsym __ex=0&quot;
+<br />
+LIBS=&quot;libcrt.a&quot;
+<br />
+
+<br />
+arm-eabi-gcc $CFLAGS -c -DNEWSGOLD main.c
+<br />
+arm-eabi-ld -pie -s -gc-sections -zmax-page-size=1 $syms $LIBS -marmelf *.o -o test.elf
+<br />
+ 
+</td>
+</tr>
+<tr>
+<td class="row_easy">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136132">Цит</a><br/>
+<b>15 Июл, 19:29</b><br/>
+Теперь перейдём к либам. Что куда и зачем.
+<br />
+
+<br />
+include - папка с инклудами бибилотеки libc и прочих, а так же свилиба и прочие нужные файлы
+<br />
+
+<br />
+libcrt.a - Статическая библиотека, которая должна линковаться __КО ВСЕМ ПРЕКТАМ__. В ней точка входа в эльф, инициализация переменной отвечающей за вызов сви и прочяя системная хрень. Забудете подключить - не удивляйтесь что пикает.
+<br />
+
+<br />
+libsupc++.a - статическая библиотека которая должна линковатся к С++ проэктам. Допиленная
+<br />
+
+<br />
+libgcc.a - статическая вспомогательная библиотека для gcc. Если вы хотите собирать эльф чисто на свилибе, без зависимости от либц, то нужно её линковать к проекту. В ней функции для работы с float, double, так же функции для работы стандарта EABI. Ну и прочих плюшек которые не умеет наш проц.
+<br />
+
+<br />
+libc.so - Собственно сам libc
+<br />
+
+<br />
+libm.so - Библиотека для математики(синусы, косинусы и т.п.)
+<br />
+
+<br />
+libzlib.so - Ну тут понятно, злиба.
+<br />
+
+<br />
+libjpeg.so - Жипег либа
+<br />
+(29.11.11)
+<br />
+<b>ЮЗЕРАМ</b> 
+<br />
+Скачайте libs.zip c первой страницы, и распакуйте только сошки(*.so) в 0:\\ZBin\\lib или 4:\\ZBin\\lib Он понадобятся для работы новых эльфов.
+<hr/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/include_712.zip">include.zip</a> (2.24 MB)<br/>
+Скачано 91 раз(а)<br/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/libs_420.zip">libs.zip</a> (1.05 MB)<br/>
+Скачано 162 раз(а)<br/>
+</td>
+</tr>
+<tr>
+<td class="row_hard">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136133">Цит</a><br/>
+<b>15 Июл, 19:29</b><br/>
+Настройка среды Code::Blocks
+<br />
+
+<br />
+1. Settings -&gt; Compiler and debuger settings. Выбираете в списке &quot;GNU ARM GCC Compiler&quot;
+<br />
+Скрин <a href="http://upwap.ru/1610076" target="_blank">http://upwap.ru/1610076</a>
+<br />
+
+<br />
+2. Вкладка Compiler settings, подвкладка Compiler Flags
+<br />
+----&gt; Ставим галочки на -mlittle-endian и -msoft-float
+<br />
+
+<br />
+2.1. Вкладка Other options
+<br />
+----&gt; пишем 
+<br />
+-mcpu=arm926ej-s -nostdlib -fshort-wchar
+<br />
+-fno-exceptions -fdata-sections -ffunction-sections
+<br />
+
+<br />
+3. Следующая вкладка Linker settings 
+<br />
+----&gt; Other linker options:
+<br />
+-marmelf
+<br />
+-z max-page-size=1
+<br />
+-nostdlib
+<br />
+Скрин <a href="http://upwap.ru/1610082" target="_blank">http://upwap.ru/1610082</a>
+<br />
+
+<br />
+4. Следующая вкладка Search directories 
+<br />
+----&gt; Компилеру прописываем путь к папке include, линкеру к папке libs
+<br />
+
+<br />
+5. Следующая вкладка Toolchain executables
+<br />
+----&gt; Compiler`s installation directory прописываем путь к папке с компиялторами
+<br />
+потом как на скрине <a href="http://upwap.ru/1610089" target="_blank">http://upwap.ru/1610089</a>
+<br />
+
+<br />
+6. Пропускаем одну вкладку и идём на Other settings
+<br />
+----&gt; Тут вы можете выставить прогресс бар сборки, число потоков и так далее, это сами.
+<br />
+Скрин моих настроек <a href="http://upwap.ru/1610091" target="_blank">http://upwap.ru/1610091</a>
+<br />
+----&gt; Тут же на вкладке тыкаем на Advanced options
+<br />
+Вкладка Commands
+<br />
+ -&gt; Выбираем из списка Link object files to dynamic library и прписываем
+<br />
+$linker -shared -s -Bsymbolic -Bsymbolic-function -soname=$exe_name.$exe_ext $libdirs $link_objects $link_resobjects -o $exe_output $link_options $libs
+<br />
+
+<br />
+ -&gt; Link object files (to executable &amp;&amp; to console executable)
+<br />
+$linker -pie $libdirs -o $exe_output $link_objects $link_resobjects $link_options $libs
+<br />
+
+<br />
+
+<br />
+Скрины: 
+<br />
+<a href="http://upwap.ru/1610095" target="_blank">http://upwap.ru/1610095</a>
+<br />
+<a href="http://upwap.ru/1610099" target="_blank">http://upwap.ru/1610099</a>
+<br />
+<a href="http://upwap.ru/1610101" target="_blank">http://upwap.ru/1610101</a>
+</td>
+</tr>
+<tr>
+<td class="row_easy">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136141">Цит</a><br/>
+<b>15 Июл, 20:13</b><br/>
+И рыбки для кодеблока
+<br />
+(05.08.11)
+<br />
+
+<br />
+В архиве Си проект с конфигом.
+<br />
+
+<br />
+<a href="http://team-sc.ru/down/dlcache_113.zip">Пример</a> как компилировать &quot;облегченные&quot; эльфы на гцц.
+<hr/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/templates_825.zip">templates.zip</a> (7.54 KB)<br/>
+Скачано 75 раз(а)<br/>
+</td>
+</tr>
+<tr>
+<td class="row_hard">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136143">Цит</a><br/>
+<b>15 Июл, 20:20</b><br/>
+Обьясню как распоряжатся с либами.
+<br />
+
+<br />
+libcrt.a - всегда подключается если это эльф
+<br />
+libsupc++.a - линкуем её к С++ проэктам, в частности и к либам если собираем С++ либу
+<br />
+libgcc.so - иногда подключается если в проэкте используется деление или ещё чтото из разряда еаби стандарта, ака undefine reference `__aeabi*' или `__eabi'
+<br />
+libc.so - подключается если вы используете функции стандарта Си, либо чтото портируете и проект требует стандартные сишные функции. Тогда дефайн __NO_LIBC убираем и компилим, если наоборот не желаем юзать libc то ставим этот дефайн в настройках проекта.
+<br />
+libjpeg.so - либа для работы с жипегом, ну есенно подключаем если хотим чтонить делать с ним. Например в балете она юзается.
+<br />
+liblua.so - интерпретатор и стандартные библиотеки, вы можете юзать скрипты в качестве плугин к своим прогам. Как юзать все на офф сайте луа, инклуды я кинул в папку которая в архиве.
+<br />
+libm.so - если вам понадобилось считать косинусы аркосинусы тангенсы и прочую фигню из math.h то подключаем эту либу.
+<br />
+libpng.so - бибилиотека для работы с png файлами, возможно будет конфликтовать с функциями из свилибы.
+<br />
+libstdc++.so - полностью рабочая либа uclibc++, стандарта С++. std::string работает точно)
+<br />
+libzlib.so - библиотека для работы со сжатием
+<br />
+
+<br />
+================
+<br />
+сорцы системных либ
+<hr/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/dietlibctargz_203.mid">dietlibc.tar.gz.mid</a> (80.54 KB)<br/>
+Скачано 46 раз(а)<br/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/uclibctargz_119.mid">uclibc++.tar.gz.mid</a> (11.52 KB)<br/>
+Скачано 39 раз(а)<br/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/libsupctargz_702.mid">libsupc++.tar.gz.mid</a> (48.01 KB)<br/>
+Скачано 39 раз(а)<br/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/libmtargz_177.mid">libm.tar.gz.mid</a> (138.51 KB)<br/>
+Скачано 40 раз(а)<br/>
+<img src="images/icon_clip.gif" alt="" border="0" /><a href="./down/crt_helpertargz_300.mid">crt_helper.tar.gz.mid</a> (6.08 KB)<br/>
+Скачано 93 раз(а)<br/>
+</td>
+</tr>
+<tr>
+<td class="row_easy">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136144">Цит</a><br/>
+<b>15 Июл, 20:24</b><br/>
+Что поменялось и что нужно учитывать при сборке эльфа?
+<br />
+
+<br />
+Самое главное отличие это отсутствие ненужной секции ELF_BEGIN по которой убивались эльфы. Убийство эльф в новой версии проивзодится по средствам новых функций свилибе и екстерна переменной void *__ex.
+<br />
+
+<br />
+Эльфлоадер при парсинге эльфа находит импорт __ex и присваивает ему значение, а именно на данные по ктоторым новая функция в свилибе elfclose(void*) убивает эльф. 
+<br />
+
+<br />
+Я сделал функцию kill_elf(); которая сделает все за вас. Так что вызывайте её, либо
+<br />
+extern void *__ex;
+<br />
+elfclose(&amp;__ex);
+</td>
+</tr>
+<tr>
+<td class="row_hard">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136148">Цит</a><br/>
+<b>15 Июл, 20:35</b><br/>
+набор компиляторов для linux x86_64 
+<br />
+<a href="http://ompldr.org/vOWlqMQ/arm-eabi.tar.bz2">arm-eabi</a>
+<br />
+
+<br />
+набор компиляторов для linux i386(пакеты для ubuntu)
+<br />
+<a href="http://ompldr.org/vOXJuZw">arm-eabi-ubuntu</a>
+<br />
+
+<br />
+для rpm-based систем(openSUSE)
+<br />
+<a href="http://ompldr.org/vOXlqcQ">arm-eabi-binutils-2.20-1.x86_64</a>
+<br />
+<a href="http://ompldr.org/vOXkzZQ">arm-eabi-gcc-4.6.1-1.x86_64</a>
+<br />
+
+<br />
+набор компиляторов для windows x86
+<br />
+<a href="http://ompldr.org/vOWlqcA/arm-eabi-win.rar">arm-eabi-win</a>
+<br />
+
+<br />
+з.ы. В обоих версиях ос, линкер пропатчен чтоб помечал эльфы как Executable, а не Shared. Это не страшно, но раздражает <img src="images/smiles/14.gif" alt=" " border="0" />
+</td>
+</tr>
+<tr>
+<td class="row_easy">
+<b><a href="profile.php?mode=viewprofile&amp;u=1811" style="color: #3B678D">STANOK</a>[2879]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136239">Цит</a><br/>
+<b>16 Июл, 23:16</b><br/>
+Обновил либы и хедеры.
+</td>
+</tr>
+<tr>
+<td class="row_hard">
+<b><a href="profile.php?mode=viewprofile&amp;u=1789" style="color: #3B678D">Twitch</a>[638]</b><span style="color: #b40000">(Off)</span><a href="posting.php?mode=quote&amp;p=136308">Цит</a><br/>
+<b>17 Июл, 16:19</b><br/>
+Смотрите <a href="http://code.google.com/p/sieelf-dev/wiki/CodeBlocks_GCC_ARM?tm=6">здесь</a>:
+<br />
+
+<br />
+Скомпилированые бинарники для Linux, для архитектуры i686.
+</td>
+</tr>
+</table>
+<p>
+&lt;&lt;Пред. | <a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=10">След.&gt;&gt;</a><br/><b>1</b>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=10">2</a>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=20">3</a>...<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=1120">113</a>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=1130">114</a>,<a href="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc&amp;start=1140">115</a><form action="viewtopic.php?t=7254&amp;postdays=0&amp;postorder=asc" method="post"><br/>Стр.<input type="text" name="start1" size="3" value="1"><input type="submit" value="&gt;&gt;"/></form></p>
+<form action="posting.php" method="post">
+<p>Быстрый ответ:<br/>
+<textarea name="message" rows="4" cols="15" style="width: 240px;"></textarea><br/>
+<input type="checkbox" name="translit" /> Транслит<br/>
+<input type="hidden" name="mode" value="reply" /><input type="hidden" name="sid" value="1d9299308760ab212a1d16bf7d77679f" /><input type="hidden" name="t" value="7254" />
+<input class="subbutton" type="submit" name="post" value="Отправить" /></p>
+</form>
+
+<p><a href="posting.php?mode=reply&amp;t=7254" class="buttom" accesskey="5">Ответить на тему</a><br/>
+<a href="viewtopic.php?download=-1&amp;t=7254" class="buttom">Сохранить в txt</a><br/>
+</p>
+<br><br><br><br>
+<div class="link">
+<p> <a href='http://just-hosting.ru' title='Недорогой хостинг php'>дешевый хостинг</a> <a href='http://nod32.pw' title='ключи для nod32'>ключи для nod32</a>
+<a href="/info/">Статьи</a>
+</div>
+
+</body>
+</html>
+
+
+
+</html></body>
+
