@@ -1,0 +1,237 @@
+##############################################################################
+#                                                                            #
+# IAR ARM ANSI C/C++ Compiler V4.42A/W32 EVALUATION    02/Oct/2016  22:27:17 #
+# Copyright 1999-2005 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Cpu mode        =  interwork                                            #
+#    Endian          =  little                                               #
+#    Stack alignment =  4                                                    #
+#    Source file     =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\loader3\log.c                                     #
+#    Command line    =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\loader3\log.c -D NDEBUG -D NEWSGOLD -D ELKA -lC   #
+#                       H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\List\ -o H:\aveman\SiemanC-git\Platform\l #
+#                       oaders\ElfLoader3\src2\E71sw45\Obj\ -s9 --no_unroll  #
+#                       --cpu_mode thumb --endian little --cpu ARM926EJ-S    #
+#                       --stack_align 4 --interwork -e --fpu None -I         #
+#                       ..\dev\include\ -I H:\aveman\IAR\ARM\INC\            #
+#                       --inline_threshold=2                                 #
+#    List file       =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\List\log.lst                              #
+#    Object file     =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\Obj\log.r79                               #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\src2\loader3\log.c
+      1          
+      2          #include "loader.h"
+      3          #include <..\..\inc\cfg_items.h>
+      4          #include "../config_struct.h"
+      5          
+      6          
+      7          
+
+   \                                 In segment CODE, align 4, keep-with-next
+      8          __arch void ep_log(Elf32_Exec *ex, const char *data, int size)
+      9          {
+   \                     ep_log:
+   \   00000000   F3B5               PUSH     {R0,R1,R4-R7,LR}
+   \   00000002   3C48               LDR      R0,??ep_log_0    ;; config
+   \   00000004   86B0               SUB      SP,SP,#+24
+   \   00000006   0168               LDR      R1,[R0, #+0]
+   \   00000008   3B48               LDR      R0,??ep_log_0+0x4  ;; 0x4ac
+   \   0000000A   1600               MOVS     R6,R2
+   \   0000000C   0818               ADDS     R0,R1,R0
+   \   0000000E   0278               LDRB     R2,[R0, #+0]
+   \   00000010   002A               CMP      R2,#+0
+   \   00000012   6CD0               BEQ      ??ep_log_1
+   \   00000014   AB22               MOVS     R2,#+171
+   \   00000016   D200               LSLS     R2,R2,#+3
+   \   00000018   8918               ADDS     R1,R1,R2
+   \   0000001A   CA78               LDRB     R2,[R1, #+3]
+   \   0000001C   8B78               LDRB     R3,[R1, #+2]
+   \   0000001E   1202               LSLS     R2,R2,#+8
+   \   00000020   1343               ORRS     R3,R3,R2
+   \   00000022   1A02               LSLS     R2,R3,#+8
+   \   00000024   4B78               LDRB     R3,[R1, #+1]
+   \   00000026   0978               LDRB     R1,[R1, #+0]
+   \   00000028   1343               ORRS     R3,R3,R2
+   \   0000002A   1A02               LSLS     R2,R3,#+8
+   \   0000002C   1143               ORRS     R1,R1,R2
+   \   0000002E   5ED0               BEQ      ??ep_log_1
+     10              if(!*config->ep_log_way || !config->max_log_size) return;
+     11              
+     12              unsigned int err;
+     13              int log_size;
+     14              TDate td;
+     15              TTime tt;
+     16              int fp = open(config->ep_log_way, A_Create | A_Append | A_BIN | A_WriteOnly, P_WRITE, &err);
+   \   00000030   3249               LDR      R1,??ep_log_0+0x8  ;; 0x8109
+   \   00000032   6B46               MOV      R3,SP
+   \   00000034   8022               MOVS     R2,#+128
+   \   00000036   5200               LSLS     R2,R2,#+1
+   \   00000038   0ADF               SVC      +10
+   \   0000003A   0400               MOVS     R4,R0
+     17              if(fp == -1) return;
+   \   0000003C   0020               MOVS     R0,#+0
+   \   0000003E   C043               MVNS     R0,R0
+   \   00000040   8442               CMP      R4,R0
+   \   00000042   54D0               BEQ      ??ep_log_1
+     18              
+     19              
+     20              int mem = lseek(fp, 0, S_CUR, &err, &err);
+   \   00000044   6846               MOV      R0,SP
+   \   00000046   01B4               PUSH     {R0}
+   \   00000048   01AB               ADD      R3,SP,#+4
+   \   0000004A   0122               MOVS     R2,#+1
+   \   0000004C   0021               MOVS     R1,#+0
+   \   0000004E   2000               MOVS     R0,R4
+   \   00000050   0FDF               SVC      +15
+   \   00000052   0700               MOVS     R7,R0
+     21              log_size = lseek(fp, 0, S_END, &err, &err);
+   \   00000054   01A8               ADD      R0,SP,#+4
+   \   00000056   01B4               PUSH     {R0}
+   \   00000058   02AB               ADD      R3,SP,#+8
+   \   0000005A   0222               MOVS     R2,#+2
+   \   0000005C   0021               MOVS     R1,#+0
+   \   0000005E   2000               MOVS     R0,R4
+   \   00000060   0FDF               SVC      +15
+   \   00000062   0500               MOVS     R5,R0
+     22              lseek(fp, mem, S_SET, &err, &err);
+   \   00000064   02A8               ADD      R0,SP,#+8
+   \   00000066   01B4               PUSH     {R0}
+   \   00000068   03AB               ADD      R3,SP,#+12
+   \   0000006A   0022               MOVS     R2,#+0
+   \   0000006C   3900               MOVS     R1,R7
+   \   0000006E   2000               MOVS     R0,R4
+   \   00000070   0FDF               SVC      +15
+     23           
+     24              char *_data = malloc( strlen(ex->fname) + size + 128 );
+   \   00000072   0998               LDR      R0,[SP, #+36]
+   \   00000074   E430               ADDS     R0,R0,#+228
+   \   00000076   0490               STR      R0,[SP, #+16]
+   \   00000078   0068               LDR      R0,[R0, #+0]
+   \   0000007A   1BDF               SVC      +27
+   \   0000007C   8019               ADDS     R0,R0,R6
+   \   0000007E   8030               ADDS     R0,R0,#+128
+   \   00000080   14DF               SVC      +20
+   \   00000082   0600               MOVS     R6,R0
+     25              
+     26              GetDateTime(&td, &tt);
+   \   00000084   07A9               ADD      R1,SP,#+28
+   \   00000086   05A8               ADD      R0,SP,#+20
+   \   00000088   B4DF               SVC      +180
+     27              int sz = sprintf(_data, " [%d.%02d.%02d %02d:%02d:%02d] %s: %s\n",
+     28                               td.year, td.month, td.day,
+     29                               tt.hour, tt.min, tt.sec,
+     30                               ex->fname, data );
+   \   0000008A   0498               LDR      R0,[SP, #+16]
+   \   0000008C   0A9A               LDR      R2,[SP, #+40]
+   \   0000008E   0168               LDR      R1,[R0, #+0]
+   \   00000090   07AB               ADD      R3,SP,#+28
+   \   00000092   9878               LDRB     R0,[R3, #+2]
+   \   00000094   05AF               ADD      R7,SP,#+20
+   \   00000096   07B4               PUSH     {R0-R2}
+   \   00000098   7879               LDRB     R0,[R7, #+5]
+   \   0000009A   5A78               LDRB     R2,[R3, #+1]
+   \   0000009C   1978               LDRB     R1,[R3, #+0]
+   \   0000009E   07B4               PUSH     {R0-R2}
+   \   000000A0   3B79               LDRB     R3,[R7, #+4]
+   \   000000A2   0B9A               LDR      R2,[SP, #+44]
+   \   000000A4   1649               LDR      R1,??ep_log_0+0xC  ;; `?<Constant " [%d.%02d.%02d %02d:%...">`
+   \   000000A6   3000               MOVS     R0,R6
+   \   000000A8   16DF               SVC      +22
+     31              
+     32              if(log_size+sz > config->max_log_size) {
+   \   000000AA   1249               LDR      R1,??ep_log_0    ;; config
+   \   000000AC   09B0               ADD      SP,SP,#+36
+   \   000000AE   0968               LDR      R1,[R1, #+0]
+   \   000000B0   0700               MOVS     R7,R0
+   \   000000B2   AB20               MOVS     R0,#+171
+   \   000000B4   C000               LSLS     R0,R0,#+3
+   \   000000B6   0818               ADDS     R0,R1,R0
+   \   000000B8   C178               LDRB     R1,[R0, #+3]
+   \   000000BA   8278               LDRB     R2,[R0, #+2]
+   \   000000BC   0902               LSLS     R1,R1,#+8
+   \   000000BE   0A43               ORRS     R2,R2,R1
+   \   000000C0   1102               LSLS     R1,R2,#+8
+   \   000000C2   4278               LDRB     R2,[R0, #+1]
+   \   000000C4   0078               LDRB     R0,[R0, #+0]
+   \   000000C6   0A43               ORRS     R2,R2,R1
+   \   000000C8   1102               LSLS     R1,R2,#+8
+   \   000000CA   0843               ORRS     R0,R0,R1
+   \   000000CC   E919               ADDS     R1,R5,R7
+   \   000000CE   8842               CMP      R0,R1
+   \   000000D0   03D2               BCS      ??ep_log_2
+     33                setfilesize(fp, 0, &err);
+   \   000000D2   6A46               MOV      R2,SP
+   \   000000D4   0021               MOVS     R1,#+0
+   \   000000D6   2000               MOVS     R0,R4
+   \   000000D8   3CDF               SVC      +60
+     34              }
+     35              
+     36              write(fp, _data, sz, &err);
+   \                     ??ep_log_2:
+   \   000000DA   6B46               MOV      R3,SP
+   \   000000DC   3A00               MOVS     R2,R7
+   \   000000DE   3100               MOVS     R1,R6
+   \   000000E0   2000               MOVS     R0,R4
+   \   000000E2   0CDF               SVC      +12
+     37              close(fp, &err);
+   \   000000E4   6946               MOV      R1,SP
+   \   000000E6   2000               MOVS     R0,R4
+   \   000000E8   0DDF               SVC      +13
+     38              mfree(_data);
+   \   000000EA   3000               MOVS     R0,R6
+   \   000000EC   15DF               SVC      +21
+     39          }
+   \                     ??ep_log_1:
+   \   000000EE   08B0               ADD      SP,SP,#+32
+   \   000000F0   F0BD               POP      {R4-R7,PC}       ;; return
+   \   000000F2   C046               Nop      
+   \                     ??ep_log_0:
+   \   000000F4   ........           DC32     config
+   \   000000F8   AC040000           DC32     0x4ac
+   \   000000FC   09810000           DC32     0x8109
+   \   00000100   ........           DC32     `?<Constant " [%d.%02d.%02d %02d:%...">`
+
+   \                                 In segment DATA_C, align 4, align-sorted
+   \                     `?<Constant " [%d.%02d.%02d %02d:%...">`:
+   \   00000000   205B25642E25       DC8 " [%d.%02d.%02d %02d:%02d:%02d] %s: %s\012"
+   \              3032642E2530
+   \              326420253032
+   \              643A25303264
+   \              3A253032645D
+   \              2025733A2025
+   \              730A00      
+   \   00000027   00                 DC8 0
+     40          
+
+   Maximum stack usage in bytes:
+
+     Function CSTACK
+     -------- ------
+     ep_log      88
+
+
+   Segment part sizes:
+
+     Function/Label                 Bytes
+     --------------                 -----
+     ep_log                          260
+     ?<Constant " [%d.%02d.%02d %02d:%...">
+                                      40
+      Others                           8
+
+ 
+ 268 bytes in segment CODE
+  40 bytes in segment DATA_C
+ 
+ 260 bytes of CODE  memory (+ 8 bytes shared)
+  40 bytes of CONST memory
+
+Errors: none
+Warnings: none

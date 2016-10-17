@@ -1,0 +1,271 @@
+##############################################################################
+#                                                                            #
+# IAR ARM ANSI C/C++ Compiler V4.42A/W32 EVALUATION    02/Oct/2016  22:27:15 #
+# Copyright 1999-2005 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Cpu mode        =  interwork                                            #
+#    Endian          =  little                                               #
+#    Stack alignment =  4                                                    #
+#    Source file     =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\conf_loader.c                                     #
+#    Command line    =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\conf_loader.c -D NDEBUG -D NEWSGOLD -D ELKA -lC   #
+#                       H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\List\ -o H:\aveman\SiemanC-git\Platform\l #
+#                       oaders\ElfLoader3\src2\E71sw45\Obj\ -s9 --no_unroll  #
+#                       --cpu_mode thumb --endian little --cpu ARM926EJ-S    #
+#                       --stack_align 4 --interwork -e --fpu None -I         #
+#                       ..\dev\include\ -I H:\aveman\IAR\ARM\INC\            #
+#                       --inline_threshold=2                                 #
+#    List file       =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\List\conf_loader.lst                      #
+#    Object file     =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\Obj\conf_loader.r79                       #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\src2\conf_loader.c
+      1          #include "loader3/loader.h"
+      2          #include <../../inc/cfg_items.h>
+      3          #include "conf_loader.h"
+      4          #include "config_struct.h"
+      5          
+      6          
+
+   \                                 In segment DATA_Z, align 4, align-sorted
+      7          config_structure_t *config = 0;
+   \                     config:
+   \   00000000                      DS8 4
+
+   \                                 In segment DATA_N, align 4, align-sorted
+      8          __no_init const char *successed_config_filename;
+   \                     successed_config_filename:
+   \   00000000                      DS8 4
+      9          extern void * memcpy_a (void *dest, const void *source, size_t cnt);
+     10          
+     11          
+     12          #ifdef NEWSGOLD
+     13          #define DEFAULT_DISK 4
+     14          #else
+     15          #define DEFAULT_DISK 0
+     16          #endif
+     17          
+     18          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     19          __arm int LoadConfigData(const char *fname)
+     20          {
+   \                     LoadConfigData:
+   \   00000000   F04F2DE9           PUSH     {R4-R11,LR}
+   \   00000004   0040A0E1           MOV      R4,R0
+     21            int f;
+     22            unsigned int ul;
+     23            int result=0;
+     24            void *cfg;
+     25            void *cfg_init;
+     26            unsigned int rlen, end;
+     27            
+     28            cfg=(void *)config;
+   \   00000008   ........           LDR      R0,??DataTable2  ;; config
+   \   0000000C   04D04DE2           SUB      SP,SP,#+4
+   \   00000010   006090E5           LDR      R6,[R0, #+0]
+   \   00000014   0050A0E3           MOV      R5,#+0
+     29            cfg_init = (void *)&config_structure;
+     30            
+     31            unsigned int len = sizeof(config_structure);
+     32            if ((f=fopen(fname,A_ReadOnly+A_BIN,P_READ,&ul))!=-1)
+   \   00000018   0D30A0E1           MOV      R3,SP
+   \   0000001C   8020A0E3           MOV      R2,#+128
+   \   00000020   801CA0E3           MOV      R1,#+32768
+   \   00000024   0400A0E1           MOV      R0,R4
+   \   00000028   0A0000EF           SWI      +10
+   \   0000002C   00A0A0E1           MOV      R10,R0
+   \   00000030   8C70A0E3           MOV      R7,#+140
+   \   00000034   507E87E3           ORR      R7,R7,#0x500
+   \   00000038   0580E0E1           MVN      R8,R5
+   \   0000003C   08005AE1           CMP      R10,R8
+   \   00000040   1300000A           BEQ      ??LoadConfigData_0
+     33            {
+     34              rlen=fread(f, cfg, len, &ul);
+   \   00000044   0D30A0E1           MOV      R3,SP
+   \   00000048   0720A0E1           MOV      R2,R7
+   \   0000004C   0610A0E1           MOV      R1,R6
+   \   00000050   0B0000EF           SWI      +11
+   \   00000054   0090A0E1           MOV      R9,R0
+     35              end=lseek(f,0,S_END,&ul,&ul);
+   \   00000058   0D00A0E1           MOV      R0,SP
+   \   0000005C   01002DE9           PUSH     {R0}
+   \   00000060   04308DE2           ADD      R3,SP,#+4
+   \   00000064   0220A0E3           MOV      R2,#+2
+   \   00000068   0010A0E3           MOV      R1,#+0
+   \   0000006C   0A00A0E1           MOV      R0,R10
+   \   00000070   0F0000EF           SWI      +15
+   \   00000074   00B0A0E1           MOV      R11,R0
+     36              fclose(f,&ul);
+   \   00000078   04108DE2           ADD      R1,SP,#+4
+   \   0000007C   0A00A0E1           MOV      R0,R10
+   \   00000080   0D0000EF           SWI      +13
+     37              if (rlen!=end || rlen!=len)  goto L_SAVENEWCFG;
+   \   00000084   0B0059E1           CMP      R9,R11
+   \   00000088   04D08DE2           ADD      SP,SP,#+4
+   \   0000008C   07005901           CMPEQ    R9,R7
+   \   00000090   1700000A           BEQ      ??LoadConfigData_1
+     38            }
+     39            else
+     40            {
+     41            L_SAVENEWCFG:
+     42              memcpy(cfg, cfg_init, len);
+   \                     ??LoadConfigData_0:
+   \   00000094   ........           LDR      R1,??DataTable3  ;; config_structure
+   \   00000098   0720A0E1           MOV      R2,R7
+   \   0000009C   0600A0E1           MOV      R0,R6
+   \   000000A0   1E0100EF           SWI      +286
+     43              if ((f=fopen(fname,A_ReadWrite+A_Create+A_Truncate,P_READ+P_WRITE,&ul))!=-1)
+   \   000000A4   0D30A0E1           MOV      R3,SP
+   \   000000A8   602FA0E3           MOV      R2,#+384
+   \   000000AC   0210A0E3           MOV      R1,#+2
+   \   000000B0   C01F81E3           ORR      R1,R1,#0x300
+   \   000000B4   0400A0E1           MOV      R0,R4
+   \   000000B8   0A0000EF           SWI      +10
+   \   000000BC   00A0A0E1           MOV      R10,R0
+   \   000000C0   08005AE1           CMP      R10,R8
+   \   000000C4   0E00000A           BEQ      ??LoadConfigData_2
+     44              {
+     45                if (fwrite(f,cfg,len,&ul)!=len) result=-1;
+   \   000000C8   0D30A0E1           MOV      R3,SP
+   \   000000CC   0720A0E1           MOV      R2,R7
+   \   000000D0   0610A0E1           MOV      R1,R6
+   \   000000D4   0C0000EF           SWI      +12
+   \   000000D8   070050E1           CMP      R0,R7
+   \   000000DC   0850A011           MOVNE    R5,R8
+     46                fclose(f,&ul);
+   \   000000E0   0D10A0E1           MOV      R1,SP
+   \   000000E4   0A00A0E1           MOV      R0,R10
+   \   000000E8   0D0000EF           SWI      +13
+     47              }
+     48              else
+     49                result=-1;
+     50            }
+     51            if (result>=0)
+   \   000000EC   000055E3           CMP      R5,#+0
+   \   000000F0   0100004A           BMI      ??LoadConfigData_3
+     52            {
+     53              //DEFAULT_DISK_N=*fname-'0';
+     54              successed_config_filename=fname;
+   \                     ??LoadConfigData_1:
+   \   000000F4   14009FE5           LDR      R0,??LoadConfigData_4  ;; successed_config_filename
+   \   000000F8   004080E5           STR      R4,[R0, #+0]
+     55            }
+     56            return(result);
+   \                     ??LoadConfigData_3:
+   \   000000FC   0500A0E1           MOV      R0,R5
+   \   00000100   F28FBDE8           POP      {R1,R4-R11,PC}   ;; return
+   \                     ??LoadConfigData_2:
+   \   00000104   0850A0E1           MOV      R5,R8
+   \   00000108   0500A0E1           MOV      R0,R5
+   \   0000010C   F28FBDE8           POP      {R1,R4-R11,PC}
+   \                     ??LoadConfigData_4:
+   \   00000110   ........           DC32     successed_config_filename
+     57          }
+     58          
+     59          
+     60          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     61          void InitConfig()
+     62          {
+   \                     InitConfig:
+   \   00000000   30B5               PUSH     {R4,R5,LR}
+     63            /* теперь под конфиг выделяется явный хиповый адрес */
+     64            /* его размер орграничевается теперь только лишь рамой */
+     65            config = malloc(sizeof(config_structure_t));
+   \   00000002   ....               LDR      R4,??DataTable2  ;; config
+   \   00000004   094D               LDR      R5,??InitConfig_0  ;; 0x58c
+   \   00000006   2800               MOVS     R0,R5
+   \   00000008   14DF               SVC      +20
+     66            memcpy_a(config, &config_structure, sizeof(config_structure_t));
+   \   0000000A   ....               LDR      R1,??DataTable3  ;; config_structure
+   \   0000000C   2060               STR      R0,[R4, #+0]
+     67            
+     68            if( LoadConfigData("4:\\ZBin\\etc\\ElfPack.bcfg")<0)
+   \   0000000E   084C               LDR      R4,??InitConfig_0+0x4  ;; `?<Constant "0:\\\\ZBin\\\\etc\\\\ElfPack.bcfg">`
+   \   00000010   2A00               MOVS     R2,R5
+   \   00000012   ........           _BLF     memcpy_a,??memcpy_a??rT
+   \   00000016   2000               MOVS     R0,R4
+   \   00000018   1C30               ADDS     R0,R0,#+28
+   \   0000001A   ........           BLX      LoadConfigData
+   \   0000001E   0028               CMP      R0,#+0
+   \   00000020   02D5               BPL      ??InitConfig_1
+     69            {
+     70              if (LoadConfigData("0:\\ZBin\\etc\\ElfPack.bcfg")<0)
+   \   00000022   2000               MOVS     R0,R4
+   \   00000024   ........           BLX      LoadConfigData
+     71              {}  //DEFAULT_DISK_N=DEFAULT_DISK;
+     72            }
+     73          }
+   \                     ??InitConfig_1:
+   \   00000028   30BD               POP      {R4,R5,PC}       ;; return
+   \   0000002A   C046               Nop      
+   \                     ??InitConfig_0:
+   \   0000002C   8C050000           DC32     0x58c
+   \   00000030   ........           DC32     `?<Constant "0:\\\\ZBin\\\\etc\\\\ElfPack.bcfg">`
+
+   \                                 In segment CODE, align 4, keep-with-next
+   \                     ??DataTable2:
+   \   00000000   ........           DC32     config
+
+   \                                 In segment CODE, align 4, keep-with-next
+   \                     ??DataTable3:
+   \   00000000   ........           DC32     config_structure
+
+   \                                 In segment DATA_C, align 4, align-sorted
+   \                     `?<Constant "0:\\\\ZBin\\\\etc\\\\ElfPack.bcfg">`:
+   \   00000000   303A5C5A4269       DC8 "0:\\ZBin\\etc\\ElfPack.bcfg"
+   \              6E5C6574635C
+   \              456C66506163
+   \              6B2E62636667
+   \              00          
+   \   00000019   000000             DC8 0, 0, 0
+   \   0000001C   343A5C5A4269       DC8 "4:\\ZBin\\etc\\ElfPack.bcfg"
+   \              6E5C6574635C
+   \              456C66506163
+   \              6B2E62636667
+   \              00          
+   \   00000035   000000             DC8 0, 0, 0
+
+   Maximum stack usage in bytes:
+
+     Function       CSTACK
+     --------       ------
+     InitConfig        12
+     LoadConfigData    44
+
+
+   Segment part sizes:
+
+     Function/Label                 Bytes
+     --------------                 -----
+     config                            4
+     successed_config_filename         4
+     LoadConfigData                  276
+     InitConfig                       52
+     ??DataTable2                      4
+     ??DataTable3                      4
+     ?<Constant "0:\\ZBin\\etc\\ElfPack.bcfg">
+                                      56
+      Others                          32
+
+ 
+ 356 bytes in segment CODE
+  56 bytes in segment DATA_C
+   4 bytes in segment DATA_N
+   4 bytes in segment DATA_Z
+  12 bytes in segment INITTAB
+ 
+ 336 bytes of CODE  memory (+ 32 bytes shared)
+  56 bytes of CONST memory
+   8 bytes of DATA  memory
+
+Errors: none
+Warnings: none

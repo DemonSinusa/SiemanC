@@ -1,0 +1,1987 @@
+##############################################################################
+#                                                                            #
+# IAR ARM ANSI C/C++ Compiler V4.42A/W32 EVALUATION    02/Oct/2016  22:27:16 #
+# Copyright 1999-2005 IAR Systems. All rights reserved.                      #
+#                                                                            #
+#    Cpu mode        =  interwork                                            #
+#    Endian          =  little                                               #
+#    Stack alignment =  4                                                    #
+#    Source file     =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\loader3\loader.c                                  #
+#    Command line    =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\loader3\loader.c -D NDEBUG -D NEWSGOLD -D ELKA    #
+#                       -lC H:\aveman\SiemanC-git\Platform\loaders\ElfLoader #
+#                       3\src2\E71sw45\List\ -o H:\aveman\SiemanC-git\Platfo #
+#                       rm\loaders\ElfLoader3\src2\E71sw45\Obj\ -s9          #
+#                       --no_unroll --cpu_mode thumb --endian little --cpu   #
+#                       ARM926EJ-S --stack_align 4 --interwork -e --fpu      #
+#                       None -I ..\dev\include\ -I H:\aveman\IAR\ARM\INC\    #
+#                       --inline_threshold=2                                 #
+#    List file       =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\List\loader.lst                           #
+#    Object file     =  H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\sr #
+#                       c2\E71sw45\Obj\loader.r79                            #
+#                                                                            #
+#                                                                            #
+##############################################################################
+
+H:\aveman\SiemanC-git\Platform\loaders\ElfLoader3\src2\loader3\loader.c
+      1          /*
+      2           * Этот файл является частью программы ElfLoader
+      3           * Copyright (C) 2011 by Z.Vova, Ganster
+      4           * Licence: GPLv3
+      5           */
+      6          
+      7          #include "loader.h"
+
+   \                                 In segment DATA_C, align 4, align-sorted
+   \   static unsigned char const __data elf_magic_header[7]
+   \                     elf_magic_header:
+   \   00000000   7F454C460101       DC8 127, 69, 76, 70, 1, 1, 1, 0
+   \              0100        
+      8          #include <..\..\inc\cfg_items.h>
+      9          #include "../config_struct.h"
+     10          
+     11          /* for testing on pc */
+     12          #ifdef _test_linux
+     13          #include <fcntl.h>
+     14          #include <unistd.h>
+     15          #include "fix.h"
+     16          int loader_warnings = 1;
+     17          int realtime_libclean = 1;
+     18          int AddrLibrary() {return 1;}
+     19          
+     20          void ep_log(Elf32_Exec *ex, const char *l, int sz)
+     21          {
+     22              printf("AAA: %s\n", l);
+     23          }
+     24          #endif
+     25          
+     26          
+     27          
+     28          /* wraper for thumb-mode calling */
+     29          #ifdef __thumb_mode
+     30          extern __arm void l_msg(int a, int b);
+     31          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     32          __arm void *memcpy_a(void *dest, const void *src, size_t size)
+     33          {
+   \                     memcpy_a:
+   \   00000000   00402DE9           PUSH     {LR}
+     34              return memcpy(dest, src, size);
+   \   00000004   1E0100EF           SWI      +286
+   \   00000008   0080BDE8           POP      {PC}             ;; return
+     35          }
+     36          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     37          __arm int memcmp_a (const void *m1, const void *m2, size_t n)
+     38          {
+   \                     memcmp_a:
+   \   00000000   00402DE9           PUSH     {LR}
+     39              return memcmp(m1, m2, n);
+   \   00000004   1C0100EF           SWI      +284
+   \   00000008   0080BDE8           POP      {PC}             ;; return
+     40          }
+     41          #else
+     42          #define l_msg ShowMSG
+     43          #define memcpy_a memcpy
+     44          #define memcmp_a memcmp
+     45          #endif
+     46          
+
+   \                                 In segment DATA_Z, align 4, align-sorted
+     47          unsigned int ferr;
+   \                     ferr:
+   \   00000000                      DS8 4
+     48          
+     49          
+     50          // Проверка валидности эльфа
+
+   \                                 In segment CODE, align 4, keep-with-next
+     51          __arch int CheckElf(Elf32_Ehdr *ehdr)
+     52          {
+     53              if(memcmp_a(ehdr, elf_magic_header, sizeof(elf_magic_header))) return E_HEADER;
+   \                     CheckElf:
+   \   00000000   0849               LDR      R1,??CheckElf_0  ;; elf_magic_header
+   \   00000002   10B5               PUSH     {R4,LR}
+   \   00000004   0722               MOVS     R2,#+7
+   \   00000006   0400               MOVS     R4,R0
+   \   00000008   ........           BLX      memcmp_a
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   01D0               BEQ      ??CheckElf_1
+   \   00000010   0420               MOVS     R0,#+4
+   \   00000012   10BD               POP      {R4,PC}
+     54              if(ehdr->e_machine != EM_ARM) return E_MACHINE;
+   \                     ??CheckElf_1:
+   \   00000014   608A               LDRH     R0,[R4, #+18]
+   \   00000016   2828               CMP      R0,#+40
+   \   00000018   01D0               BEQ      ??CheckElf_2
+   \   0000001A   0920               MOVS     R0,#+9
+   \   0000001C   10BD               POP      {R4,PC}
+     55          
+     56              return E_NO_ERROR;
+   \                     ??CheckElf_2:
+   \   0000001E   0020               MOVS     R0,#+0
+   \   00000020   10BD               POP      {R4,PC}          ;; return
+   \   00000022   C046               Nop      
+   \                     ??CheckElf_0:
+   \   00000024   ........           DC32     elf_magic_header
+     57          }
+     58          
+     59          
+     60          // Получение нужного размера в раме
+
+   \                                 In segment CODE, align 4, keep-with-next
+     61          __arch unsigned int GetBinSize(Elf32_Exec *ex, Elf32_Phdr* phdrs)
+     62          {
+   \                     GetBinSize:
+   \   00000000   F0B4               PUSH     {R4-R7}
+     63              unsigned int i = 0;
+     64              unsigned long maxadr=0;
+   \   00000002   838E               LDRH     R3,[R0, #+52]
+   \   00000004   0024               MOVS     R4,#+0
+   \   00000006   0022               MOVS     R2,#+0
+   \   00000008   002B               CMP      R3,#+0
+   \   0000000A   10D1               BNE      ??GetBinSize_0
+   \   0000000C   11E0               B        ??GetBinSize_1
+     65              unsigned int end_adr;
+     66          
+     67              while (i < ex->ehdr.e_phnum)
+     68              {
+     69                  Elf32_Phdr phdr = phdrs[i];
+   \                     ??GetBinSize_2:
+   \   0000000E   6501               LSLS     R5,R4,#+5
+   \   00000010   4F19               ADDS     R7,R1,R5
+   \   00000012   BD68               LDR      R5,[R7, #+8]
+   \   00000014   7E69               LDR      R6,[R7, #+20]
+     70          
+     71                  if (phdr.p_type == PT_LOAD)
+   \   00000016   3F68               LDR      R7,[R7, #+0]
+   \   00000018   012F               CMP      R7,#+1
+   \   0000001A   07D1               BNE      ??GetBinSize_3
+     72                  {
+     73                      if (ex->v_addr > phdr.p_vaddr) ex->v_addr = phdr.p_vaddr;
+   \   0000001C   C76B               LDR      R7,[R0, #+60]
+   \   0000001E   BD42               CMP      R5,R7
+   \   00000020   00D2               BCS      ??GetBinSize_4
+   \   00000022   C563               STR      R5,[R0, #+60]
+     74                      end_adr = phdr.p_vaddr + phdr.p_memsz;
+   \                     ??GetBinSize_4:
+   \   00000024   AD19               ADDS     R5,R5,R6
+     75                      if (maxadr < end_adr) maxadr = end_adr;
+   \   00000026   AA42               CMP      R2,R5
+   \   00000028   00D2               BCS      ??GetBinSize_3
+   \   0000002A   2A00               MOVS     R2,R5
+     76                  }
+     77                  ++i;
+   \                     ??GetBinSize_3:
+   \   0000002C   641C               ADDS     R4,R4,#+1
+     78              }
+   \                     ??GetBinSize_0:
+   \   0000002E   9C42               CMP      R4,R3
+   \   00000030   EDD3               BCC      ??GetBinSize_2
+     79              return maxadr - ex->v_addr;
+   \                     ??GetBinSize_1:
+   \   00000032   C06B               LDR      R0,[R0, #+60]
+   \   00000034   101A               SUBS     R0,R2,R0
+   \   00000036   F0BC               POP      {R4-R7}
+   \   00000038   7047               BX       LR
+     80          }
+     81          
+     82          
+     83          
+
+   \                                 In segment CODE, align 4, keep-with-next
+     84          __arch char* LoadData(Elf32_Exec* ex, int offset, int size)
+     85          {
+   \                     LoadData:
+   \   00000000   F0B5               PUSH     {R4-R7,LR}
+   \   00000002   1400               MOVS     R4,R2
+     86          #ifdef _test_linux
+     87              if(size && lseek(ex->fp, offset - ex->v_addr, S_SET))
+     88          #else
+     89              if(size && lseek(ex->fp, offset - ex->v_addr, S_SET, &ferr, &ferr))
+   \   00000004   1CD0               BEQ      ??LoadData_0
+   \   00000006   ....               LDR      R6,??DataTable0  ;; ferr
+   \   00000008   0500               MOVS     R5,R0
+   \   0000000A   40B4               PUSH     {R6}
+   \   0000000C   C06B               LDR      R0,[R0, #+60]
+   \   0000000E   D435               ADDS     R5,R5,#+212
+   \   00000010   091A               SUBS     R1,R1,R0
+   \   00000012   2868               LDR      R0,[R5, #+0]
+   \   00000014   3300               MOVS     R3,R6
+   \   00000016   0022               MOVS     R2,#+0
+   \   00000018   0FDF               SVC      +15
+   \   0000001A   01B0               ADD      SP,SP,#+4
+   \   0000001C   0028               CMP      R0,#+0
+   \   0000001E   0FD0               BEQ      ??LoadData_0
+     90          #endif
+     91              {
+     92                  char* data = malloc(size+1);
+   \   00000020   601C               ADDS     R0,R4,#+1
+   \   00000022   14DF               SVC      +20
+   \   00000024   0700               MOVS     R7,R0
+     93          #ifdef _test_linux
+     94                  if(fread(ex->fp, data, size) == size)
+     95          #else
+     96                  if(fread(ex->fp, data, size, &ferr) == size)
+   \   00000026   2868               LDR      R0,[R5, #+0]
+   \   00000028   3300               MOVS     R3,R6
+   \   0000002A   2200               MOVS     R2,R4
+   \   0000002C   3900               MOVS     R1,R7
+   \   0000002E   0BDF               SVC      +11
+   \   00000030   A042               CMP      R0,R4
+   \   00000032   03D1               BNE      ??LoadData_1
+     97          #endif
+     98                  {
+     99                      data[size] = 0;
+   \   00000034   0020               MOVS     R0,#+0
+   \   00000036   3855               STRB     R0,[R7, R4]
+    100                      return data;
+   \   00000038   3800               MOVS     R0,R7
+   \   0000003A   F0BD               POP      {R4-R7,PC}
+    101                  }
+    102                  else mfree(data);
+   \                     ??LoadData_1:
+   \   0000003C   3800               MOVS     R0,R7
+   \   0000003E   15DF               SVC      +21
+    103              }
+    104          
+    105              return 0;
+   \                     ??LoadData_0:
+   \   00000040   0020               MOVS     R0,#+0
+   \   00000042   F0BD               POP      {R4-R7,PC}       ;; return
+    106          }
+    107          
+    108          
+    109          /* Вспомогательная функция */
+    110          __arch static inline unsigned int _look_sym(Elf32_Exec *ex, const char *name)
+    111          {
+    112              Libs_Queue *lib = ex->libs;
+    113              unsigned int func = 0;
+    114              while(lib && !func)
+    115              {
+    116                  func = (unsigned int)FindFunction(lib->lib, name);
+    117                  lib = lib->next;
+    118              }
+    119              return func;
+    120          }
+    121          
+    122          
+    123          /* функция пролетается рекурсивно по либам которые в зависимостях */
+
+   \                                 In segment CODE, align 4, keep-with-next
+    124          __arch unsigned int try_search_in_base(Elf32_Exec* ex, const char *name, int bind_type)
+    125          {
+   \                     try_search_in_base:
+   \   00000000   70B5               PUSH     {R4-R6,LR}
+   \   00000002   0C00               MOVS     R4,R1
+    126              printf("Searching in libs...\n");
+    127              unsigned int address = 0;
+    128          
+    129              if(ex->type == EXEC_LIB && !ex->dyn[DT_SYMBOLIC])
+   \   00000004   0100               MOVS     R1,R0
+   \   00000006   4031               ADDS     R1,R1,#+64
+   \   00000008   0A78               LDRB     R2,[R1, #+0]
+   \   0000000A   0500               MOVS     R5,R0
+   \   0000000C   D035               ADDS     R5,R5,#+208
+   \   0000000E   022A               CMP      R2,#+2
+   \   00000010   07D1               BNE      ??try_search_in_base_0
+   \   00000012   496C               LDR      R1,[R1, #+68]
+   \   00000014   0029               CMP      R1,#+0
+   \   00000016   04D1               BNE      ??try_search_in_base_0
+    130                  address = findExport(ex, name);
+   \   00000018   2100               MOVS     R1,R4
+   \   0000001A   ........           _BLF     findExport,??findExport??rT
+    131          
+    132              if(!address)
+   \   0000001E   0028               CMP      R0,#+0
+   \   00000020   0BD1               BNE      ??try_search_in_base_1
+    133                  address = (unsigned int)_look_sym(ex, name);
+   \                     ??try_search_in_base_0:
+   \   00000022   2E68               LDR      R6,[R5, #+0]
+   \   00000024   0020               MOVS     R0,#+0
+   \   00000026   04E0               B        ??try_search_in_base_2
+   \                     ??try_search_in_base_3:
+   \   00000028   3068               LDR      R0,[R6, #+0]
+   \   0000002A   2100               MOVS     R1,R4
+   \   0000002C   ........           _BLF     FindFunction,??FindFunction??rT
+   \   00000030   7668               LDR      R6,[R6, #+4]
+   \                     ??try_search_in_base_2:
+   \   00000032   002E               CMP      R6,#+0
+   \   00000034   01D0               BEQ      ??try_search_in_base_1
+   \   00000036   0028               CMP      R0,#+0
+   \   00000038   F6D0               BEQ      ??try_search_in_base_3
+    134          
+    135              if( !address )
+   \                     ??try_search_in_base_1:
+   \   0000003A   0028               CMP      R0,#+0
+   \   0000003C   11D1               BNE      ??try_search_in_base_4
+    136              {
+    137                  if(!address && ex->meloaded)
+   \   0000003E   ED68               LDR      R5,[R5, #+12]
+   \   00000040   002D               CMP      R5,#+0
+   \   00000042   0ED0               BEQ      ??try_search_in_base_4
+    138                  {
+    139                      Elf32_Exec *mex = (Elf32_Exec*)ex->meloaded;
+   \   00000044   05E0               B        ??try_search_in_base_5
+    140                      while(mex && !address && mex->type == EXEC_LIB)
+    141                      {
+    142                          address = findExport(mex, name);
+   \                     ??try_search_in_base_6:
+   \   00000046   2100               MOVS     R1,R4
+   \   00000048   2800               MOVS     R0,R5
+   \   0000004A   ........           _BLF     findExport,??findExport??rT
+    143                          mex = (Elf32_Exec*)mex->meloaded;
+   \   0000004E   DC35               ADDS     R5,R5,#+220
+   \   00000050   2D68               LDR      R5,[R5, #+0]
+    144                      }
+   \                     ??try_search_in_base_5:
+   \   00000052   002D               CMP      R5,#+0
+   \   00000054   05D0               BEQ      ??try_search_in_base_4
+   \   00000056   0028               CMP      R0,#+0
+   \   00000058   03D1               BNE      ??try_search_in_base_4
+   \   0000005A   4021               MOVS     R1,#+64
+   \   0000005C   695C               LDRB     R1,[R5, R1]
+   \   0000005E   0229               CMP      R1,#+2
+   \   00000060   F1D0               BEQ      ??try_search_in_base_6
+    145                  }
+    146              }
+    147              return address;
+   \                     ??try_search_in_base_4:
+   \   00000062   70BD               POP      {R4-R6,PC}       ;; return
+    148          }
+    149          
+    150          
+    151          // Релокация
+
+   \                                 In segment CODE, align 4, keep-with-next
+    152          __arch int DoRelocation(Elf32_Exec* ex, Elf32_Dyn* dyn_sect, Elf32_Phdr* phdr)
+    153          {
+   \                     DoRelocation:
+   \   00000000   F4B5               PUSH     {R2,R4-R7,LR}
+   \   00000002   E4B0               SUB      SP,SP,#+400
+   \   00000004   0400               MOVS     R4,R0
+    154              unsigned int i = 0;
+    155              Elf32_Word libs_needed[64];
+    156              unsigned int libs_cnt = 0;
+   \   00000006   0868               LDR      R0,[R1, #+0]
+   \   00000008   0025               MOVS     R5,#+0
+   \   0000000A   0026               MOVS     R6,#+0
+   \   0000000C   0028               CMP      R0,#+0
+   \   0000000E   24AB               ADD      R3,SP,#+144
+   \   00000010   12D1               BNE      ??DoRelocation_1
+   \                     ??DoRelocation_2:
+   \   00000012   2000               MOVS     R0,R4
+   \   00000014   4030               ADDS     R0,R0,#+64
+   \   00000016   C069               LDR      R0,[R0, #+28]
+   \   00000018   0028               CMP      R0,#+0
+   \   0000001A   22D0               BEQ      ??DoRelocation_3
+   \   0000001C   E06B               LDR      R0,[R4, #+60]
+   \   0000001E   2268               LDR      R2,[R4, #+0]
+   \   00000020   4142               RSBS     R1,R0,#+0
+   \   00000022   2000               MOVS     R0,R4
+   \   00000024   4030               ADDS     R0,R0,#+64
+   \   00000026   C069               LDR      R0,[R0, #+28]
+   \   00000028   1018               ADDS     R0,R2,R0
+   \   0000002A   4018               ADDS     R0,R0,R1
+   \   0000002C   19E0               B        ??DoRelocation_3
+    157              char dbg[128];
+    158          
+    159              // Вытаскиваем теги
+    160              while (dyn_sect[i].d_tag != DT_NULL)
+    161              {
+    162                  if (dyn_sect[i].d_tag <= DT_FLAGS)
+    163                  {
+    164                      switch(dyn_sect[i].d_tag)
+    165                      {
+    166                      case DT_SYMBOLIC:
+    167                          // Флаг SYMBOLIC-библиотек. В d_val 0, даже при наличии :(
+    168                          ex->dyn[dyn_sect[i].d_tag] = 1;
+    169                          break;
+    170                      case DT_NEEDED:
+    171                          // Получаем смещения в .symtab на имена либ
+    172                          libs_needed[libs_cnt++] = dyn_sect[i].d_un.d_val;
+    173                          break;
+    174                      default:
+    175                          ex->dyn[dyn_sect[i].d_tag] = dyn_sect[i].d_un.d_val;
+    176                      }
+    177                  }
+    178                  ++i;
+    179              }
+    180          
+    181              // Таблички. Нужны только либам, и их юзающим)
+    182              ex->symtab = ex->dyn[DT_SYMTAB]? (Elf32_Sym*)(ex->body + ex->dyn[DT_SYMTAB] - ex->v_addr) : 0;
+   \                     ??DoRelocation_4:
+   \   0000002E   4068               LDR      R0,[R0, #+4]
+   \   00000030   9200               LSLS     R2,R2,#+2
+   \   00000032   A218               ADDS     R2,R4,R2
+   \   00000034   5064               STR      R0,[R2, #+68]
+   \                     ??DoRelocation_5:
+   \   00000036   6D1C               ADDS     R5,R5,#+1
+   \                     ??DoRelocation_1:
+   \   00000038   E800               LSLS     R0,R5,#+3
+   \   0000003A   0818               ADDS     R0,R1,R0
+   \   0000003C   0268               LDR      R2,[R0, #+0]
+   \   0000003E   002A               CMP      R2,#+0
+   \   00000040   E7D0               BEQ      ??DoRelocation_2
+   \   00000042   1F2A               CMP      R2,#+31
+   \   00000044   F7DA               BGE      ??DoRelocation_5
+   \   00000046   012A               CMP      R2,#+1
+   \   00000048   06D0               BEQ      ??DoRelocation_6
+   \   0000004A   102A               CMP      R2,#+16
+   \   0000004C   EFD1               BNE      ??DoRelocation_4
+   \   0000004E   9000               LSLS     R0,R2,#+2
+   \   00000050   2018               ADDS     R0,R4,R0
+   \   00000052   0122               MOVS     R2,#+1
+   \   00000054   4264               STR      R2,[R0, #+68]
+   \   00000056   EEE7               B        ??DoRelocation_5
+   \                     ??DoRelocation_6:
+   \   00000058   4068               LDR      R0,[R0, #+4]
+   \   0000005A   B200               LSLS     R2,R6,#+2
+   \   0000005C   9850               STR      R0,[R3, R2]
+   \   0000005E   761C               ADDS     R6,R6,#+1
+   \   00000060   E9E7               B        ??DoRelocation_5
+   \                     ??DoRelocation_3:
+   \   00000062   C021               MOVS     R1,#+192
+   \   00000064   6050               STR      R0,[R4, R1]
+    183              ex->jmprel = (Elf32_Rel*)(ex->body + ex->dyn[DT_JMPREL] - ex->v_addr);
+   \   00000066   E26B               LDR      R2,[R4, #+60]
+   \   00000068   2368               LDR      R3,[R4, #+0]
+   \   0000006A   5042               RSBS     R0,R2,#+0
+   \   0000006C   2200               MOVS     R2,R4
+   \   0000006E   4032               ADDS     R2,R2,#+64
+   \   00000070   126E               LDR      R2,[R2, #+96]
+   \   00000072   2100               MOVS     R1,R4
+   \   00000074   C031               ADDS     R1,R1,#+192
+   \   00000076   9A18               ADDS     R2,R3,R2
+   \   00000078   1018               ADDS     R0,R2,R0
+   \   0000007A   4860               STR      R0,[R1, #+4]
+    184              ex->strtab = ex->dyn[DT_STRTAB]? ex->body + ex->dyn[DT_STRTAB] - ex->v_addr : 0;
+   \   0000007C   2000               MOVS     R0,R4
+   \   0000007E   4030               ADDS     R0,R0,#+64
+   \   00000080   8069               LDR      R0,[R0, #+24]
+   \   00000082   0028               CMP      R0,#+0
+   \   00000084   06D0               BEQ      ??DoRelocation_7
+   \   00000086   E06B               LDR      R0,[R4, #+60]
+   \   00000088   4142               RSBS     R1,R0,#+0
+   \   0000008A   2000               MOVS     R0,R4
+   \   0000008C   4030               ADDS     R0,R0,#+64
+   \   0000008E   8069               LDR      R0,[R0, #+24]
+   \   00000090   1818               ADDS     R0,R3,R0
+   \   00000092   4018               ADDS     R0,R0,R1
+   \                     ??DoRelocation_7:
+   \   00000094   2100               MOVS     R1,R4
+   \   00000096   C031               ADDS     R1,R1,#+192
+   \   00000098   C860               STR      R0,[R1, #+12]
+   \   0000009A   4020               MOVS     R0,#+64
+   \   0000009C   205C               LDRB     R0,[R4, R0]
+   \   0000009E   0228               CMP      R0,#+2
+   \   000000A0   24D1               BNE      ??DoRelocation_8
+    185          
+    186              printf("STRTAB: %X\n", ex->dyn[DT_STRTAB]);
+    187              printf("SYMTAB: %X %X\n", ex->dyn[DT_SYMTAB], ex->symtab);
+    188          
+    189              if(ex->type == EXEC_LIB)
+    190              {
+    191                  Elf32_Word* hash_hdr = (Elf32_Word*)LoadData(ex, ex->dyn[DT_HASH], 8);
+   \   000000A2   0822               MOVS     R2,#+8
+   \   000000A4   2000               MOVS     R0,R4
+   \   000000A6   4030               ADDS     R0,R0,#+64
+   \   000000A8   4169               LDR      R1,[R0, #+20]
+   \   000000AA   2000               MOVS     R0,R4
+   \   000000AC   ........           BL       LoadData
+   \   000000B0   0500               MOVS     R5,R0
+    192                  if(hash_hdr)
+   \   000000B2   14D0               BEQ      ??DoRelocation_9
+    193                  {
+    194                      int hash_size = hash_hdr[0] * sizeof(Elf32_Word) + hash_hdr[1] * sizeof(Elf32_Word) + 8;
+    195                      ex->hashtab = (Elf32_Word*)LoadData(ex, ex->dyn[DT_HASH], hash_size);
+   \   000000B4   2868               LDR      R0,[R5, #+0]
+   \   000000B6   6968               LDR      R1,[R5, #+4]
+   \   000000B8   4018               ADDS     R0,R0,R1
+   \   000000BA   8200               LSLS     R2,R0,#+2
+   \   000000BC   2000               MOVS     R0,R4
+   \   000000BE   4030               ADDS     R0,R0,#+64
+   \   000000C0   4169               LDR      R1,[R0, #+20]
+   \   000000C2   0832               ADDS     R2,R2,#+8
+   \   000000C4   2000               MOVS     R0,R4
+   \   000000C6   ........           BL       LoadData
+   \   000000CA   2100               MOVS     R1,R4
+   \   000000CC   C031               ADDS     R1,R1,#+192
+   \   000000CE   8860               STR      R0,[R1, #+8]
+    196                      mfree(hash_hdr);
+   \   000000D0   2800               MOVS     R0,R5
+   \   000000D2   15DF               SVC      +21
+    197                      if(!ex->hashtab) goto __hash_err;
+   \   000000D4   2000               MOVS     R0,R4
+   \   000000D6   C030               ADDS     R0,R0,#+192
+   \   000000D8   8068               LDR      R0,[R0, #+8]
+   \   000000DA   0028               CMP      R0,#+0
+   \   000000DC   06D1               BNE      ??DoRelocation_8
+    198                  }
+    199                  else
+    200                  {
+    201          __hash_err:
+    202                      //ShowMSG(1, (int)"Error loading hashtab");
+    203                      ep_log(ex, "Hash tab is mising", 18);
+   \                     ??DoRelocation_9:
+   \   000000DE   D749               LDR      R1,??DoRelocation_10  ;; `?<Constant "Hash tab is mising">`
+   \   000000E0   1222               MOVS     R2,#+18
+   \   000000E2   2000               MOVS     R0,R4
+   \   000000E4   ........           _BLF     ep_log,??ep_log??rT
+    204                      return E_HASTAB;
+   \   000000E8   0F20               MOVS     R0,#+15
+   \   000000EA   A1E2               B        ??DoRelocation_11
+    205                  }
+    206              }
+    207          
+    208              // Загрузка библиотек
+    209              for(i=0; i < libs_cnt; ++i)
+   \                     ??DoRelocation_8:
+   \   000000EC   0025               MOVS     R5,#+0
+   \   000000EE   04E0               B        ??DoRelocation_12
+    210              {
+    211                  char *lib_name = ex->strtab + libs_needed[i];
+    212                  Elf32_Lib* lib;
+    213                  if( (lib = OpenLib(lib_name, ex)) )
+    214                  {
+    215                      Libs_Queue* libq = malloc(sizeof(Libs_Queue));
+    216                      libq->lib = lib;
+    217          
+    218                      if(ex->libs) libq->next = ex->libs;
+    219                      else libq->next = 0;
+   \                     ??DoRelocation_13:
+   \   000000F0   4160               STR      R1,[R0, #+4]
+    220          
+    221                      ex->libs = libq;
+   \   000000F2   2100               MOVS     R1,R4
+   \   000000F4   C031               ADDS     R1,R1,#+192
+   \   000000F6   0861               STR      R0,[R1, #+16]
+   \   000000F8   6D1C               ADDS     R5,R5,#+1
+   \                     ??DoRelocation_12:
+   \   000000FA   B542               CMP      R5,R6
+   \   000000FC   2AD2               BCS      ??DoRelocation_14
+   \   000000FE   A800               LSLS     R0,R5,#+2
+   \   00000100   24A9               ADD      R1,SP,#+144
+   \   00000102   0858               LDR      R0,[R1, R0]
+   \   00000104   2100               MOVS     R1,R4
+   \   00000106   C031               ADDS     R1,R1,#+192
+   \   00000108   C968               LDR      R1,[R1, #+12]
+   \   0000010A   0F18               ADDS     R7,R1,R0
+   \   0000010C   2100               MOVS     R1,R4
+   \   0000010E   3800               MOVS     R0,R7
+   \   00000110   ........           _BLF     OpenLib,??OpenLib??rT
+   \   00000114   0290               STR      R0,[SP, #+8]
+   \   00000116   0028               CMP      R0,#+0
+   \   00000118   0CD0               BEQ      ??DoRelocation_15
+   \   0000011A   0820               MOVS     R0,#+8
+   \   0000011C   14DF               SVC      +20
+   \   0000011E   0299               LDR      R1,[SP, #+8]
+   \   00000120   0160               STR      R1,[R0, #+0]
+   \   00000122   2100               MOVS     R1,R4
+   \   00000124   C031               ADDS     R1,R1,#+192
+   \   00000126   0969               LDR      R1,[R1, #+16]
+   \   00000128   0029               CMP      R1,#+0
+   \   0000012A   E1D0               BEQ      ??DoRelocation_13
+   \   0000012C   2100               MOVS     R1,R4
+   \   0000012E   C031               ADDS     R1,R1,#+192
+   \   00000130   0969               LDR      R1,[R1, #+16]
+   \   00000132   DDE7               B        ??DoRelocation_13
+    222                  }
+    223                  else
+    224                  {
+    225                      int csz = sprintf(dbg, "Не могу загрузить %s!", lib_name);
+   \                     ??DoRelocation_15:
+   \   00000134   C249               LDR      R1,??DoRelocation_10+0x4  ;; `?<Constant "Hash tab is mising">` + 20
+   \   00000136   3A00               MOVS     R2,R7
+   \   00000138   04A8               ADD      R0,SP,#+16
+   \   0000013A   16DF               SVC      +22
+   \   0000013C   0500               MOVS     R5,R0
+    226                      l_msg(1, (int)dbg);
+   \   0000013E   04A9               ADD      R1,SP,#+16
+   \   00000140   0120               MOVS     R0,#+1
+   \   00000142   ........           _BLF     l_msg,??l_msg??rT
+    227                      ep_log(ex, dbg, csz);
+   \   00000146   2A00               MOVS     R2,R5
+   \   00000148   04A9               ADD      R1,SP,#+16
+   \   0000014A   2000               MOVS     R0,R4
+   \   0000014C   ........           _BLF     ep_log,??ep_log??rT
+    228                      return E_SHARED;
+   \   00000150   0320               MOVS     R0,#+3
+   \   00000152   6DE2               B        ??DoRelocation_11
+    229                  }
+    230              }
+    231          
+    232              // Релокация
+    233              if (ex->dyn[DT_RELSZ])
+   \                     ??DoRelocation_14:
+   \   00000154   2000               MOVS     R0,R4
+   \   00000156   4030               ADDS     R0,R0,#+64
+   \   00000158   C06C               LDR      R0,[R0, #+76]
+   \   0000015A   0028               CMP      R0,#+0
+   \   0000015C   ....               BNE      .+5
+   \   0000015E   29E2               B        ??DoRelocation_16
+    234              {
+    235                  i=0;
+    236                  unsigned int* addr;
+    237                  char* name;
+    238                  Elf32_Word r_type;
+    239                  unsigned int func = 0;
+    240                  int symtab_index = 0;
+    241                  int bind_type = 0;
+    242                  int reloc_type = 0;
+    243          
+    244                  // Таблица релокаций
+    245                  Elf32_Rel* reltab = (Elf32_Rel*)LoadData(ex, phdr->p_offset + ex->dyn[DT_REL] - phdr->p_vaddr, ex->dyn[DT_RELSZ]);
+   \   00000160   2000               MOVS     R0,R4
+   \   00000162   4030               ADDS     R0,R0,#+64
+   \   00000164   C26C               LDR      R2,[R0, #+76]
+   \   00000166   6498               LDR      R0,[SP, #+400]
+   \   00000168   2100               MOVS     R1,R4
+   \   0000016A   4068               LDR      R0,[R0, #+4]
+   \   0000016C   4031               ADDS     R1,R1,#+64
+   \   0000016E   896C               LDR      R1,[R1, #+72]
+   \   00000170   0025               MOVS     R5,#+0
+   \   00000172   4018               ADDS     R0,R0,R1
+   \   00000174   6499               LDR      R1,[SP, #+400]
+   \   00000176   8968               LDR      R1,[R1, #+8]
+   \   00000178   411A               SUBS     R1,R0,R1
+   \   0000017A   2000               MOVS     R0,R4
+   \   0000017C   ........           BL       LoadData
+   \   00000180   0190               STR      R0,[SP, #+4]
+    246          
+    247                  if(!reltab)
+   \   00000182   0028               CMP      R0,#+0
+   \   00000184   ....               BEQ      .+5
+   \   00000186   1BE1               B        ??DoRelocation_17
+    248                  {
+    249                      elfclose(ex);
+   \   00000188   2000               MOVS     R0,R4
+   \   0000018A   ........           _BLF     elfclose,??elfclose??rT
+    250                      return E_RELOCATION;
+   \                     ??DoRelocation_18:
+   \   0000018E   0120               MOVS     R0,#+1
+   \   00000190   4EE2               B        ??DoRelocation_11
+    251                  }
+    252          
+    253                  while(i * sizeof(Elf32_Rel) < ex->dyn[DT_RELSZ])
+    254                  {
+    255                      r_type = ELF32_R_TYPE(reltab[i].r_info);
+    256                      symtab_index = ELF32_R_SYM(reltab[i].r_info);
+    257          	   
+    258          	    Elf32_Sym *sym = ex->symtab? &ex->symtab[symtab_index] : 0;
+   \                     ??DoRelocation_19:
+   \   00000192   0026               MOVS     R6,#+0
+   \   00000194   0296               STR      R6,[SP, #+8]
+    259                      bind_type = sym ? ELF_ST_BIND(sym->st_info) : 0;
+    260                      reloc_type = sym ? ELF_ST_TYPE(sym->st_info) : 0;
+    261                      addr = (unsigned int*)(ex->body + reltab[i].r_offset - ex->v_addr);
+   \                     ??DoRelocation_20:
+   \   00000196   E76B               LDR      R7,[R4, #+60]
+   \   00000198   1268               LDR      R2,[R2, #+0]
+   \   0000019A   7B42               RSBS     R3,R7,#+0
+   \   0000019C   2768               LDR      R7,[R4, #+0]
+   \   0000019E   BA18               ADDS     R2,R7,R2
+   \   000001A0   D718               ADDS     R7,R2,R3
+    262          
+    263                      switch(r_type)
+   \   000001A2   039A               LDR      R2,[SP, #+12]
+   \   000001A4   FD2A               CMP      R2,#+253
+   \   000001A6   ....               BLS      .+5
+   \   000001A8   F6E1               B        ??DoRelocation_21
+   \   000001AA   02A3               ADR      R3,??DoRelocation_0
+   \   000001AC   5200               LSLS     R2,R2,#+1
+   \   000001AE   9B5A               LDRH     R3,[R3, R2]
+   \   000001B0   9F44               ADD      PC,PC,R3
+   \   000001B2   C046               Nop      
+   \                     ??DoRelocation_0:
+   \   000001B4   0A02E4034C02       DC16     +522,+996,+588,+986
+   \              DA03        
+   \   000001BC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001C4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001CC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001D4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001DC   CA032E032E03       DC16     +970,+814,+814,+508
+   \              FC01        
+   \   000001E4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001EC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001F4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000001FC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000204   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000020C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000214   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000021C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000224   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000022C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000234   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000023C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000244   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000024C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000254   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000025C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000264   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000026C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000274   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000027C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000284   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000028C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000294   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000029C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002A4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002AC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002B4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002BC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002C4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002CC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002D4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002DC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002E4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002EC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002F4   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000002FC   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000304   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000030C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000314   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000031C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000324   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000032C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000334   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000033C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000344   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000034C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000354   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000035C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000364   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000036C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000374   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000037C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000384   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000038C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   00000394   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   0000039C   E403E403E403       DC16     +996,+996,+996,+996
+   \              E403        
+   \   000003A4   E403E403E403       DC16     +996,+996,+996,+522
+   \              0A02        
+   \   000003AC   E403FC01           DC16     +996,+508
+    264                      {
+    265                      case R_ARM_NONE:
+    266                          break;
+    267          		
+    268                      case R_ARM_RABS32:
+    269                          printf("R_ARM_RABS32\n");
+    270                          *addr += (unsigned int)(ex->body - ex->v_addr);
+   \                     ??DoRelocation_22:
+   \   000003B0   E16B               LDR      R1,[R4, #+60]
+   \   000003B2   3868               LDR      R0,[R7, #+0]
+   \   000003B4   4A42               RSBS     R2,R1,#+0
+   \   000003B6   2168               LDR      R1,[R4, #+0]
+   \   000003B8   8918               ADDS     R1,R1,R2
+   \   000003BA   4018               ADDS     R0,R0,R1
+   \                     ??DoRelocation_23:
+   \   000003BC   3860               STR      R0,[R7, #+0]
+    271                          printf("*addr = %X\n", *addr);
+    272                          break;
+    273                      case R_ARM_ABS32:
+    274                          printf("R_ARM_ABS32\n");
+    275          
+    276                          if( !ex->symtab )
+    277                          {
+    278          		    int csz = sprintf(dbg, "warning: symtab not found, but relocation R_ARM_ABS32 is exist");
+    279          		    if(config->loader_warnings)
+    280          		      ep_log(ex, dbg, csz);
+    281          		    *addr = (unsigned int)ex->body;
+    282          		    break;
+    283                          }
+    284          
+    285                          if( !ex->strtab )
+    286                          {
+    287          		    int csz = sprintf(dbg, "warning: symtab not found, but relocation R_ARM_ABS32 is exist");
+    288          		    if(config->loader_warnings)
+    289          		      ep_log(ex, dbg, csz);
+    290          		    
+    291          		    *addr = (unsigned int)ex->body;
+    292          		    break;
+    293                          }
+    294          
+    295                          /* на всякий случай, вдруг сум пустой будет */
+    296                          if(sym)
+    297                          {
+    298                              /* имя требуемой функции */
+    299                              name = ex->strtab + sym->st_name;
+    300          
+    301                              // Если нужен указатель на эльф
+    302                              if( name[4] == 0   &&
+    303                                      name[0] == '_' &&
+    304                                      name[1] == '_' &&
+    305                                      name[2] == 'e' &&
+    306                                      name[3] == 'x'
+    307                                )
+    308                              {
+    309                                  ex->__is_ex_import = 1;
+    310                                  *addr = (unsigned int)ex;
+    311                                  break;
+    312                              }
+    313          
+    314                              
+    315                              switch(reloc_type)
+    316                              {
+    317                              case STT_NOTYPE:
+    318                                  if(bind_type != STB_LOCAL)
+    319                                     func = (unsigned int)ex->body + sym->st_value;
+    320                                  else
+    321                                     func = sym->st_value;
+    322                                  goto skeep_err;
+    323          
+    324                              default:
+    325                                  if(sym->st_value)
+    326                                      func = (unsigned int)ex->body + sym->st_value;
+    327                                  else
+    328                                      func = try_search_in_base(ex, name, bind_type);
+    329                                  break;
+    330                              }
+    331          
+    332                          }
+    333                          else
+    334                          {
+    335                              func = 0;
+    336                          }
+    337          
+    338                          /* ничего не нашли, жаль */
+    339                          if(!func && bind_type != STB_WEAK)
+    340                          {
+    341                              int csz = sprintf(dbg, "[2] Undefined reference to `%s'\n", name?name : "");
+    342                              ep_log(ex, dbg, csz);
+    343                              return E_UNDEF;
+    344                          }
+    345          
+    346          skeep_err:
+    347          
+    348                          /* в ABS32 релоке в *addr всегда должен быть 0 */
+    349                          *addr += func;
+    350                          break;
+    351          		
+    352                      case R_ARM_RELATIVE:
+    353                          printf("R_ARM_RELATIVE\n");
+    354                          *addr += (unsigned int)(ex->body - ex->v_addr);
+    355                          break;
+    356          
+    357                      case R_ARM_GLOB_DAT:
+    358                      case R_ARM_JUMP_SLOT:
+    359                          printf("R_ARM_GLOB_DAT\n");
+    360          
+    361                          if( !ex->symtab )
+    362                          {
+    363                              int csz = sprintf(dbg, "Relocation R_ARM_GLOB_DAT cannot run without symtab\n");
+    364                              ep_log(ex, dbg, csz);
+    365                              mfree(reltab);
+    366                              return E_SYMTAB;
+    367                          }
+    368          
+    369                          if( !ex->strtab )
+    370                          {
+    371                              int csz = sprintf(dbg, "Relocation R_ARM_GLOB_DAT cannot run without strtab\n");
+    372                              ep_log(ex, dbg, csz);
+    373                              mfree(reltab);
+    374                              return E_STRTAB;
+    375                          }
+    376          
+    377                          if(sym)
+    378                          {
+    379                              name = ex->strtab + sym->st_name;
+    380                          }
+    381                          else
+    382                              name = 0;
+    383          
+    384                          printf(" strtab: '%s' \n", name);
+    385          
+    386                          if( symtab_index && name )
+    387                          {
+    388                              switch(reloc_type)
+    389                              {
+    390                              case STT_NOTYPE:
+    391                                  if(bind_type != STB_LOCAL)
+    392                                     func = (unsigned int)ex->body + sym->st_value;
+    393                                  else
+    394                                     func = sym->st_value;
+    395                                  goto skeep_err1;
+    396          			
+    397          
+    398                              default:
+    399                                  if(sym->st_value)
+    400                                      func = (unsigned int)ex->body + sym->st_value;
+    401                                  else
+    402                                  {
+    403                                      printf("Searching in libs...\n");
+    404                                      func = try_search_in_base(ex, name, bind_type);
+    405                                  }
+    406                                  break;
+    407                              }
+    408          
+    409          
+    410                              if(!func && bind_type != STB_WEAK)
+    411                              {
+    412                                  int csz = sprintf(dbg, "[2] Undefined reference to `%s'\n", name?name : "");
+    413                                  //l_msg(1, (int)dbg);
+    414                                  ep_log(ex, dbg, csz);
+    415                                  return E_UNDEF;
+    416                              }
+    417          
+    418          skeep_err1:
+    419          
+    420                              /* В доках написано что бинды типа STB_WEAK могут быть нулевыми */
+    421                              *addr = func;
+    422          
+    423                              if(*addr)
+    424                              {
+    425                                  printf("found at 0x%X\n", *addr);
+    426                              }
+    427                              else
+    428                              {
+    429                                  printf("warning: address is zero\n");
+    430                              }
+    431                          }
+    432                          else
+    433                              *addr = sym->st_value;
+    434          
+    435                          break;
+    436          
+    437          		
+    438                      case R_ARM_COPY:
+    439                          printf("R_ARM_COPY\n");
+    440                          memcpy_a((void *) addr,
+    441                                   (void *)(ex->body + sym->st_value), sym->st_size);
+    442                          break;
+    443          
+    444          		
+    445          	    /* хз чо за релок, ни в одном лоадере его не встречал, 
+    446          	     * хотя по описанию похож на R_ARM_REL32.
+    447          	     * Но, если выполнить релокацию по описанию - эльфятник падает.
+    448          	     * С пропуском - работает, так что хайтек.
+    449          	     */
+    450                      case R_ARM_THM_RPC22:
+    451                          printf("R_ARM_THM_RPC22 stub\n");
+    452                          break;
+    453          
+    454                          // S + A - P
+    455                      case R_ARM_REL32:
+    456                          printf("R_ARM_REL32\n");
+    457                          *addr += sym->st_value - (unsigned int)addr;
+    458                          break;
+    459          
+    460                      default:
+    461                          printf("unknow relocation type '%d'\n", r_type);
+    462                          int csz = sprintf(dbg, "Fatal error! Unknown type relocation '%d'!\n", r_type);
+    463                          //l_msg(1, (int)dbg);
+    464                          ep_log(ex, dbg, csz);
+    465                          mfree(reltab);
+    466                          return E_RELOCATION;
+    467                      }
+    468                      ++i;
+   \                     ??DoRelocation_24:
+   \   000003BE   6D1C               ADDS     R5,R5,#+1
+   \                     ??DoRelocation_17:
+   \   000003C0   2100               MOVS     R1,R4
+   \   000003C2   4031               ADDS     R1,R1,#+64
+   \   000003C4   C96C               LDR      R1,[R1, #+76]
+   \   000003C6   E800               LSLS     R0,R5,#+3
+   \   000003C8   8842               CMP      R0,R1
+   \   000003CA   ....               BCC      .+5
+   \   000003CC   F0E0               B        ??DoRelocation_25
+   \   000003CE   0199               LDR      R1,[SP, #+4]
+   \   000003D0   0A18               ADDS     R2,R1,R0
+   \   000003D2   5068               LDR      R0,[R2, #+4]
+   \   000003D4   0006               LSLS     R0,R0,#+24
+   \   000003D6   000E               LSRS     R0,R0,#+24
+   \   000003D8   0390               STR      R0,[SP, #+12]
+   \   000003DA   5068               LDR      R0,[R2, #+4]
+   \   000003DC   010A               LSRS     R1,R0,#+8
+   \   000003DE   C020               MOVS     R0,#+192
+   \   000003E0   2058               LDR      R0,[R4, R0]
+   \   000003E2   0028               CMP      R0,#+0
+   \   000003E4   ....               BNE      .+5
+   \   000003E6   D4E6               B        ??DoRelocation_19
+   \   000003E8   C023               MOVS     R3,#+192
+   \   000003EA   E358               LDR      R3,[R4, R3]
+   \   000003EC   0801               LSLS     R0,R1,#+4
+   \   000003EE   1818               ADDS     R0,R3,R0
+   \   000003F0   ....               BNE      .+5
+   \   000003F2   CEE6               B        ??DoRelocation_19
+   \   000003F4   037B               LDRB     R3,[R0, #+12]
+   \   000003F6   1E09               LSRS     R6,R3,#+4
+   \   000003F8   1B07               LSLS     R3,R3,#+28
+   \   000003FA   1B0F               LSRS     R3,R3,#+28
+   \   000003FC   0293               STR      R3,[SP, #+8]
+   \   000003FE   CAE6               B        ??DoRelocation_20
+   \                     ??DoRelocation_26:
+   \   00000400   C021               MOVS     R1,#+192
+   \   00000402   6158               LDR      R1,[R4, R1]
+   \   00000404   0029               CMP      R1,#+0
+   \   00000406   1DD1               BNE      ??DoRelocation_27
+   \                     ??DoRelocation_28:
+   \   00000408   8A49               LDR      R1,??DoRelocation_29  ;; `?<Constant "Hash tab is mising">` + 44
+   \   0000040A   04A8               ADD      R0,SP,#+16
+   \   0000040C   16DF               SVC      +22
+   \   0000040E   8A4A               LDR      R2,??DoRelocation_29+0x4  ;; config
+   \   00000410   B121               MOVS     R1,#+177
+   \   00000412   1268               LDR      R2,[R2, #+0]
+   \   00000414   C900               LSLS     R1,R1,#+3
+   \   00000416   5118               ADDS     R1,R2,R1
+   \   00000418   CA78               LDRB     R2,[R1, #+3]
+   \   0000041A   8B78               LDRB     R3,[R1, #+2]
+   \   0000041C   1202               LSLS     R2,R2,#+8
+   \   0000041E   1343               ORRS     R3,R3,R2
+   \   00000420   1A02               LSLS     R2,R3,#+8
+   \   00000422   4B78               LDRB     R3,[R1, #+1]
+   \   00000424   0978               LDRB     R1,[R1, #+0]
+   \   00000426   1343               ORRS     R3,R3,R2
+   \   00000428   1A02               LSLS     R2,R3,#+8
+   \   0000042A   1143               ORRS     R1,R1,R2
+   \   0000042C   04D0               BEQ      ??DoRelocation_30
+   \   0000042E   0200               MOVS     R2,R0
+   \   00000430   04A9               ADD      R1,SP,#+16
+   \   00000432   2000               MOVS     R0,R4
+   \   00000434   ........           _BLF     ep_log,??ep_log??rT
+   \                     ??DoRelocation_30:
+   \   00000438   2068               LDR      R0,[R4, #+0]
+   \   0000043A   BFE7               B.N      ??DoRelocation_23
+   \                     ??DoRelocation_10:
+   \   0000043C   ........           DC32     `?<Constant "Hash tab is mising">`
+   \   00000440   ........           DC32     `?<Constant "Hash tab is mising">` + 20
+   \                     ??DoRelocation_27:
+   \   00000444   2100               MOVS     R1,R4
+   \   00000446   C031               ADDS     R1,R1,#+192
+   \   00000448   C968               LDR      R1,[R1, #+12]
+   \   0000044A   0029               CMP      R1,#+0
+   \   0000044C   DCD0               BEQ      ??DoRelocation_28
+   \                     ??DoRelocation_31:
+   \   0000044E   0028               CMP      R0,#+0
+   \   00000450   2FD0               BEQ      ??DoRelocation_32
+   \   00000452   0168               LDR      R1,[R0, #+0]
+   \   00000454   2200               MOVS     R2,R4
+   \   00000456   C032               ADDS     R2,R2,#+192
+   \   00000458   D268               LDR      R2,[R2, #+12]
+   \   0000045A   5118               ADDS     R1,R2,R1
+   \   0000045C   0091               STR      R1,[SP, #+0]
+   \   0000045E   0979               LDRB     R1,[R1, #+4]
+   \   00000460   0029               CMP      R1,#+0
+   \   00000462   15D1               BNE      ??DoRelocation_33
+   \   00000464   0099               LDR      R1,[SP, #+0]
+   \   00000466   0978               LDRB     R1,[R1, #+0]
+   \   00000468   5F29               CMP      R1,#+95
+   \   0000046A   11D1               BNE      ??DoRelocation_33
+   \   0000046C   0099               LDR      R1,[SP, #+0]
+   \   0000046E   4978               LDRB     R1,[R1, #+1]
+   \   00000470   5F29               CMP      R1,#+95
+   \   00000472   0DD1               BNE      ??DoRelocation_33
+   \   00000474   0099               LDR      R1,[SP, #+0]
+   \   00000476   8978               LDRB     R1,[R1, #+2]
+   \   00000478   6529               CMP      R1,#+101
+   \   0000047A   09D1               BNE      ??DoRelocation_33
+   \   0000047C   0099               LDR      R1,[SP, #+0]
+   \   0000047E   C978               LDRB     R1,[R1, #+3]
+   \   00000480   7829               CMP      R1,#+120
+   \   00000482   05D1               BNE      ??DoRelocation_33
+   \   00000484   2000               MOVS     R0,R4
+   \   00000486   C030               ADDS     R0,R0,#+192
+   \   00000488   0121               MOVS     R1,#+1
+   \   0000048A   4176               STRB     R1,[R0, #+25]
+   \   0000048C   3C60               STR      R4,[R7, #+0]
+   \   0000048E   96E7               B        ??DoRelocation_24
+   \                     ??DoRelocation_33:
+   \   00000490   0299               LDR      R1,[SP, #+8]
+   \   00000492   4068               LDR      R0,[R0, #+4]
+   \   00000494   0029               CMP      R1,#+0
+   \   00000496   06D1               BNE      ??DoRelocation_34
+   \   00000498   002E               CMP      R6,#+0
+   \   0000049A   01D0               BEQ      ??DoRelocation_35
+   \   0000049C   2168               LDR      R1,[R4, #+0]
+   \   0000049E   0818               ADDS     R0,R1,R0
+   \                     ??DoRelocation_35:
+   \   000004A0   3968               LDR      R1,[R7, #+0]
+   \   000004A2   0818               ADDS     R0,R1,R0
+   \   000004A4   8AE7               B.N      ??DoRelocation_23
+   \                     ??DoRelocation_34:
+   \   000004A6   0028               CMP      R0,#+0
+   \   000004A8   0AD0               BEQ      ??DoRelocation_36
+   \   000004AA   2168               LDR      R1,[R4, #+0]
+   \   000004AC   0818               ADDS     R0,R1,R0
+   \                     ??DoRelocation_37:
+   \   000004AE   0028               CMP      R0,#+0
+   \   000004B0   F6D1               BNE      ??DoRelocation_35
+   \                     ??DoRelocation_32:
+   \   000004B2   022E               CMP      R6,#+2
+   \   000004B4   F4D0               BEQ      ??DoRelocation_35
+   \   000004B6   0098               LDR      R0,[SP, #+0]
+   \   000004B8   0028               CMP      R0,#+0
+   \   000004BA   07D0               BEQ      ??DoRelocation_38
+   \   000004BC   0200               MOVS     R2,R0
+   \   000004BE   06E0               B        ??DoRelocation_39
+   \                     ??DoRelocation_36:
+   \   000004C0   0099               LDR      R1,[SP, #+0]
+   \   000004C2   3200               MOVS     R2,R6
+   \   000004C4   2000               MOVS     R0,R4
+   \   000004C6   ........           BL       try_search_in_base
+   \   000004CA   F0E7               B        ??DoRelocation_37
+   \                     ??DoRelocation_38:
+   \   000004CC   5BA2               ADR      R2,??DoRelocation_29+0x8  ;; ""
+   \                     ??DoRelocation_39:
+   \   000004CE   5C49               LDR      R1,??DoRelocation_29+0xC  ;; `?<Constant "Hash tab is mising">` + 108
+   \   000004D0   04A8               ADD      R0,SP,#+16
+   \   000004D2   16DF               SVC      +22
+   \   000004D4   0200               MOVS     R2,R0
+   \   000004D6   04A9               ADD      R1,SP,#+16
+   \   000004D8   2000               MOVS     R0,R4
+   \   000004DA   ........           _BLF     ep_log,??ep_log??rT
+   \   000004DE   0B20               MOVS     R0,#+11
+   \   000004E0   A6E0               B        ??DoRelocation_11
+   \                     ??DoRelocation_40:
+   \   000004E2   C022               MOVS     R2,#+192
+   \   000004E4   A258               LDR      R2,[R4, R2]
+   \   000004E6   002A               CMP      R2,#+0
+   \   000004E8   0BD1               BNE      ??DoRelocation_41
+   \   000004EA   5649               LDR      R1,??DoRelocation_29+0x10  ;; `?<Constant "Hash tab is mising">` + 144
+   \   000004EC   04A8               ADD      R0,SP,#+16
+   \   000004EE   16DF               SVC      +22
+   \   000004F0   0200               MOVS     R2,R0
+   \   000004F2   04A9               ADD      R1,SP,#+16
+   \   000004F4   2000               MOVS     R0,R4
+   \   000004F6   ........           _BLF     ep_log,??ep_log??rT
+   \   000004FA   0198               LDR      R0,[SP, #+4]
+   \   000004FC   15DF               SVC      +21
+   \   000004FE   0C20               MOVS     R0,#+12
+   \   00000500   96E0               B        ??DoRelocation_11
+   \                     ??DoRelocation_41:
+   \   00000502   2200               MOVS     R2,R4
+   \   00000504   C032               ADDS     R2,R2,#+192
+   \   00000506   D268               LDR      R2,[R2, #+12]
+   \   00000508   002A               CMP      R2,#+0
+   \   0000050A   0BD1               BNE      ??DoRelocation_42
+   \   0000050C   4E49               LDR      R1,??DoRelocation_29+0x14  ;; `?<Constant "Hash tab is mising">` + 200
+   \   0000050E   04A8               ADD      R0,SP,#+16
+   \   00000510   16DF               SVC      +22
+   \   00000512   0200               MOVS     R2,R0
+   \   00000514   04A9               ADD      R1,SP,#+16
+   \   00000516   2000               MOVS     R0,R4
+   \   00000518   ........           _BLF     ep_log,??ep_log??rT
+   \   0000051C   0198               LDR      R0,[SP, #+4]
+   \   0000051E   15DF               SVC      +21
+   \   00000520   0D20               MOVS     R0,#+13
+   \   00000522   85E0               B        ??DoRelocation_11
+   \                     ??DoRelocation_42:
+   \   00000524   0028               CMP      R0,#+0
+   \   00000526   05D0               BEQ      ??DoRelocation_43
+   \   00000528   0268               LDR      R2,[R0, #+0]
+   \   0000052A   2300               MOVS     R3,R4
+   \   0000052C   C033               ADDS     R3,R3,#+192
+   \   0000052E   DB68               LDR      R3,[R3, #+12]
+   \   00000530   9A18               ADDS     R2,R3,R2
+   \   00000532   00E0               B.N      ??DoRelocation_44
+   \                     ??DoRelocation_43:
+   \   00000534   0022               MOVS     R2,#+0
+   \                     ??DoRelocation_44:
+   \   00000536   0092               STR      R2,[SP, #+0]
+   \   00000538   4068               LDR      R0,[R0, #+4]
+   \   0000053A   0029               CMP      R1,#+0
+   \   0000053C   ....               BNE      .+5
+   \   0000053E   3DE7               B        ??DoRelocation_23
+   \   00000540   0099               LDR      R1,[SP, #+0]
+   \   00000542   0029               CMP      R1,#+0
+   \   00000544   ....               BNE      .+5
+   \   00000546   39E7               B        ??DoRelocation_23
+   \   00000548   0299               LDR      R1,[SP, #+8]
+   \   0000054A   0029               CMP      R1,#+0
+   \   0000054C   05D1               BNE      ??DoRelocation_45
+   \   0000054E   002E               CMP      R6,#+0
+   \   00000550   ....               BNE      .+5
+   \   00000552   33E7               B        ??DoRelocation_23
+   \   00000554   2168               LDR      R1,[R4, #+0]
+   \   00000556   0818               ADDS     R0,R1,R0
+   \                     ??DoRelocation_46:
+   \   00000558   30E7               B.N      ??DoRelocation_23
+   \                     ??DoRelocation_45:
+   \   0000055A   0028               CMP      R0,#+0
+   \   0000055C   02D0               BEQ      ??DoRelocation_47
+   \   0000055E   2168               LDR      R1,[R4, #+0]
+   \   00000560   0818               ADDS     R0,R1,R0
+   \   00000562   04E0               B        ??DoRelocation_48
+   \                     ??DoRelocation_47:
+   \   00000564   0099               LDR      R1,[SP, #+0]
+   \   00000566   3200               MOVS     R2,R6
+   \   00000568   2000               MOVS     R0,R4
+   \   0000056A   ........           BL       try_search_in_base
+   \                     ??DoRelocation_48:
+   \   0000056E   0028               CMP      R0,#+0
+   \   00000570   ....               BEQ      .+5
+   \   00000572   23E7               B        ??DoRelocation_23
+   \   00000574   022E               CMP      R6,#+2
+   \   00000576   ....               BNE      .+5
+   \   00000578   20E7               B        ??DoRelocation_23
+   \   0000057A   009A               LDR      R2,[SP, #+0]
+   \   0000057C   A7E7               B.N      ??DoRelocation_39
+   \                     ??DoRelocation_49:
+   \   0000057E   8268               LDR      R2,[R0, #+8]
+   \   00000580   4068               LDR      R0,[R0, #+4]
+   \   00000582   2168               LDR      R1,[R4, #+0]
+   \   00000584   0918               ADDS     R1,R1,R0
+   \   00000586   3800               MOVS     R0,R7
+   \   00000588   ........           BLX      memcpy_a
+   \   0000058C   17E7               B        ??DoRelocation_24
+   \                     ??DoRelocation_50:
+   \   0000058E   3968               LDR      R1,[R7, #+0]
+   \   00000590   4068               LDR      R0,[R0, #+4]
+   \   00000592   0818               ADDS     R0,R1,R0
+   \   00000594   C01B               SUBS     R0,R0,R7
+   \   00000596   11E7               B.N      ??DoRelocation_23
+   \                     ??DoRelocation_21:
+   \   00000598   039A               LDR      R2,[SP, #+12]
+   \   0000059A   2C49               LDR      R1,??DoRelocation_29+0x18  ;; `?<Constant "Hash tab is mising">` + 256
+   \   0000059C   04A8               ADD      R0,SP,#+16
+   \   0000059E   16DF               SVC      +22
+   \   000005A0   0200               MOVS     R2,R0
+   \   000005A2   04A9               ADD      R1,SP,#+16
+   \   000005A4   2000               MOVS     R0,R4
+   \   000005A6   ........           _BLF     ep_log,??ep_log??rT
+   \   000005AA   0198               LDR      R0,[SP, #+4]
+   \   000005AC   15DF               SVC      +21
+   \   000005AE   EEE5               B.N      ??DoRelocation_18
+    469                  }
+    470          
+    471                  mfree(reltab);
+   \                     ??DoRelocation_25:
+   \   000005B0   0198               LDR      R0,[SP, #+4]
+   \   000005B2   15DF               SVC      +21
+    472              }
+    473          
+    474              // Биндим функции
+    475              if(ex->dyn[DT_PLTRELSZ])
+   \                     ??DoRelocation_16:
+   \   000005B4   2000               MOVS     R0,R4
+   \   000005B6   4030               ADDS     R0,R0,#+64
+   \   000005B8   C068               LDR      R0,[R0, #+12]
+   \   000005BA   0028               CMP      R0,#+0
+   \   000005BC   37D0               BEQ      ??DoRelocation_51
+    476              {
+    477                  i=0;
+   \   000005BE   0025               MOVS     R5,#+0
+   \   000005C0   06E0               B        ??DoRelocation_52
+    478                  while(i * sizeof(Elf32_Rel) < ex->dyn[DT_PLTRELSZ])
+    479                  {
+    480                      int sym_idx = ELF32_R_SYM(ex->jmprel[i].r_info);
+    481                      char* name = ex->strtab + ex->symtab[sym_idx].st_name;
+    482                      Elf32_Sym *sym = &ex->symtab[sym_idx];
+    483                      Elf32_Word func = 0;
+    484                      int bind_type = ELF_ST_BIND(sym->st_info);
+    485          
+    486          
+    487                      func = try_search_in_base(ex, name, bind_type);
+    488                      if(!func && bind_type != STB_WEAK)
+    489                      {
+    490                          int csz = sprintf(dbg, "[3] Undefined reference to `%s'\n", name);
+    491                          //l_msg(1, (int)dbg);
+    492                          ep_log(ex, dbg, csz);
+    493                          return E_UNDEF;
+    494                      }
+    495          
+    496                      *((Elf32_Word*)(ex->body + ex->jmprel[i].r_offset)) = func;
+   \                     ??DoRelocation_53:
+   \   000005C2   2268               LDR      R2,[R4, #+0]
+   \   000005C4   2100               MOVS     R1,R4
+   \   000005C6   C031               ADDS     R1,R1,#+192
+   \   000005C8   4968               LDR      R1,[R1, #+4]
+    497                      ++i;
+   \   000005CA   6D1C               ADDS     R5,R5,#+1
+   \   000005CC   8959               LDR      R1,[R1, R6]
+   \   000005CE   5050               STR      R0,[R2, R1]
+   \                     ??DoRelocation_52:
+   \   000005D0   2100               MOVS     R1,R4
+   \   000005D2   4031               ADDS     R1,R1,#+64
+   \   000005D4   C968               LDR      R1,[R1, #+12]
+   \   000005D6   E800               LSLS     R0,R5,#+3
+   \   000005D8   8842               CMP      R0,R1
+   \   000005DA   28D2               BCS      ??DoRelocation_51
+   \   000005DC   2000               MOVS     R0,R4
+   \   000005DE   C030               ADDS     R0,R0,#+192
+   \   000005E0   4068               LDR      R0,[R0, #+4]
+   \   000005E2   EE00               LSLS     R6,R5,#+3
+   \   000005E4   8019               ADDS     R0,R0,R6
+   \   000005E6   4068               LDR      R0,[R0, #+4]
+   \   000005E8   C021               MOVS     R1,#+192
+   \   000005EA   6158               LDR      R1,[R4, R1]
+   \   000005EC   000A               LSRS     R0,R0,#+8
+   \   000005EE   0001               LSLS     R0,R0,#+4
+   \   000005F0   0958               LDR      R1,[R1, R0]
+   \   000005F2   2200               MOVS     R2,R4
+   \   000005F4   C032               ADDS     R2,R2,#+192
+   \   000005F6   D268               LDR      R2,[R2, #+12]
+   \   000005F8   5118               ADDS     R1,R2,R1
+   \   000005FA   0091               STR      R1,[SP, #+0]
+   \   000005FC   C021               MOVS     R1,#+192
+   \   000005FE   6158               LDR      R1,[R4, R1]
+   \   00000600   0818               ADDS     R0,R1,R0
+   \   00000602   007B               LDRB     R0,[R0, #+12]
+   \   00000604   0099               LDR      R1,[SP, #+0]
+   \   00000606   0709               LSRS     R7,R0,#+4
+   \   00000608   3A00               MOVS     R2,R7
+   \   0000060A   2000               MOVS     R0,R4
+   \   0000060C   ........           BL       try_search_in_base
+   \   00000610   0028               CMP      R0,#+0
+   \   00000612   D6D1               BNE      ??DoRelocation_53
+   \   00000614   022F               CMP      R7,#+2
+   \   00000616   D4D0               BEQ      ??DoRelocation_53
+   \   00000618   009A               LDR      R2,[SP, #+0]
+   \   0000061A   0D49               LDR      R1,??DoRelocation_29+0x1C  ;; `?<Constant "Hash tab is mising">` + 300
+   \   0000061C   04A8               ADD      R0,SP,#+16
+   \   0000061E   16DF               SVC      +22
+   \   00000620   0200               MOVS     R2,R0
+   \   00000622   04A9               ADD      R1,SP,#+16
+   \   00000624   2000               MOVS     R0,R4
+   \   00000626   ........           _BLF     ep_log,??ep_log??rT
+   \   0000062A   0B20               MOVS     R0,#+11
+   \   0000062C   00E0               B        ??DoRelocation_11
+    498                  }
+    499              }
+    500          
+    501              return E_NO_ERROR;
+   \                     ??DoRelocation_51:
+   \   0000062E   0020               MOVS     R0,#+0
+   \                     ??DoRelocation_11:
+   \   00000630   65B0               ADD      SP,SP,#+404
+   \   00000632   F0BD               POP      {R4-R7,PC}       ;; return
+   \                     ??DoRelocation_29:
+   \   00000634   ........           DC32     `?<Constant "Hash tab is mising">` + 44
+   \   00000638   ........           DC32     config
+   \   0000063C   00000000           DC8      "",+0,+0,+0
+   \   00000640   ........           DC32     `?<Constant "Hash tab is mising">` + 108
+   \   00000644   ........           DC32     `?<Constant "Hash tab is mising">` + 144
+   \   00000648   ........           DC32     `?<Constant "Hash tab is mising">` + 200
+   \   0000064C   ........           DC32     `?<Constant "Hash tab is mising">` + 256
+   \   00000650   ........           DC32     `?<Constant "Hash tab is mising">` + 300
+    502          }
+    503          
+    504          
+    505          // Чтение сегментов из файла
+
+   \                                 In segment CODE, align 4, keep-with-next
+    506          __arch int LoadSections(Elf32_Exec* ex)
+    507          {
+   \                     LoadSections:
+   \   00000000   F0B5               PUSH     {R4-R7,LR}
+   \   00000002   8BB0               SUB      SP,SP,#+44
+   \   00000004   0400               MOVS     R4,R0
+    508              Elf32_Phdr* phdrs = malloc(sizeof(Elf32_Phdr) * ex->ehdr.e_phnum);
+   \   00000006   A08E               LDRH     R0,[R4, #+52]
+   \   00000008   4001               LSLS     R0,R0,#+5
+   \   0000000A   14DF               SVC      +20
+   \   0000000C   0090               STR      R0,[SP, #+0]
+    509              if(!phdrs) return E_SECTION;
+   \   0000000E   0028               CMP      R0,#+0
+   \   00000010   01D1               BNE      ??LoadSections_0
+   \                     ??LoadSections_1:
+   \   00000012   0520               MOVS     R0,#+5
+   \   00000014   B1E0               B        ??LoadSections_2
+    510          
+    511              unsigned int hdr_offset = ex->ehdr.e_phoff;
+   \                     ??LoadSections_0:
+   \   00000016   656A               LDR      R5,[R4, #+36]
+    512              int i = 0;
+    513          
+    514              unsigned long maxadr=0;
+   \   00000018   ....               LDR      R7,??DataTable1  ;; ferr
+   \   0000001A   0026               MOVS     R6,#+0
+   \   0000001C   0296               STR      R6,[SP, #+8]
+   \   0000001E   17E0               B        ??LoadSections_3
+    515              unsigned int end_adr;
+    516          
+    517              // Читаем заголовки
+    518              while(i < ex->ehdr.e_phnum)
+    519              {
+    520          #ifdef _test_linux
+    521                  if(lseek(ex->fp, hdr_offset, S_SET) == -1) break;
+    522                  if(fread(ex->fp, &phdrs[i], sizeof(Elf32_Phdr)) != sizeof(Elf32_Phdr))
+    523          #else
+    524          	if(lseek(ex->fp, hdr_offset, S_SET, &ferr, &ferr) != hdr_offset) break;
+    525                  if(fread(ex->fp, &phdrs[i], sizeof(Elf32_Phdr), &ferr) != sizeof(Elf32_Phdr))
+    526          #endif
+    527                  {
+    528                      /* кривой заголовок, шлём нафиг этот эльф */
+    529                      mfree(ex->body);
+    530                      ex->body = 0;
+    531                      mfree(phdrs);
+    532                      return E_PHDR;
+    533                  }
+    534          
+    535                  /* тут же и размер бинарника посчитаем */
+    536                  if (phdrs[i].p_type == PT_LOAD)
+   \                     ??LoadSections_4:
+   \   00000020   0198               LDR      R0,[SP, #+4]
+   \   00000022   0068               LDR      R0,[R0, #+0]
+   \   00000024   0128               CMP      R0,#+1
+   \   00000026   10D1               BNE      ??LoadSections_5
+    537                  {
+    538                      if (ex->v_addr > phdrs[i].p_vaddr) ex->v_addr = phdrs[i].p_vaddr;
+   \   00000028   0198               LDR      R0,[SP, #+4]
+   \   0000002A   E16B               LDR      R1,[R4, #+60]
+   \   0000002C   8068               LDR      R0,[R0, #+8]
+   \   0000002E   8842               CMP      R0,R1
+   \   00000030   02D2               BCS      ??LoadSections_6
+   \   00000032   0198               LDR      R0,[SP, #+4]
+   \   00000034   8068               LDR      R0,[R0, #+8]
+   \   00000036   E063               STR      R0,[R4, #+60]
+    539                      end_adr = phdrs[i].p_vaddr + phdrs[i].p_memsz;
+   \                     ??LoadSections_6:
+   \   00000038   0198               LDR      R0,[SP, #+4]
+   \   0000003A   0199               LDR      R1,[SP, #+4]
+   \   0000003C   8068               LDR      R0,[R0, #+8]
+   \   0000003E   4969               LDR      R1,[R1, #+20]
+   \   00000040   4018               ADDS     R0,R0,R1
+    540                      if (maxadr < end_adr) maxadr = end_adr;
+   \   00000042   0299               LDR      R1,[SP, #+8]
+   \   00000044   8142               CMP      R1,R0
+   \   00000046   00D2               BCS      ??LoadSections_5
+   \   00000048   0290               STR      R0,[SP, #+8]
+    541                  }
+    542          
+    543                  hdr_offset += ex->ehdr.e_phentsize;
+   \                     ??LoadSections_5:
+   \   0000004A   608E               LDRH     R0,[R4, #+50]
+    544                  ++i;
+   \   0000004C   761C               ADDS     R6,R6,#+1
+   \   0000004E   2D18               ADDS     R5,R5,R0
+   \                     ??LoadSections_3:
+   \   00000050   A08E               LDRH     R0,[R4, #+52]
+   \   00000052   8642               CMP      R6,R0
+   \   00000054   1DDA               BGE      ??LoadSections_7
+   \   00000056   80B4               PUSH     {R7}
+   \   00000058   D420               MOVS     R0,#+212
+   \   0000005A   2058               LDR      R0,[R4, R0]
+   \   0000005C   3B00               MOVS     R3,R7
+   \   0000005E   0022               MOVS     R2,#+0
+   \   00000060   2900               MOVS     R1,R5
+   \   00000062   0FDF               SVC      +15
+   \   00000064   01B0               ADD      SP,SP,#+4
+   \   00000066   A842               CMP      R0,R5
+   \   00000068   13D1               BNE      ??LoadSections_7
+   \   0000006A   0099               LDR      R1,[SP, #+0]
+   \   0000006C   7001               LSLS     R0,R6,#+5
+   \   0000006E   0818               ADDS     R0,R1,R0
+   \   00000070   0190               STR      R0,[SP, #+4]
+   \   00000072   0100               MOVS     R1,R0
+   \   00000074   D420               MOVS     R0,#+212
+   \   00000076   2058               LDR      R0,[R4, R0]
+   \   00000078   3B00               MOVS     R3,R7
+   \   0000007A   2022               MOVS     R2,#+32
+   \   0000007C   0BDF               SVC      +11
+   \   0000007E   2028               CMP      R0,#+32
+   \   00000080   CED0               BEQ      ??LoadSections_4
+   \   00000082   2068               LDR      R0,[R4, #+0]
+   \   00000084   15DF               SVC      +21
+   \   00000086   0020               MOVS     R0,#+0
+   \   00000088   2060               STR      R0,[R4, #+0]
+   \   0000008A   0098               LDR      R0,[SP, #+0]
+   \   0000008C   15DF               SVC      +21
+   \   0000008E   0E20               MOVS     R0,#+14
+   \   00000090   73E0               B        ??LoadSections_2
+    545              }
+    546          
+    547              ex->bin_size = maxadr - ex->v_addr;
+   \                     ??LoadSections_7:
+   \   00000092   0298               LDR      R0,[SP, #+8]
+   \   00000094   E16B               LDR      R1,[R4, #+60]
+   \   00000096   401A               SUBS     R0,R0,R1
+   \   00000098   6060               STR      R0,[R4, #+4]
+    548          
+    549              if(i == ex->ehdr.e_phnum) // Если прочитались все заголовки
+   \   0000009A   A18E               LDRH     R1,[R4, #+52]
+   \   0000009C   8E42               CMP      R6,R1
+   \   0000009E   65D1               BNE      ??LoadSections_8
+    550              {
+    551                  //ex->bin_size = GetBinSize(ex, phdrs);
+    552          
+    553                  if(ex->body = malloc(ex->bin_size+1)) // Если хватило рамы
+   \   000000A0   401C               ADDS     R0,R0,#+1
+   \   000000A2   14DF               SVC      +20
+   \   000000A4   2060               STR      R0,[R4, #+0]
+   \   000000A6   0028               CMP      R0,#+0
+   \   000000A8   60D0               BEQ      ??LoadSections_8
+    554                  {
+    555                      zeromem_a(ex->body, ex->bin_size+1);
+   \   000000AA   6168               LDR      R1,[R4, #+4]
+    556                      zeromem_a(ex->dyn, sizeof(ex->dyn));
+    557          
+    558                      for(i=0; i < ex->ehdr.e_phnum; ++i)
+   \   000000AC   0026               MOVS     R6,#+0
+   \   000000AE   491C               ADDS     R1,R1,#+1
+   \   000000B0   ........           _BLF     zeromem_a,??zeromem_a??rT
+   \   000000B4   7C21               MOVS     R1,#+124
+   \   000000B6   2000               MOVS     R0,R4
+   \   000000B8   4430               ADDS     R0,R0,#+68
+   \   000000BA   ........           _BLF     zeromem_a,??zeromem_a??rT
+   \   000000BE   12E0               B        ??LoadSections_9
+    559                      {
+    560                          Elf32_Phdr phdr = phdrs[i];
+    561                          Elf32_Dyn* dyn_sect;
+    562          
+    563                          switch (phdr.p_type)
+    564                          {
+    565                          case PT_LOAD:
+    566                              if(phdr.p_filesz == 0) break; // Пропускаем пустые сегменты
+    567                              printf("PT_LOAD: %X - %X\n", phdr.p_offset, phdr.p_filesz);
+    568          #ifdef _test_linux
+    569                              if(lseek(ex->fp, phdr.p_offset, S_SET) != -1)
+    570          #else
+    571                              if(lseek(ex->fp, phdr.p_offset, S_SET, &ferr, &ferr) == phdr.p_offset)
+    572          #endif
+    573                              {
+    574          #ifdef _test_linux
+    575                                  if(fread(ex->fp, ex->body + phdr.p_vaddr - ex->v_addr, phdr.p_filesz) == phdr.p_filesz)
+    576          #else
+    577          			 if(fread(ex->fp, ex->body + phdr.p_vaddr - ex->v_addr, phdr.p_filesz, &ferr) == phdr.p_filesz)
+    578          #endif
+    579                                      break;
+    580                              }
+    581          
+    582                              // Не прочитали сколько нужно
+    583                              mfree(ex->body);
+    584                              ex->body = 0;
+    585                              mfree(phdrs);
+    586                              return E_SECTION;
+    587          
+    588                          case PT_DYNAMIC:
+    589                              if(phdr.p_filesz == 0) break; // Пропускаем пустые сегменты
+   \                     ??LoadSections_10:
+   \   000000C0   079A               LDR      R2,[SP, #+28]
+   \   000000C2   002A               CMP      R2,#+0
+   \   000000C4   0ED0               BEQ      ??LoadSections_11
+    590          
+    591                              printf("Load data dynamic segment: %d - %d\n", phdr.p_offset, phdr.p_filesz);
+    592                              if(dyn_sect = (Elf32_Dyn*)LoadData(ex, phdr.p_offset, phdr.p_filesz))
+   \   000000C6   0499               LDR      R1,[SP, #+16]
+   \   000000C8   2000               MOVS     R0,R4
+   \   000000CA   ........           BL       LoadData
+   \   000000CE   0500               MOVS     R5,R0
+   \   000000D0   3ED0               BEQ      ??LoadSections_12
+    593                              {
+    594                                  if(!DoRelocation(ex, dyn_sect, &phdr))
+   \   000000D2   03AA               ADD      R2,SP,#+12
+   \   000000D4   2900               MOVS     R1,R5
+   \   000000D6   2000               MOVS     R0,R4
+   \   000000D8   ........           BL       DoRelocation
+   \   000000DC   0028               CMP      R0,#+0
+   \   000000DE   37D1               BNE      ??LoadSections_12
+    595                                  {
+    596                                      mfree(dyn_sect);
+   \   000000E0   2800               MOVS     R0,R5
+   \   000000E2   15DF               SVC      +21
+    597                                      break;
+    598                                  }
+    599                              }
+   \                     ??LoadSections_11:
+   \   000000E4   761C               ADDS     R6,R6,#+1
+   \                     ??LoadSections_9:
+   \   000000E6   A08E               LDRH     R0,[R4, #+52]
+   \   000000E8   8642               CMP      R6,R0
+   \   000000EA   3BDA               BGE      ??LoadSections_13
+   \   000000EC   009A               LDR      R2,[SP, #+0]
+   \   000000EE   03A8               ADD      R0,SP,#+12
+   \   000000F0   7101               LSLS     R1,R6,#+5
+   \   000000F2   5118               ADDS     R1,R2,R1
+   \   000000F4   2023               MOVS     R3,#+32
+   \                     ??LoadSections_14:
+   \   000000F6   1B1F               SUBS     R3,R3,#+4
+   \   000000F8   CA58               LDR      R2,[R1, R3]
+   \   000000FA   C250               STR      R2,[R0, R3]
+   \   000000FC   FBD1               BNE      ??LoadSections_14
+   \   000000FE   0398               LDR      R0,[SP, #+12]
+   \   00000100   0128               CMP      R0,#+1
+   \   00000102   02D0               BEQ      ??LoadSections_15
+   \   00000104   0228               CMP      R0,#+2
+   \   00000106   DBD0               BEQ      ??LoadSections_10
+   \   00000108   ECE7               B        ??LoadSections_11
+   \                     ??LoadSections_15:
+   \   0000010A   0798               LDR      R0,[SP, #+28]
+   \   0000010C   0028               CMP      R0,#+0
+   \   0000010E   E9D0               BEQ      ??LoadSections_11
+   \   00000110   80B4               PUSH     {R7}
+   \   00000112   0599               LDR      R1,[SP, #+20]
+   \   00000114   3B00               MOVS     R3,R7
+   \   00000116   0022               MOVS     R2,#+0
+   \   00000118   D420               MOVS     R0,#+212
+   \   0000011A   2058               LDR      R0,[R4, R0]
+   \   0000011C   0FDF               SVC      +15
+   \   0000011E   0599               LDR      R1,[SP, #+20]
+   \   00000120   01B0               ADD      SP,SP,#+4
+   \   00000122   8842               CMP      R0,R1
+   \   00000124   0DD1               BNE      ??LoadSections_16
+   \   00000126   E16B               LDR      R1,[R4, #+60]
+   \   00000128   2568               LDR      R5,[R4, #+0]
+   \   0000012A   079A               LDR      R2,[SP, #+28]
+   \   0000012C   4842               RSBS     R0,R1,#+0
+   \   0000012E   0599               LDR      R1,[SP, #+20]
+   \   00000130   3B00               MOVS     R3,R7
+   \   00000132   6918               ADDS     R1,R5,R1
+   \   00000134   0918               ADDS     R1,R1,R0
+   \   00000136   D420               MOVS     R0,#+212
+   \   00000138   2058               LDR      R0,[R4, R0]
+   \   0000013A   0BDF               SVC      +11
+   \   0000013C   0799               LDR      R1,[SP, #+28]
+   \   0000013E   8842               CMP      R0,R1
+   \   00000140   D0D0               BEQ      ??LoadSections_11
+   \                     ??LoadSections_16:
+   \   00000142   2068               LDR      R0,[R4, #+0]
+   \   00000144   15DF               SVC      +21
+   \   00000146   0020               MOVS     R0,#+0
+   \   00000148   2060               STR      R0,[R4, #+0]
+   \   0000014A   0098               LDR      R0,[SP, #+0]
+   \   0000014C   15DF               SVC      +21
+   \   0000014E   60E7               B.N      ??LoadSections_1
+    600          
+    601                              // Если что-то пошло не так...
+    602                              mfree(dyn_sect);
+   \                     ??LoadSections_12:
+   \   00000150   2800               MOVS     R0,R5
+   \   00000152   15DF               SVC      +21
+    603                              mfree(ex->body);
+   \   00000154   2068               LDR      R0,[R4, #+0]
+   \   00000156   15DF               SVC      +21
+    604                              ex->body = 0;
+   \   00000158   0020               MOVS     R0,#+0
+   \   0000015A   2060               STR      R0,[R4, #+0]
+    605                              mfree(phdrs);
+   \   0000015C   0098               LDR      R0,[SP, #+0]
+   \   0000015E   15DF               SVC      +21
+    606                              return E_SECTION;
+   \   00000160   0520               MOVS     R0,#+5
+   \   00000162   0AE0               B        ??LoadSections_2
+    607                          }
+    608                      }
+    609          
+    610                      mfree(phdrs);
+   \                     ??LoadSections_13:
+   \   00000164   0098               LDR      R0,[SP, #+0]
+   \   00000166   15DF               SVC      +21
+    611                      return E_NO_ERROR;
+   \   00000168   0020               MOVS     R0,#+0
+   \   0000016A   06E0               B        ??LoadSections_2
+    612                  }
+    613              }
+    614          
+    615              mfree(ex->body);
+   \                     ??LoadSections_8:
+   \   0000016C   2068               LDR      R0,[R4, #+0]
+   \   0000016E   15DF               SVC      +21
+    616              ex->body = 0;
+   \   00000170   0020               MOVS     R0,#+0
+   \   00000172   2060               STR      R0,[R4, #+0]
+    617              mfree(phdrs);
+   \   00000174   0098               LDR      R0,[SP, #+0]
+   \   00000176   15DF               SVC      +21
+    618              return E_RAM;
+   \   00000178   0620               MOVS     R0,#+6
+   \                     ??LoadSections_2:
+   \   0000017A   0BB0               ADD      SP,SP,#+44
+   \   0000017C   F0BD               POP      {R4-R7,PC}       ;; return
+    619          }
+    620          
+    621          
+    622          /* constructors */
+
+   \                                 In segment CODE, align 4, keep-with-next
+    623          __arch void run_INIT_Array(Elf32_Exec *ex)
+    624          {
+   \                     run_INIT_Array:
+   \   00000000   70B5               PUSH     {R4-R6,LR}
+    625              if(!ex->dyn[DT_FINI_ARRAY]) return;
+   \   00000002   0100               MOVS     R1,R0
+   \   00000004   A831               ADDS     R1,R1,#+168
+   \   00000006   4A68               LDR      R2,[R1, #+4]
+   \   00000008   002A               CMP      R2,#+0
+   \   0000000A   11D0               BEQ      ??run_INIT_Array_0
+    626              size_t sz = ex->dyn[DT_INIT_ARRAYSZ] / sizeof (void*);
+   \   0000000C   8A68               LDR      R2,[R1, #+8]
+    627              void ** arr = (void**)(ex->body + ex->dyn[DT_INIT_ARRAY] - ex->v_addr);
+   \   0000000E   0968               LDR      R1,[R1, #+0]
+   \   00000010   9408               LSRS     R4,R2,#+2
+   \   00000012   C26B               LDR      R2,[R0, #+60]
+   \   00000014   0068               LDR      R0,[R0, #+0]
+   \   00000016   5342               RSBS     R3,R2,#+0
+   \   00000018   4018               ADDS     R0,R0,R1
+   \   0000001A   C518               ADDS     R5,R0,R3
+    628          
+    629              printf("init_array sz: %d\n", sz);
+    630          
+    631              for(int i=0; i < sz; ++i)
+   \   0000001C   0026               MOVS     R6,#+0
+   \   0000001E   002C               CMP      R4,#+0
+   \   00000020   04D1               BNE      ??run_INIT_Array_1
+   \   00000022   70BD               POP      {R4-R6,PC}
+    632              {
+    633                  printf("init %d: 0x%X\n", i, arr[i]);
+    634          #ifndef _test_linux
+    635                  ( (void (*)())arr[i])();
+   \                     ??run_INIT_Array_2:
+   \   00000024   B000               LSLS     R0,R6,#+2
+   \   00000026   2858               LDR      R0,[R5, R0]
+    636          #endif
+    637              }
+   \   00000028   761C               ADDS     R6,R6,#+1
+   \   0000002A   8047               BLX      R0
+   \                     ??run_INIT_Array_1:
+   \   0000002C   A642               CMP      R6,R4
+   \   0000002E   F9D3               BCC      ??run_INIT_Array_2
+   \                     ??run_INIT_Array_0:
+   \   00000030   70BD               POP      {R4-R6,PC}       ;; return
+    638          }
+    639          
+    640          
+    641          /* destructors */
+
+   \                                 In segment CODE, align 4, keep-with-next
+    642          __arch void run_FINI_Array(Elf32_Exec *ex)
+    643          {
+   \                     run_FINI_Array:
+   \   00000000   70B5               PUSH     {R4-R6,LR}
+    644              if(!ex->dyn[DT_FINI_ARRAY]) return;
+   \   00000002   0100               MOVS     R1,R0
+   \   00000004   AC31               ADDS     R1,R1,#+172
+   \   00000006   0A68               LDR      R2,[R1, #+0]
+   \   00000008   002A               CMP      R2,#+0
+   \   0000000A   10D0               BEQ      ??run_FINI_Array_0
+    645              size_t sz = ex->dyn[DT_FINI_ARRAYSZ] / sizeof (void*);
+   \   0000000C   8968               LDR      R1,[R1, #+8]
+    646              void ** arr = (void**)(ex->body + ex->dyn[DT_FINI_ARRAY] - ex->v_addr);
+    647          
+    648              printf("fini_array sz: %d\n", sz);
+    649          
+    650              for(int i=0; i < sz; ++i)
+   \   0000000E   0026               MOVS     R6,#+0
+   \   00000010   8C08               LSRS     R4,R1,#+2
+   \   00000012   C16B               LDR      R1,[R0, #+60]
+   \   00000014   0068               LDR      R0,[R0, #+0]
+   \   00000016   4B42               RSBS     R3,R1,#+0
+   \   00000018   8018               ADDS     R0,R0,R2
+   \   0000001A   C518               ADDS     R5,R0,R3
+   \   0000001C   002C               CMP      R4,#+0
+   \   0000001E   04D1               BNE      ??run_FINI_Array_1
+   \   00000020   70BD               POP      {R4-R6,PC}
+    651              {
+    652                  printf("fini %d: 0x%X\n", i, arr[i]);
+    653          #ifndef _test_linux
+    654                  ( (void (*)())arr[i])();
+   \                     ??run_FINI_Array_2:
+   \   00000022   B000               LSLS     R0,R6,#+2
+   \   00000024   2858               LDR      R0,[R5, R0]
+    655          #endif
+    656              }
+   \   00000026   761C               ADDS     R6,R6,#+1
+   \   00000028   8047               BLX      R0
+   \                     ??run_FINI_Array_1:
+   \   0000002A   A642               CMP      R6,R4
+   \   0000002C   F9D3               BCC      ??run_FINI_Array_2
+   \                     ??run_FINI_Array_0:
+   \   0000002E   70BD               POP      {R4-R6,PC}       ;; return
+    657          }
+
+   \                                 In segment CODE, align 4, keep-with-next
+   \                     ??DataTable0:
+   \   00000000   ........           DC32     ferr
+
+   \                                 In segment CODE, align 4, keep-with-next
+   \                     ??DataTable1:
+   \   00000000   ........           DC32     ferr
+
+   \                                 In segment DATA_C, align 4, align-sorted
+   \                     `?<Constant "Hash tab is mising">`:
+   \   00000000   486173682074       DC8 "Hash tab is mising"
+   \              616220697320
+   \              6D6973696E67
+   \              00          
+   \   00000013   00                 DC8 0
+   \   00000014   CDE520ECEEE3       DC8 "\315\345 \354\356\343\363 \347\340\343\360\363\347\350\362\374 %s!"
+   \              F320E7E0E3F0
+   \              F3E7E8F2FC20
+   \              25732100    
+   \   0000002A   0000               DC8 0, 0
+   \   0000002C   7761726E696E       DC8 77H, 61H, 72H, 6EH, 69H, 6EH, 67H, 3AH
+   \              673A        
+   \   00000034   2073796D7461       DC8 20H, 73H, 79H, 6DH, 74H, 61H, 62H, 20H
+   \              6220        
+   \   0000003C   6E6F7420666F       DC8 6EH, 6FH, 74H, 20H, 66H, 6FH, 75H, 6EH
+   \              756E        
+   \   00000044   642C20627574       DC8 64H, 2CH, 20H, 62H, 75H, 74H, 20H, 72H
+   \              2072        
+   \   0000004C   656C6F636174       DC8 65H, 6CH, 6FH, 63H, 61H, 74H, 69H, 6FH
+   \              696F        
+   \   00000054   6E20525F4152       DC8 6EH, 20H, 52H, 5FH, 41H, 52H, 4DH, 5FH
+   \              4D5F        
+   \   0000005C   414253333220       DC8 41H, 42H, 53H, 33H, 32H, 20H, 69H, 73H
+   \              6973        
+   \   00000064   206578697374       DC8 20H, 65H, 78H, 69H, 73H, 74H, 0
+   \              00          
+   \   0000006B   00                 DC8 0
+   \   0000006C   5B325D20556E       DC8 "[2] Undefined reference to `%s'\012"
+   \              646566696E65
+   \              642072656665
+   \              72656E636520
+   \              746F20602573
+   \              270A00      
+   \   0000008D   000000             DC8 0, 0, 0
+   \   00000090   52656C6F6361       DC8 52H, 65H, 6CH, 6FH, 63H, 61H, 74H, 69H
+   \              7469        
+   \   00000098   6F6E20525F41       DC8 6FH, 6EH, 20H, 52H, 5FH, 41H, 52H, 4DH
+   \              524D        
+   \   000000A0   5F474C4F425F       DC8 5FH, 47H, 4CH, 4FH, 42H, 5FH, 44H, 41H
+   \              4441        
+   \   000000A8   542063616E6E       DC8 54H, 20H, 63H, 61H, 6EH, 6EH, 6FH, 74H
+   \              6F74        
+   \   000000B0   2072756E2077       DC8 20H, 72H, 75H, 6EH, 20H, 77H, 69H, 74H
+   \              6974        
+   \   000000B8   686F75742073       DC8 68H, 6FH, 75H, 74H, 20H, 73H, 79H, 6DH
+   \              796D        
+   \   000000C0   7461620A00         DC8 74H, 61H, 62H, 0AH, 0
+   \   000000C5   000000             DC8 0, 0, 0
+   \   000000C8   52656C6F6361       DC8 52H, 65H, 6CH, 6FH, 63H, 61H, 74H, 69H
+   \              7469        
+   \   000000D0   6F6E20525F41       DC8 6FH, 6EH, 20H, 52H, 5FH, 41H, 52H, 4DH
+   \              524D        
+   \   000000D8   5F474C4F425F       DC8 5FH, 47H, 4CH, 4FH, 42H, 5FH, 44H, 41H
+   \              4441        
+   \   000000E0   542063616E6E       DC8 54H, 20H, 63H, 61H, 6EH, 6EH, 6FH, 74H
+   \              6F74        
+   \   000000E8   2072756E2077       DC8 20H, 72H, 75H, 6EH, 20H, 77H, 69H, 74H
+   \              6974        
+   \   000000F0   686F75742073       DC8 68H, 6FH, 75H, 74H, 20H, 73H, 74H, 72H
+   \              7472        
+   \   000000F8   7461620A00         DC8 74H, 61H, 62H, 0AH, 0
+   \   000000FD   000000             DC8 0, 0, 0
+   \   00000100   466174616C20       DC8 "Fatal error! Unknown type relocation '%d'!\012"
+   \              6572726F7221
+   \              20556E6B6E6F
+   \              776E20747970
+   \              652072656C6F
+   \              636174696F6E
+   \              202725642721
+   \              0A00        
+   \   0000012C   5B335D20556E       DC8 "[3] Undefined reference to `%s'\012"
+   \              646566696E65
+   \              642072656665
+   \              72656E636520
+   \              746F20602573
+   \              270A00      
+   \   0000014D   000000             DC8 0, 0, 0
+
+   \                                 In segment DATA_C, align 1, align-sorted
+   \   00000000   00                 DC8 ""
+
+   Maximum stack usage in bytes:
+
+     Function           CSTACK
+     --------           ------
+     CheckElf               8
+     DoRelocation         424
+     GetBinSize            20
+     LoadData              24
+     LoadSections          68
+     memcmp_a               4
+     memcpy_a               4
+     run_FINI_Array        16
+     run_INIT_Array        16
+     try_search_in_base    16
+
+
+   Segment part sizes:
+
+     Function/Label                 Bytes
+     --------------                 -----
+     elf_magic_header                  8
+     memcpy_a                         12
+     memcmp_a                         12
+     ferr                              4
+     CheckElf                         40
+     GetBinSize                       58
+     LoadData                         68
+     try_search_in_base              100
+     DoRelocation                   1620
+     LoadSections                    382
+     run_INIT_Array                   50
+     run_FINI_Array                   48
+     ??DataTable0                      4
+     ??DataTable1                      4
+     ?<Constant "Hash tab is mising">
+                                     336
+     ?<Constant "">                    1
+      Others                         140
+
+ 
+ 2 526 bytes in segment CODE
+   345 bytes in segment DATA_C
+     4 bytes in segment DATA_Z
+    12 bytes in segment INITTAB
+ 
+ 2 398 bytes of CODE  memory (+ 140 bytes shared)
+   345 bytes of CONST memory
+     4 bytes of DATA  memory
+
+Errors: none
+Warnings: none
